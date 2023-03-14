@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
-import { UserSocialLinkSchema } from "./UserSocialLink";
+import { userSocialLinkSchema } from "./UserSocialLink.js";
 
 const { Schema } = mongoose;
 const userSchema = new mongoose.Schema(
   {
-    _id: Schema.Types.ObjectId,
     username: {
       type: String,
       require: true,
@@ -25,6 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     picturePath: {
       type: String,
+      require: true,
       default: "/assets/avatar.png",
     },
     friends: {
@@ -37,8 +37,22 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
     favouriteCourts: {
-      type: Schema.Types.ObjectId,
-      ref: "Court",
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Court",
+        },
+      ],
+      default: [],
+    },
+    addedCourts: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Court",
+        },
+      ],
+      default: [],
     },
     checkins: {
       type: [
@@ -51,7 +65,7 @@ const userSchema = new mongoose.Schema(
     },
     socialLinks: {
       type: Array,
-      of: UserSocialLinkSchema,
+      of: userSocialLinkSchema,
       default: [],
     },
     city: {

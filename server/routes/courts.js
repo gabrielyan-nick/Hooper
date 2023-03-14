@@ -1,12 +1,15 @@
 import express from "express";
 import multer from "multer";
-import { login, register } from "../controllers/auth.js";
+import { addCourt, getCourts } from "../controllers/courts.js";
 import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 const upload = multer();
 
-router.post("/login", login);
-router.post("/register", upload.none(), register);
+// ADD COURT 
+router.post("/", upload.none(), addCourt);
+
+// GET COURTS
+router.get("/", getCourts);
 
 export default router;

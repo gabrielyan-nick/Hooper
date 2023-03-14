@@ -3,32 +3,48 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 const courtSchema = new mongoose.Schema(
   {
-    _id: Schema.Types.ObjectId,
-    type: {
+    sport: {
       type: String,
       require: true,
+    },
+    cover: {
+      type: String,
+      require: true,
+    },
+    lighting: {
+      type: String,
+      require: true,
+      default: false,
     },
     isPrivate: { type: Boolean, require: true, default: false },
     name: {
       type: String,
       required: true,
+      default: function () {
+        if (this.sport === "basketball") return "Баскетбольний майданчик";
+        else return "Футбольне поле";
+      },
     },
     picturePath: {
       type: String,
       require: true,
       default: function () {
         if (this.isPrivate) {
-          if (this.type === "basketball")
+          if (this.sport === "basketball")
             return "/assets/basketball-court-private.jpg";
-          else if (this.type === "football")
+          else if (this.sport === "football")
             return "/assets/football-court-private.jpg";
         } else {
-          if (this.type === "basketball")
+          if (this.sport === "basketball")
             return "/assets/basketball-court-notprivate.jpg";
-          else if (this.type === "football")
+          else if (this.sport === "football")
             return "/assets/football-court-notprivate.jpg";
         }
       },
+    },
+    photosPath: {
+      type: [String],
+      default: [],
     },
     location: {
       type: {
@@ -82,12 +98,13 @@ const courtSchema = new mongoose.Schema(
       ],
       default: [],
     },
+    organizerContact: String,
   },
 
   { timestamps: true }
 );
 
-courtSchema.index({ location: '2dsphere' });
+courtSchema.index({ location: "2dsphere" });
 
 const Court = mongoose.model("Court", courtSchema);
 
