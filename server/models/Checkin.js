@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 const checkinSchema = new mongoose.Schema(
   {
-    // _id: Schema.Types.ObjectId,
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",

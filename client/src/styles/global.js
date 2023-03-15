@@ -8,4 +8,12 @@ export default createGlobalStyle`
     width: 100%;
     font-family: 'Nunito', sans-serif;
   }
+  .mapboxgl-popup-content {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+}
+.mapboxgl-popup-tip {
+  display: none;
+}
 `;
