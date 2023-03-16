@@ -12,9 +12,17 @@ const courtSchema = new mongoose.Schema(
       require: true,
     },
     lighting: {
-      type: String,
+      type: Boolean,
       require: true,
-      default: false,
+      default: function () {
+        if (this.cover === "indoor") return true;
+        else return false;
+      },
+    },
+    hoopsCount: {
+      type: Number,
+      require: true,
+      default: 2,
     },
     isPrivate: { type: Boolean, require: true, default: false },
     name: {

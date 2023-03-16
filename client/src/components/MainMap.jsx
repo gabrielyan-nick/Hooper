@@ -1,4 +1,4 @@
-import React, { useState, useMemo, Fragment } from "react";
+import React, { useState, useMemo, Fragment, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Map, { Marker, Popup } from "react-map-gl";

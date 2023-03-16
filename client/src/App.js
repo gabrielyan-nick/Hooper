@@ -8,6 +8,7 @@ import { lightTheme, darkTheme } from "./styles/themes.js";
 import MainPage from "./pages/MainPage";
 import { Map } from "./components";
 import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
+import "../node_modules/react-tooltip/dist/react-tooltip.css";
 
 function App() {
   const theme = useSelector((state) => state.theme.theme);

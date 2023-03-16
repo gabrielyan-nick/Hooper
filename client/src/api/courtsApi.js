@@ -17,7 +17,11 @@ export const courtsApi = createApi({
       }),
       invalidatesTags: ["Courts"],
     }),
+    getCourt: builder.query({
+      query: (id) => `/courts/${id}`,
+    }),
   }),
 });
 
-export const { useGetMarkersQuery, useAddCourtMutation } = courtsApi;
+export const { useGetMarkersQuery, useAddCourtMutation, useGetCourtQuery } =
+  courtsApi;
