@@ -1,12 +1,18 @@
-import React, { useState, useMemo, Fragment, useRef } from "react";
+import React, { useState, useMemo, Fragment, useRef, useEffect } from "react";
+import { CSSTransition } from "react-transition-group";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Map, { Marker, Popup } from "react-map-gl";
 import { lightTheme, darkTheme } from "../styles/themes";
 import { useGetMarkersQuery } from "../api/courtsApi";
-import { FootballMarker, BasketballMarker, CourtPopup } from "./index";
+import {
+  FootballMarker,
+  BasketballMarker,
+  CourtPopup,
+  LoadingScreen,
+} from "./index";
 
-const MainMap = () => {
+const MainMap = ({ closeLoadingScreen }) => {
   const theme = useSelector((state) => state.theme.theme);
   const [currentMarkerId, setCurrentMarkerId] = useState(null);
   const [viewState, setViewState] = useState({
@@ -14,6 +20,7 @@ const MainMap = () => {
     latitude: 49.91435295466242,
     zoom: 14,
   });
+  const courtRef = useRef(null);
 
   const {
     data: markers = [],
@@ -62,6 +69,7 @@ const MainMap = () => {
 
   return (
     <Map
+      onLoad={closeLoadingScreen}
       reuseMaps
       {...viewState}
       style={{ width: "100%", height: "100%" }}

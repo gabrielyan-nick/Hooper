@@ -1,0 +1,142 @@
+import React, { useRef, useEffect, useState } from "react";
+import styled from "styled-components";
+import { CSSTransition } from "react-transition-group";
+import useOnClickOutside from "../hooks/useOnClickOutside";
+import useMount from "../hooks/useMount";
+import { Button, IconButton } from "./microComponets";
+import { CloseIcon } from "./svgIcons";
+
+const ModalWindow = ({
+  opened,
+  closeModal,
+  children,
+  closeClickOutside = true,
+}) => {
+  const [animationIn, setAnimationIn] = useState(false);
+  const contentRef = useRef(null);
+  const overlayRef = useRef(null);
+  const { mounted } = useMount({ opened });
+
+  useEffect(() => {
+    setAnimationIn(opened);
+  }, [opened]);
+
+  useEffect(() => {
+    if (opened) {
+      document.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [opened]);
+
+  const handleKeyDown = (event) => {
+    const modalElements = overlayRef.current.querySelectorAll(
+      'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+    );
+    const firstElement = modalElements[0];
+    const lastElement = modalElements[modalElements.length - 1];
+
+    if (event.key === "Escape") {
+      onCloseModal();
+    }
+
+    if (event.key === "Tab") {
+      if (event.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement.focus();
+          event.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement.focus();
+          event.preventDefault();
+        }
+      }
+    }
+  };
+
+  const onCloseModal = () => {
+    closeModal();
+  };
+
+  useOnClickOutside(contentRef, closeClickOutside ? onCloseModal : null);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return (
+    <CSSTransition
+      in={animationIn}
+      nodeRef={overlayRef}
+      timeout={100}
+      appear
+      mountOnEnter
+      unmountOnExit
+      classNames="modal-overlay"
+    >
+      <ModalWrapper ref={overlayRef}>
+        <CSSTransition
+          in={animationIn}
+          nodeRef={contentRef}
+          timeout={100}
+          appear
+          mountOnEnter
+          unmountOnExit
+          classNames="modal-content"
+        >
+          <ModalContent ref={contentRef}>
+            <ModalHeader>
+              <IconButton onClick={onCloseModal}>
+                <CloseIcon />
+              </IconButton>
+            </ModalHeader>
+            {children}
+          </ModalContent>
+        </CSSTransition>
+      </ModalWrapper>
+    </CSSTransition>
+  );
+};
+
+const ModalWrapper = styled.div`
+  position: fixed;
+  z-index: 101;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: #09000cb9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.div`
+  position: relative;
+  background: ${(props) => props.theme.popupBg};
+  border-radius: 15px;
+  min-height: 100px;
+  padding: 3px 5px;
+  @media ${(props) => props.theme.media.wideScreen} {
+    width: 27%;
+  }
+  @media ${(props) => props.theme.media.desktop} {
+    width: 40%;
+  }
+  @media ${(props) => props.theme.media.tablet} {
+    width: 60%;
+  }
+  @media ${(props) => props.theme.media.mobile} {
+    width: 95%;
+  }
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export default ModalWindow;

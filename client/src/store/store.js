@@ -17,7 +17,6 @@ const persistConfig = {
   key: "hoop",
   storage,
   version: 1,
-  whitelist: ["themeReducer"],
 };
 
 const persistedThemeReducer = persistReducer(persistConfig, themeReducer);

@@ -5,7 +5,7 @@ import {
   FlexBetweenBox,
   FlexCenterBox,
   IconButton,
-  CourtTitle,
+  Title,
   CourtImg,
 } from "./microComponets";
 import { FavouriteIcon, CloseIcon, BasketballCourtIcon } from "./svgIcons";
@@ -17,7 +17,7 @@ const PopupWrapper = styled.div`
   max-height: 700px;
   border-radius: 20px;
   background: ${(props) => props.theme.popupBg};
-  border: ${(props) => props.theme.popupBorder};
+  /* border: ${(props) => props.theme.popupBorder}; */
   box-shadow: 0 0 5px 0 #001107;
 `;
 
@@ -25,22 +25,22 @@ const CourtHeader = styled(FlexBetweenBox)`
   padding: 3px 7px;
 `;
 
-const CourtPopup = ({ courtId, onClose }) => {
+const CourtPopup = forwardRef((props, ref) => {
   const {
     data: court = {},
     isLoading,
     isError,
     error,
-  } = useGetCourtQuery(courtId);
+  } = useGetCourtQuery(props.courtId);
   console.log(court);
   return (
-    <PopupWrapper>
+    <PopupWrapper ref={ref}>
       <CourtHeader>
         <IconButton>
           <FavouriteIcon />
         </IconButton>
-        <CourtTitle>{court.name}</CourtTitle>
-        <IconButton onClick={onClose}>
+        <Title>{court.name}</Title>
+        <IconButton onClick={props.onClose}>
           <CloseIcon />
         </IconButton>
       </CourtHeader>
@@ -50,6 +50,6 @@ const CourtPopup = ({ courtId, onClose }) => {
       <CourtChat />
     </PopupWrapper>
   );
-};
+});
 
 export default CourtPopup;
