@@ -12,6 +12,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import themeReducer from "./themeSlice";
 import { courtsApi } from "../api/courtsApi";
+import { authApi } from "../api/authApi";
 
 const persistConfig = {
   key: "hoop",
@@ -24,7 +25,7 @@ const persistedThemeReducer = persistReducer(persistConfig, themeReducer);
 const rootReducer = combineReducers({
   theme: persistedThemeReducer,
   [courtsApi.reducerPath]: courtsApi.reducer,
-  // ...reducers
+  [authApi.reducerPath]: authApi.reducer,
 });
 
 export const store = configureStore({
@@ -34,7 +35,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(courtsApi.middleware),
+    }).concat(courtsApi.middleware, authApi.middleware),
   devTools: process.env.NODE_ENV !== "production",
 });
 

@@ -21,6 +21,9 @@ export default createGlobalStyle`
     padding: 0;
   }
 
+  select, option {
+    font-family: 'Nunito', sans-serif;
+  }
 
 .modal-overlay-appear {
   opacity: 0;

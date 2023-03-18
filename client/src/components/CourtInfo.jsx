@@ -90,7 +90,7 @@ const CourtInfo = ({ data }) => {
 
 export default CourtInfo;
 
-const IconWithTooltip = ({ icon, tooltip, id, place = "top" }) => {
+export const IconWithTooltip = ({ icon, tooltip, id, place = "top" }) => {
   return (
     <>
       <IconButton data-tooltip-id={id} data-tooltip-place={place}>
@@ -104,4 +104,3 @@ const IconWithTooltip = ({ icon, tooltip, id, place = "top" }) => {
     </>
   );
 };
-

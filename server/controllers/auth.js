@@ -13,8 +13,11 @@ export const register = async (req, res) => {
       ...data,
     });
 
-    const existingUser = await User.findOne({ email: data.email });
-    if (existingUser) return res.status(401).json("User already exist");
+    const existingUserName = await User.findOne({ username: data.username });
+    if (existingUserName) return res.status(401).json("Username already exist");
+
+    const existingUserMail = await User.findOne({ email: data.email });
+    if (existingUserMail) return res.status(401).json("Email already exist");
 
     await newUser.save();
     res.status(201).json(newUser);

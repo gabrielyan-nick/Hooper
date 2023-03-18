@@ -69,7 +69,7 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
     city: {
-      type: String,
+      type: Object,
       required: true,
     },
     location: {

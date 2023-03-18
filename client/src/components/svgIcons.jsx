@@ -14,7 +14,27 @@ export const FavouriteIcon = ({ size = 25 }) => {
   );
 };
 
-export const CloseIcon = ({ size = 25, color = "#5e1f02" }) => {
+export const CloseIconFill = ({ size = 30, color = "#5e1f02" }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      width={`${size}px`}
+      height={`${size}px`}
+    >
+      <path
+        fill="#af3707"
+        d="M40 3H24C12.4 3 3 12.4 3 24v16c0 11.6 9.4 21 21 21h16c11.6 0 21-9.4 21-21V24c0-11.6-9.4-21-21-21z"
+      />
+      <path
+        fill="#E2E2E2"
+        d="M36.8 32L48 20.8c.6-.6 1-1.5 1-2.4 0-.9-.4-1.8-1-2.4-1.3-1.3-3.5-1.3-4.8 0L32 27.2 20.8 16c-1.3-1.3-3.5-1.3-4.8 0-.6.6-1 1.5-1 2.4 0 .9.4 1.8 1 2.4L27.2 32 16 43.2c-.6.6-1 1.5-1 2.4s.4 1.8 1 2.4c.6.6 1.5 1 2.4 1 .9 0 1.8-.4 2.4-1L32 36.8 43.2 48c1.3 1.3 3.5 1.3 4.8 0 .6-.6 1-1.5 1-2.4 0-.9-.4-1.8-1-2.4L36.8 32z"
+      />
+    </svg>
+  );
+};
+
+export const CloseIcon = ({ size = 23, color = "#d9ece6" }) => {
   return (
     <svg
       viewBox="0 0 512 512"
@@ -26,6 +46,25 @@ export const CloseIcon = ({ size = 25, color = "#5e1f02" }) => {
       <path
         fill={color}
         d="M437.5 386.6L306.9 256l130.6-130.6c14.1-14.1 14.1-36.8 0-50.9-14.1-14.1-36.8-14.1-50.9 0L256 205.1 125.4 74.5c-14.1-14.1-36.8-14.1-50.9 0-14.1 14.1-14.1 36.8 0 50.9L205.1 256 74.5 386.6c-14.1 14.1-14.1 36.8 0 50.9 14.1 14.1 36.8 14.1 50.9 0L256 306.9l130.6 130.6c14.1 14.1 36.8 14.1 50.9 0 14-14.1 14-36.9 0-50.9z"
+      />
+    </svg>
+  );
+};
+
+export const QuestionIcon = ({ size = 18 }) => {
+  return (
+    <svg
+      fill="none"
+      width={`${size}px`}
+      height={`${size}px`}
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clipRule="evenodd"
+        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+        fill="#4A5568"
+        fillRule="evenodd"
       />
     </svg>
   );

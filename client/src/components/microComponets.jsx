@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const FlexBetweenBox = styled.div`
   display: flex;
@@ -60,7 +60,7 @@ export const Input = styled.input`
   color: ${(props) => props.color || props.theme.text};
   background: ${(props) => props.bg || props.theme.inputBg};
   width: 100%;
-  padding: ${(props) => props.p || "7px 15px"};
+  padding: ${(props) => props.p || "9px 15px"};
   border-radius: 15px;
   margin-top: ${(props) => props.mt || 0};
   margin-bottom: ${(props) => props.mb || 0};
@@ -68,7 +68,8 @@ export const Input = styled.input`
   box-shadow: ${(props) => props.boxSh || "0 0 3px 0 black"};
   &:focus {
     outline: none;
-    box-shadow: ${(props) => props.boxSh || "0 0 4px 0 #000000 inset"};
+    box-shadow: ${(props) => props.boxSh || "0 0 3px 0 #000000 inset"};
+    outline: ${(props) => props.theme.inputBorder};
   }
 `;
 
@@ -91,13 +92,15 @@ export const Button = styled.button`
   box-sizing: border-box;
   color: ${(props) => props.color || "#fff"};
   cursor: pointer;
-  display: inline-block;
+  display: inline-flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   flex-shrink: 0;
   font-size: ${(props) => props.fS || "16px"};
   font-weight: ${(props) => props.fW || 700};
   justify-content: center;
-  line-height: 24px;
+  line-height: ${(props) => props.lh || "24px"};
   margin: 0;
   outline: none;
   overflow: visible;
@@ -111,15 +114,16 @@ export const Button = styled.button`
   -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: middle;
-  width: auto;
+  width: ${(props) => props.width || "auto"};
+  height: ${(props) => props.height || null};
   word-break: keep-all;
-  z-index: 10;
+  z-index: ${(props) => props.zi || 0};
   &::after,
   ::before {
     border-radius: 80px;
   }
   &:before {
-    background-color: ${(props) => props.b || "rgba(2, 105, 36, 0.32)"};
+    background-color: ${(props) => props.b || "rgba(151, 98, 91, 0.479)"};
     content: "";
     display: block;
     height: 100%;
@@ -134,9 +138,9 @@ export const Button = styled.button`
     background-color: initial;
     background-image: ${(props) =>
       `linear-gradient(92.83deg,
-      ${props.bgColors?.first || "#f88b4c"}
+      ${props.bgColors?.first || "#5a0324"}
        0,
-       ${props.bgColors?.second || "#f8330b"} 100%)`};
+       ${props.bgColors?.second || "#b61e03"} 100%)`};
 
     bottom: 4px;
     content: "";
@@ -177,6 +181,34 @@ export const Button = styled.button`
   }
   &:disabled {
     cursor: default;
-    opacity: 0.24;
+    opacity: 0.8;
+  }
+  &:focus:not(:active) {
+    outline: 2px solid #01442f;
+    border-radius: 80px;
+  }
+`;
+
+const rollAnim = keyframes`
+   0% { transform: translateX(-150%) rotate(0deg) ; } 100% { transform: translateX(150%) rotate(360deg)};
+`;
+
+export const BtnSpinner = styled.span`
+  display: block;
+  width: 30px;
+  height: 30px;
+  background: #d0f0e1;
+  border-radius: 50%;
+  position: relative;
+  animation: ${rollAnim} 1s ease-in-out infinite alternate;
+
+
+  &:after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    border: 5px solid;
+    border-color: #ff2600 transparent;
   }
 `;

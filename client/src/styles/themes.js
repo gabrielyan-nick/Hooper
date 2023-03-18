@@ -7,6 +7,7 @@ export const lightTheme = {
   courtTitleColor: "#270a01",
   text: "#000",
   inputBg: "#fff",
+  inputBorder: "2px solid #039768",
   media: {
     wideScreen: "(min-width: 1400px)",
     desktop: "(min-width: 800px) and (max-width: 1400px)",
@@ -23,7 +24,8 @@ export const darkTheme = {
   color: "purple",
   courtTitleColor: "#fff",
   text: "#fff",
-  inputBg: "#5b6e62",
+  inputBg: "2px solid #5b6e62",
+  inputBorder: "#039768",
   media: {
     wideScreen: "(min-width: 1400px)",
     desktop: "(min-width: 800px) and (max-width: 1400px)",

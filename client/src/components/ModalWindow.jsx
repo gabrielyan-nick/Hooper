@@ -4,7 +4,7 @@ import { CSSTransition } from "react-transition-group";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import useMount from "../hooks/useMount";
 import { Button, IconButton } from "./microComponets";
-import { CloseIcon } from "./svgIcons";
+import { CloseIconFill, CloseIcon } from "./svgIcons";
 
 const ModalWindow = ({
   opened,
@@ -88,9 +88,14 @@ const ModalWindow = ({
         >
           <ModalContent ref={contentRef}>
             <ModalHeader>
-              <IconButton onClick={onCloseModal}>
+              <Button
+                p="5px"
+                lh="0px"
+                bgColors={{ first: "#911903", second: "#d6634c" }}
+                onClick={onCloseModal}
+              >
                 <CloseIcon />
-              </IconButton>
+              </Button>
             </ModalHeader>
             {children}
           </ModalContent>
@@ -117,9 +122,9 @@ const ModalWrapper = styled.div`
 const ModalContent = styled.div`
   position: relative;
   background: ${(props) => props.theme.popupBg};
-  border-radius: 15px;
+  border-radius: 20px;
   min-height: 100px;
-  padding: 3px 5px;
+  padding: 5px 5px;
   @media ${(props) => props.theme.media.wideScreen} {
     width: 27%;
   }
