@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { CSSTransition } from "react-transition-group";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import useMount from "../hooks/useMount";
-import { Button, IconButton } from "./microComponets";
+import { Button, IconButton, CloseBtn } from "./microComponets";
 import { CloseIconFill, CloseIcon } from "./svgIcons";
 
 const ModalWindow = ({
@@ -88,14 +88,9 @@ const ModalWindow = ({
         >
           <ModalContent ref={contentRef}>
             <ModalHeader>
-              <Button
-                p="5px"
-                lh="0px"
-                bgColors={{ first: "#911903", second: "#d6634c" }}
-                onClick={onCloseModal}
-              >
+              <CloseBtn onClick={onCloseModal}>
                 <CloseIcon />
-              </Button>
+              </CloseBtn>
             </ModalHeader>
             {children}
           </ModalContent>
@@ -122,7 +117,7 @@ const ModalWrapper = styled.div`
 const ModalContent = styled.div`
   position: relative;
   background: ${(props) => props.theme.popupBg};
-  border-radius: 20px;
+  border-radius: 10px;
   min-height: 100px;
   padding: 5px 5px;
   @media ${(props) => props.theme.media.wideScreen} {

@@ -6,7 +6,7 @@ export default createGlobalStyle`
   body {
     height: 100%;
     width: 100%;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Golos Text', sans-serif;
   }
   .mapboxgl-popup-content {
     background: none;
@@ -19,10 +19,6 @@ export default createGlobalStyle`
   p {
     margin: 0;
     padding: 0;
-  }
-
-  select, option {
-    font-family: 'Nunito', sans-serif;
   }
 
 .modal-overlay-appear {

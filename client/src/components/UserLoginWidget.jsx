@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Button } from "./microComponets";
-import { ModalWindow, LoginRegisterForm } from "./index";
+import { ModalWindow, LoginRegisterScreen } from "./index";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -30,7 +30,7 @@ const UserLoginWidget = () => {
         closeModal={closeModal}
         closeClickOutside={false}
       >
-        <LoginRegisterForm />
+        <LoginRegisterScreen />
       </ModalWindow>
     </>
   );

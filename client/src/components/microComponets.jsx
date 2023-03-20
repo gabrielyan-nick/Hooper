@@ -11,6 +11,7 @@ export const FlexCenterBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: ${props => props.direction || 'row'};
   width: ${(props) => props.width || "auto"};
 `;
 
@@ -23,24 +24,36 @@ export const IconButton = styled.button`
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  transition: all 0.1s ease-in-out;
+  transition: scale 0.1s ease-in-out;
   &:active {
     transform: scale(0.9);
   }
 `;
 
+export const CloseBtn = styled(IconButton)`
+  border-radius: 5px;
+  background-color: #e02504;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: #9e1b04;
+  }
+`;
+
 export const Text = styled.p`
-  font-family: "Nunito", sans-serif;
   font-size: ${(props) => props.fS || "inherit"};
   font-weight: ${(props) => props.fW || 600};
-  color: ${(props) => props.color || props.theme.text};
+  color: ${(props) =>
+    props.color === "primary"
+      ? props.theme.text
+      : props.color === "secondary"
+      ? props.theme.textSecondary
+      : props.theme.text};
   margin: 0;
   text-align: ${(props) => (props.centred ? "center" : "inherit")};
   margin: ${(props) => props.m || 0}; ;
 `;
 
 export const Title = styled.h3`
-  font-family: "Nunito", sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: ${(props) => props.theme.courtTitleColor};
@@ -54,21 +67,20 @@ export const CourtImg = styled.img`
 `;
 
 export const Input = styled.input`
-  font-family: "Nunito", sans-serif;
+  font-family: "Golos Text", sans-serif;
   font-weight: ${(props) => props.fW || 700};
   font-size: ${(props) => props.fS || "inherit"};
-  color: ${(props) => props.color || props.theme.text};
+  color: ${(props) => props.color || "#2c2522"};
   background: ${(props) => props.bg || props.theme.inputBg};
   width: 100%;
   padding: ${(props) => props.p || "9px 15px"};
-  border-radius: 15px;
+  border-radius: 7px;
   margin-top: ${(props) => props.mt || 0};
   margin-bottom: ${(props) => props.mb || 0};
   border: ${(props) => props.border || "none"};
-  box-shadow: ${(props) => props.boxSh || "0 0 3px 0 black"};
   &:focus {
     outline: none;
-    box-shadow: ${(props) => props.boxSh || "0 0 3px 0 #000000 inset"};
+    box-shadow: ${(props) => props.boxSh || "0 0 2px 0 #000000 inset"};
     outline: ${(props) => props.theme.inputBorder};
   }
 `;
@@ -78,7 +90,7 @@ export const Label = styled.label`
   font-family: "Play", sans-serif;
   font-weight: ${(props) => props.fW || 600};
   font-size: ${(props) => props.fS || "inherit"};
-  color: ${(props) => props.color || props.theme.text};
+  color: ${(props) => props.color || props.theme.textSecondary};
   padding-left: ${(props) => props.pl || 0};
 `;
 
@@ -90,13 +102,14 @@ export const Button = styled.button`
   background-image: none;
   border-style: none;
   box-sizing: border-box;
-  color: ${(props) => props.color || "#fff"};
+  color: ${(props) => props.color || "#dbdada"};
   cursor: pointer;
   display: inline-flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  font-family: "Play", sans-serif;
   font-size: ${(props) => props.fS || "16px"};
   font-weight: ${(props) => props.fW || 700};
   justify-content: center;
@@ -122,8 +135,8 @@ export const Button = styled.button`
   ::before {
     border-radius: 80px;
   }
-  &:before {
-    background-color: ${(props) => props.b || "rgba(151, 98, 91, 0.479)"};
+  /* &:before {
+    background-color: ${(props) => props.b || "rgba(209, 55, 9, 0.582)"};
     content: "";
     display: block;
     height: 100%;
@@ -133,15 +146,10 @@ export const Button = styled.button`
     top: 0;
     width: 100%;
     z-index: -2;
-  }
+  } */
   &:after {
-    background-color: initial;
-    background-image: ${(props) =>
-      `linear-gradient(92.83deg,
-      ${props.bgColors?.first || "#5a0324"}
-       0,
-       ${props.bgColors?.second || "#b61e03"} 100%)`};
-
+    /* background-color: #55bf40; */
+    background-image: ${(props) => props.bgColors || props.theme.btnPrimary};
     bottom: 4px;
     content: "";
     display: block;
@@ -170,10 +178,11 @@ export const Button = styled.button`
         rgba(0, 0, 0, 0.2)
       ),
       ${(props) =>
+        props.bgColors ||
         `linear-gradient(92.83deg,
-      ${props.bgColors?.first || "#ff7426"}
+      #0a8314
        0,
-       ${props.bgColors?.second || "#d42f0e"} 100%)`};
+       #024d29 100%)`};
     bottom: 4px;
     left: 4px;
     right: 4px;
@@ -202,13 +211,12 @@ export const BtnSpinner = styled.span`
   position: relative;
   animation: ${rollAnim} 1s ease-in-out infinite alternate;
 
-
   &:after {
     content: "";
     position: absolute;
     inset: 5px;
     border-radius: 50%;
     border: 5px solid;
-    border-color: #ff2600 transparent;
+    border-color: #d04516 transparent;
   }
 `;

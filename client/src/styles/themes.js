@@ -1,13 +1,37 @@
 export const lightTheme = {
+  greenMain: `linear-gradient(92.83deg,
+    #00914C
+     0,
+     #024d29 100%)`,
+  selectBg: `linear-gradient(92.83deg,
+    #024d299a    0,
+    #00914b9d 100%)`,
+  orangeMain: `linear-gradient(92.83deg,
+      #D04516
+       0,
+       #a0310c 100%)`,
   mapStyle: "mapbox://styles/mapbox/outdoors-v11",
   popupBorder: "2px solid #f93a13",
-  popupBg:
-    "linear-gradient(180deg, rgba(218,245,230,1) 0%, rgba(76,194,135,1) 76%, rgba(65,157,115,1) 100%)",
+  popupBg: "#BDA69E",
   color: "red",
   courtTitleColor: "#270a01",
-  text: "#000",
-  inputBg: "#fff",
-  inputBorder: "2px solid #039768",
+  text: "#2c2522",
+  textSecondary: "#55433C",
+  inputBg: "#ebe6e3",
+  inputBorder: "2px solid #00914C",
+  btnPrimary: `linear-gradient(92.83deg,
+    #00914C
+     0,
+     #024d29 100%)`,
+  btnSecondary: `linear-gradient(92.83deg,
+      #D04516
+       0,
+       #a0310c 100%)`,
+  scrollbar: `linear-gradient(92.83deg,
+  #D04516
+   0,
+   #a0310c 100%)`,
+  placeholderText: "#6e5d56",
   media: {
     wideScreen: "(min-width: 1400px)",
     desktop: "(min-width: 800px) and (max-width: 1400px)",
@@ -17,15 +41,40 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
+  greenMain: `linear-gradient(92.83deg,
+    #00914C
+     0,
+     #024d29 100%)`,
+
+  orangeMain: `linear-gradient(92.83deg,
+      #D04516
+       0,
+       #a0310c 100%)`,
   mapStyle: "mapbox://styles/mapbox/dark-v10",
   popupBorder: "2px solid #001107",
-  popupBg:
-    "linear-gradient(0deg, rgba(7,47,29,1) 0%, rgba(24,79,56,1) 25%, rgba(65,145,99,1) 100%)",
+  popupBg: "#2c2522",
   color: "purple",
   courtTitleColor: "#fff",
-  text: "#fff",
-  inputBg: "2px solid #5b6e62",
-  inputBorder: "#039768",
+  text: "#dbdada",
+  textSecondary: "#b8b3b3",
+  inputBg: "#aca4a4",
+  inputBorder: "2px solid #a0310c",
+  selectBg: `linear-gradient(92.83deg,
+    #024d299a    0,
+    #00914b9d 100%)`,
+  btnPrimary: `linear-gradient(92.83deg,
+    #00914C
+     0,
+     #024d29 100%)`,
+  btnSecondary: `linear-gradient(92.83deg,
+      #D04516
+       0,
+       #a0310c 100%)`,
+  scrollbar: `linear-gradient(92.83deg,
+        #00914C
+         0,
+         #024d29 100%)`,
+         placeholderText: "#5f4c44",
   media: {
     wideScreen: "(min-width: 1400px)",
     desktop: "(min-width: 800px) and (max-width: 1400px)",
