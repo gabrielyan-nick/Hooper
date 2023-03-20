@@ -11,3 +11,6 @@ export { default as LoginRegisterScreen } from "./LoginRegisterScreen";
 export { IconWithTooltip } from "./CourtInfo";
 export { LoginFormWrapper, LoginForm, LoginAfterReg } from "./forms/LoginForm";
 export { default as RegisterForm } from "./forms/RegisterForm";
+export { default as ForgotPassForm } from "./forms/ForgotPassForm";
+export { default as ResetPassForm } from "./forms/ResetPassForm";
+export { default as UserWidget } from "./UserWidget";

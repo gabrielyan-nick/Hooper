@@ -10,7 +10,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import themeReducer from "./themeSlice";
+import userReducer from "./userSlice";
 import { courtsApi } from "../api/courtsApi";
 import { authApi } from "../api/authApi";
 
@@ -20,10 +20,10 @@ const persistConfig = {
   version: 1,
 };
 
-const persistedThemeReducer = persistReducer(persistConfig, themeReducer);
+const persistedThemeReducer = persistReducer(persistConfig, userReducer);
 
 const rootReducer = combineReducers({
-  theme: persistedThemeReducer,
+  user: persistedThemeReducer,
   [courtsApi.reducerPath]: courtsApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
 });

@@ -13,7 +13,7 @@ import {
   Label,
   FlexCenterBox,
   IconButton,
-  BtnSpinner,
+  BtnSpinnerWrapper,
 } from "./../microComponets";
 import { ShowPassIcon, HidePassIcon, QuestionIcon } from "./../svgIcons";
 import { useRegisterMutation } from "../../api/authApi";
@@ -24,13 +24,15 @@ import {
   PassIconBtn,
   ErrorText,
   FormWrapper,
+  SubmitErrorText,
 } from "../LoginRegisterScreen";
+import { BasketballMarker } from "../markers";
 
 const registerSchema = yup
   .object({
     username: yup
       .string()
-      .max(30, "Максмимум 30 символів")
+      .max(20, "Максимум 20 символів")
       .min(2, "Мінімум 2 символи")
       .required("Введіть ім'я користувача"),
     password: yup
@@ -65,12 +67,9 @@ const RegisterForm = forwardRef((props, ref) => {
 
   const onSubmit = async (formData) => {
     const res = await submit(formData);
-    console.log(res);
-    console.log(error);
     if (!res.error && res.data) {
       changeForm("loginAfterReg");
-    }
-    if (res.error.status === 500) {
+    } else if (res.error.status === 500) {
       setSubmitError(true);
     }
   };
@@ -142,7 +141,7 @@ const RegisterForm = forwardRef((props, ref) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Label pl="10px">
           Ім'я користувача
-          <Input {...register("username")} mt="5px" mb="25px" />
+          <Input {...register("username")} m="5px 0 25px" />
           <ErrorText>
             {errors.username?.message ||
               (isError &&
@@ -155,8 +154,7 @@ const RegisterForm = forwardRef((props, ref) => {
           <Input
             {...register("password")}
             type={isPassVisible ? "text" : "password"}
-            mt="5px"
-            mb="25px"
+            m="5px 0 25px"
             p="9px 40px 9px 15px"
           />
           <PassIconBtn onClick={togglePassVisible} type="button">
@@ -184,7 +182,7 @@ const RegisterForm = forwardRef((props, ref) => {
               email використовується лише для відновлення паролю
             </Tooltip>
           </QuestionIconWrapper>
-          <Input {...register("email")} mt="5px" mb="25px" />
+          <Input {...register("email")} m="5px 0 25px" />
           <ErrorText>
             {errors.email?.message ||
               (isError &&
@@ -210,15 +208,23 @@ const RegisterForm = forwardRef((props, ref) => {
             {errors.city?.message}
           </ErrorText>
         </Label>
-        {submitError && <RegErrorText>Упс...невідома помилка</RegErrorText>}
+        {submitError && (
+          <SubmitErrorText>Упс...невідома помилка</SubmitErrorText>
+        )}
         <FlexCenterBox>
           <Button
             type="submit"
             disabled={isLoading}
-            height="44px"
             width="170px"
+            onClick={() => setSubmitError(false)}
           >
-            {isLoading ? <BtnSpinner /> : "Зареєструватись"}
+            {isLoading ? (
+              <BtnSpinnerWrapper>
+                <BasketballMarker />
+              </BtnSpinnerWrapper>
+            ) : (
+              "Зареєструватись"
+            )}
           </Button>
         </FlexCenterBox>
       </form>
@@ -236,13 +242,5 @@ const RegisterForm = forwardRef((props, ref) => {
     </FormWrapper>
   );
 });
-
-const RegErrorText = styled.p`
-  font-family: "Play", sans-serif;
-  font-weight: 600;
-  color: #ac2b04;
-  padding: 0 0 10px;
-  text-align: center;
-`;
 
 export default RegisterForm;

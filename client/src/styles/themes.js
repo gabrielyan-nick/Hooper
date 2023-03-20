@@ -1,4 +1,6 @@
 export const lightTheme = {
+  lightGreen: "#05b962",
+  greenUserWidget: "#025a30be",
   greenMain: `linear-gradient(92.83deg,
     #00914C
      0,
@@ -10,6 +12,8 @@ export const lightTheme = {
       #D04516
        0,
        #a0310c 100%)`,
+  userWidgetBtn: "linear-gradient(92.83deg, #00914cdb 0px, #024d29d1 100%)",
+  username: "#ffd6c8",
   mapStyle: "mapbox://styles/mapbox/outdoors-v11",
   popupBorder: "2px solid #f93a13",
   popupBg: "#BDA69E",
@@ -70,11 +74,12 @@ export const darkTheme = {
       #D04516
        0,
        #a0310c 100%)`,
+  userWidgetBtn: "linear-gradient(92.83deg, #00914cdb 0px, #024d29d1 100%)",
   scrollbar: `linear-gradient(92.83deg,
         #00914C
          0,
          #024d29 100%)`,
-         placeholderText: "#5f4c44",
+  placeholderText: "#5f4c44",
   media: {
     wideScreen: "(min-width: 1400px)",
     desktop: "(min-width: 800px) and (max-width: 1400px)",

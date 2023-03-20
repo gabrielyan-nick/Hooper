@@ -34,7 +34,7 @@ export const CloseIconFill = ({ size = 30, color = "#5e1f02" }) => {
   );
 };
 
-export const CloseIcon = ({ size = 23, color = "#d9ece6" }) => {
+export const CloseIcon = ({ size = 23, color = "#f8d4c5" }) => {
   return (
     <svg
       viewBox="0 0 512 512"

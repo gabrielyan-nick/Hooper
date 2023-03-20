@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { Button } from "./microComponets";
-import { ModalWindow, LoginRegisterScreen } from "./index";
+import { Button, UserWidgetBtn } from "./microComponets";
+import { ModalWindow, LoginRegisterScreen, UserWidget } from "./index";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -15,6 +16,7 @@ const Wrapper = styled.div`
 `;
 
 const UserLoginWidget = () => {
+  const isAuth = useSelector((state) => !!state.user.user?.token);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);
@@ -23,14 +25,18 @@ const UserLoginWidget = () => {
   return (
     <>
       <Wrapper>
-        <Button onClick={openModal}>Увійти</Button>
+        {isAuth ? (
+          <UserWidget />
+        ) : (
+          <UserWidgetBtn p='12px 30px' onClick={openModal}>Увійти</UserWidgetBtn>
+        )}
       </Wrapper>
       <ModalWindow
         opened={isModalOpen}
         closeModal={closeModal}
         closeClickOutside={false}
       >
-        <LoginRegisterScreen />
+        <LoginRegisterScreen closeModal={closeModal} />
       </ModalWindow>
     </>
   );

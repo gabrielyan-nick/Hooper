@@ -1,12 +1,7 @@
 import React, { useState, useRef, forwardRef } from "react";
 import { useSelector } from "react-redux";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useForm, Controller } from "react-hook-form";
-import Select from "react-select";
 import styled, { useTheme, css } from "styled-components";
-import { Tooltip } from "react-tooltip";
 import {
   Text,
   Button,
@@ -21,22 +16,22 @@ import {
   LoginFormWrapper,
   RegisterForm,
   LoginAfterReg,
+  ForgotPassForm,
 } from "../components";
-import { ShowPassIcon, HidePassIcon, QuestionIcon } from "./svgIcons";
-import { useRegisterMutation, useLoginMutation } from "../api/authApi";
-import { cities } from "../data";
-import { darkTheme, lightTheme } from "../styles/themes";
 
-const LoginRegisterScreen = () => {
+const LoginRegisterScreen = ({ closeModal }) => {
   const [formType, setFormType] = useState("login");
   const loginRef = useRef(null);
   const registerRef = useRef(null);
   const loginAfterRegRef = useRef(null);
+  const forgotPassRef = useRef(null);
   const nodeRef =
     formType === "login"
       ? loginRef
       : formType === "loginAfterReg"
       ? loginAfterRegRef
+      : formType === "forgotPass"
+      ? forgotPassRef
       : registerRef;
 
   const changeFormType = (type) => {
@@ -49,25 +44,22 @@ const LoginRegisterScreen = () => {
         nodeRef={nodeRef}
         key={formType}
         classNames="switch"
-        timeout={200}
+        timeout={300}
       >
         {formType === "login" ? (
-          <>
-            <LoginFormWrapper ref={nodeRef} />
-            <FlexCenterBox direction="column" style={{ padding: "0 7px 10px" }}>
-              <Text fS="17px" fW={700} m="10px 0" color="secondary" centred>
-                Немає акаунта? Зареєструйтесь, щоб мати більше можливостей
-              </Text>
-              <Button
-                bgColors={lightTheme.btnSecondary}
-                onClick={() => changeFormType("register")}
-              >
-                Зареєструватись
-              </Button>
-            </FlexCenterBox>
-          </>
+          <LoginFormWrapper
+            ref={nodeRef}
+            changeForm={changeFormType}
+            closeModal={closeModal}
+          />
         ) : formType === "loginAfterReg" ? (
-          <LoginAfterReg ref={nodeRef} />
+          <LoginAfterReg
+            ref={nodeRef}
+            closeModal={closeModal}
+            changeForm={changeFormType}
+          />
+        ) : formType === "forgotPass" ? (
+          <ForgotPassForm ref={forgotPassRef} changeForm={changeFormType} />
         ) : (
           <RegisterForm ref={nodeRef} changeForm={changeFormType} />
         )}
@@ -88,7 +80,7 @@ export const FormWrapper = styled.div`
 export const ErrorText = styled(Text)`
   font-family: "Play", sans-serif;
   position: absolute;
-  bottom: -30px;
+  top: 65px;
   left: 10px;
   color: #ac2b04;
 `;
@@ -103,6 +95,14 @@ export const QuestionIconWrapper = styled(IconButton)`
   position: absolute;
   top: 0px;
   left: 60px;
+`;
+
+export const SubmitErrorText = styled.p`
+  font-family: "Play", sans-serif;
+  font-weight: 600;
+  color: #ac2b04;
+  padding: 0 0 10px;
+  text-align: center;
 `;
 
 export default LoginRegisterScreen;

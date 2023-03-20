@@ -5,13 +5,14 @@ import GlobalStyles from "./styles/global.js";
 import { Helmet } from "react-helmet";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./styles/themes.js";
-import MainPage from "./pages/MainPage";
+import MainPage from "./pages/MainPage.jsx";
+import ResetPassPage from "./pages/ResetPassPage.jsx";
 import { Map } from "./components";
 import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
 import "../node_modules/react-tooltip/dist/react-tooltip.css";
 
 function App() {
-  const theme = useSelector((state) => state.theme.theme);
+  const theme = useSelector((state) => state.user.theme);
 
   return (
     <>
@@ -36,6 +37,10 @@ function App() {
             <main>
               <Routes>
                 <Route path="/" element={<MainPage />} />
+                <Route
+                  path="/reset-password/:token"
+                  element={<ResetPassPage />}
+                />
               </Routes>
             </main>
           </BrowserRouter>

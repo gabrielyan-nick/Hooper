@@ -60,19 +60,23 @@ export default createGlobalStyle`
 
 .switch-enter{
    opacity: 0;
-   transition: opacity 300ms, transform 300ms;
-}
-.switch-exit{
-   opacity: 1;
-  transition: opacity 300ms, transform 300ms;
+   transform: scale(0.95);
+   transition: opacity 300ms, transform 400ms;
 }
 .switch-enter-active{
    opacity: 1;
-     transition: opacity 300ms, transform 300ms;
+   transform: scale(1);
+     transition: opacity 300ms, transform 400ms;
+}
+.switch-exit{
+   opacity: 1;
+   transform: scale(1);
+  transition: opacity 300ms, transform 400ms;
 }
 .switch-exit-active{
    opacity: 0;
-  transition: opacity 300ms, transform 300ms;
+   transform: scale(0.95);
+  transition: opacity 300ms, transform 400ms;
 }
 
 

@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { MainMap, UserLoginWidget, LoadingScreen } from "../components";
-import { setTheme } from "../store/themeSlice";
+import { setTheme } from "../store/userSlice";
+import { Wrapper } from "../components/microComponets";
+import { setLogout } from "../store/userSlice";
 
 const MainPage = () => {
   const [isLoadingScreen, setIsLoadingScreen] = useState(true);
   const dispatch = useDispatch();
-  const theme = useSelector((state) => state.theme.theme);
+  const theme = useSelector((state) => state.user.theme);
 
   const onChangeTheme = () => dispatch(setTheme());
+  const onLogout = () => dispatch(setLogout());
   const closeLoadingScreen = () => setIsLoadingScreen(false);
 
   return (
@@ -19,6 +22,7 @@ const MainPage = () => {
       ) : (
         <>
           <ChangeThemeBtn onClick={onChangeTheme} />
+          <LogoutBtn onClick={onLogout} />
           <UserLoginWidget />
         </>
       )}
@@ -30,12 +34,6 @@ const MainPage = () => {
 
 export default MainPage;
 
-const Wrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-`;
-
 const ChangeThemeBtn = styled.button`
   position: absolute;
   top: 30px;
@@ -44,4 +42,8 @@ const ChangeThemeBtn = styled.button`
   height: 20px;
   z-index: 10;
   background-color: ${(props) => props.theme.color};
+`;
+
+const LogoutBtn = styled(ChangeThemeBtn)`
+  top: 70px;
 `;

@@ -100,7 +100,7 @@ const ModalWindow = ({
   );
 };
 
-const ModalWrapper = styled.div`
+export const ModalWrapper = styled.div`
   position: fixed;
   z-index: 101;
   left: 0;
@@ -114,9 +114,9 @@ const ModalWrapper = styled.div`
   align-items: center;
 `;
 
-const ModalContent = styled.div`
+export const ModalContent = styled.div`
   position: relative;
-  background: ${(props) => props.theme.popupBg};
+  background: ${(props) => props.bg || props.theme.popupBg};
   border-radius: 10px;
   min-height: 100px;
   padding: 5px 5px;

@@ -1,4 +1,12 @@
 import styled, { keyframes } from "styled-components";
+import { lightTheme, darkTheme } from "../styles/themes";
+import { BasketballMarker } from "./markers";
+
+export const Wrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+`;
 
 export const FlexBetweenBox = styled.div`
   display: flex;
@@ -11,7 +19,7 @@ export const FlexCenterBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: ${props => props.direction || 'row'};
+  flex-direction: ${(props) => props.direction || "row"};
   width: ${(props) => props.width || "auto"};
 `;
 
@@ -24,9 +32,10 @@ export const IconButton = styled.button`
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  transition: scale 0.1s ease-in-out;
+  transition: all 0.2s ease-in-out;
   &:active {
-    transform: scale(0.9);
+    transform: scale(0.93);
+    transition: all 0.2s ease-in-out;
   }
 `;
 
@@ -34,6 +43,10 @@ export const CloseBtn = styled(IconButton)`
   border-radius: 5px;
   background-color: #e02504;
   transition: background-color 0.3s;
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+    rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
+    rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+    rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px;
   &:hover {
     background-color: #9e1b04;
   }
@@ -75,8 +88,7 @@ export const Input = styled.input`
   width: 100%;
   padding: ${(props) => props.p || "9px 15px"};
   border-radius: 7px;
-  margin-top: ${(props) => props.mt || 0};
-  margin-bottom: ${(props) => props.mb || 0};
+  margin: ${(props) => props.m || 0};
   border: ${(props) => props.border || "none"};
   &:focus {
     outline: none;
@@ -94,6 +106,56 @@ export const Label = styled.label`
   padding-left: ${(props) => props.pl || 0};
 `;
 
+export const UserWidgetBtn = styled.button`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  font-family: "Play", sans-serif;
+  font-size: ${(props) => props.fS || "16px"};
+  font-weight: ${(props) => props.fW || 700};
+  padding: ${(props) => props.p || "3px"};
+  margin: ${(props) => props.m || 0};
+  background-color: ${lightTheme.greenUserWidget};
+  color: ${(props) => props.color || "#fdf3ee"};
+  border-radius: 30px;
+  gap: 10px;
+  transition: all 0.3s;
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+    rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
+    rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+    rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px;
+  &:hover {
+    background-color: ${lightTheme.lightGreen};
+    transition: all 0.3s;
+  }
+  &:active {
+    transform: scale(0.96);
+  }
+`;
+
+export const TextButton = styled.button`
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  font-family: "Play", sans-serif;
+  font-size: ${(props) => props.fS || "16px"};
+  font-weight: ${(props) => props.fW || 700};
+  text-align: center;
+  margin: ${(props) => props.m || 0};
+  padding: ${(props) => props.p || 0};
+  color: ${(props) => props.color || props.theme.textSecondary};
+  background: transparent;
+  border: none;
+  transition: all 0.2s;
+  &:hover {
+    color: ${(props) => props.theme.text};
+  }
+`;
+
 export const Button = styled.button`
   align-items: center;
   appearance: none;
@@ -104,7 +166,7 @@ export const Button = styled.button`
   box-sizing: border-box;
   color: ${(props) => props.color || "#dbdada"};
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -114,7 +176,7 @@ export const Button = styled.button`
   font-weight: ${(props) => props.fW || 700};
   justify-content: center;
   line-height: ${(props) => props.lh || "24px"};
-  margin: 0;
+  margin: ${(props) => props.m || 0};
   outline: none;
   overflow: visible;
   padding: ${(props) => props.p || "10px 20px"};
@@ -128,27 +190,14 @@ export const Button = styled.button`
   touch-action: manipulation;
   vertical-align: middle;
   width: ${(props) => props.width || "auto"};
-  height: ${(props) => props.height || null};
+  height: ${(props) => props.height || "44px"};
   word-break: keep-all;
   z-index: ${(props) => props.zi || 0};
   &::after,
   ::before {
     border-radius: 80px;
   }
-  /* &:before {
-    background-color: ${(props) => props.b || "rgba(209, 55, 9, 0.582)"};
-    content: "";
-    display: block;
-    height: 100%;
-    left: 0;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: -2;
-  } */
   &:after {
-    /* background-color: #55bf40; */
     background-image: ${(props) => props.bgColors || props.theme.btnPrimary};
     bottom: 4px;
     content: "";
@@ -158,8 +207,10 @@ export const Button = styled.button`
     position: absolute;
     right: 4px;
     top: 4px;
-    transition: all 100ms ease-out;
+    transition: all 200ms ease-out;
     z-index: -1;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+      rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
   }
   &:hover:not(:disabled):after {
     bottom: 0;
@@ -202,21 +253,11 @@ const rollAnim = keyframes`
    0% { transform: translateX(-150%) rotate(0deg) ; } 100% { transform: translateX(150%) rotate(360deg)};
 `;
 
-export const BtnSpinner = styled.span`
+export const BtnSpinnerWrapper = styled.span`
   display: block;
   width: 30px;
   height: 30px;
-  background: #d0f0e1;
   border-radius: 50%;
   position: relative;
   animation: ${rollAnim} 1s ease-in-out infinite alternate;
-
-  &:after {
-    content: "";
-    position: absolute;
-    inset: 5px;
-    border-radius: 50%;
-    border: 5px solid;
-    border-color: #d04516 transparent;
-  }
 `;
