@@ -20,7 +20,7 @@ const UserWidget = () => {
   const name = username.slice(0, 15);
 
   return (
-    <UserWidgetBtn style={{fontFamily: "inherit"}}>
+    <UserWidgetBtn style={{ fontFamily: "inherit" }}>
       <Username>{name || null}</Username>
       <Avatar src={picturePath || null} />
     </UserWidgetBtn>

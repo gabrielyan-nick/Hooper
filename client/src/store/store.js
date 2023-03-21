@@ -20,10 +20,10 @@ const persistConfig = {
   version: 1,
 };
 
-const persistedThemeReducer = persistReducer(persistConfig, userReducer);
+const persistedUserReducer = persistReducer(persistConfig, userReducer);
 
 const rootReducer = combineReducers({
-  user: persistedThemeReducer,
+  user: persistedUserReducer,
   [courtsApi.reducerPath]: courtsApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
 });
