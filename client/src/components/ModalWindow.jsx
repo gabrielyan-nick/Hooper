@@ -95,6 +95,7 @@ const ModalWindow = ({
             {children}
           </ModalContent>
         </CSSTransition>
+        {/* <div style={{ minHeight: "100px", width: "100%" }}></div> */}
       </ModalWrapper>
     </CSSTransition>
   );
@@ -109,17 +110,13 @@ export const ModalWrapper = styled.div`
   height: 100%;
   overflow: auto;
   background-color: #09000cb9;
-  /* display: flex;
+  display: flex;
   justify-content: center;
-  align-items: center; */
+  align-items: flex-start;
 `;
 
 export const ModalContent = styled.div`
-  margin: 50px 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin: 25px 0;
   background: ${(props) => props.bg || props.theme.popupBg};
   border-radius: 10px;
   min-height: 100px;
