@@ -115,7 +115,7 @@ export const ModalWrapper = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  margin: 150px 0;
+  margin: 50px 0;
   position: absolute;
   top: 50%;
   left: 50%;
