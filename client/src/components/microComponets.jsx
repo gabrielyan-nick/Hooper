@@ -111,6 +111,7 @@ export const UserWidgetBtn = styled.button`
   justify-content: space-between;
   align-items: center;
   border: none;
+  user-select: none;
   font-family: "Play", sans-serif;
   font-size: ${(props) => props.fS || "16px"};
   font-weight: ${(props) => props.fW || 700};
