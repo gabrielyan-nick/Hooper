@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { serverUrl } from "../config";
 
 export const courtsApi = createApi({
   reducerPath: "courts",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3001" }),
+  baseQuery: fetchBaseQuery({ baseUrl: serverUrl }),
   tagTypes: ["Courts"],
   endpoints: (builder) => ({
     getMarkers: builder.query({
