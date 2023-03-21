@@ -12,7 +12,7 @@ import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
 import "../node_modules/react-tooltip/dist/react-tooltip.css";
 
 function App() {
-  const theme = useSelector((state) => state.user.theme);
+  const theme = useSelector((state) => state.storage.theme);
 
   return (
     <>

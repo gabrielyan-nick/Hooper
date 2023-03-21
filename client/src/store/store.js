@@ -10,9 +10,10 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import userReducer from "./userSlice";
+import storageReducer from "./storageSlice";
 import { courtsApi } from "../api/courtsApi";
 import { authApi } from "../api/authApi";
+import { userApi } from "../api/userApi";
 
 const persistConfig = {
   key: "hoop",
@@ -20,12 +21,13 @@ const persistConfig = {
   version: 1,
 };
 
-const persistedUserReducer = persistReducer(persistConfig, userReducer);
+const persistedStorageReducer = persistReducer(persistConfig, storageReducer);
 
 const rootReducer = combineReducers({
-  user: persistedUserReducer,
+  storage: persistedStorageReducer,
   [courtsApi.reducerPath]: courtsApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
 });
 
 export const store = configureStore({
@@ -35,7 +37,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(courtsApi.middleware, authApi.middleware),
+    }).concat(courtsApi.middleware, authApi.middleware, userApi.middleware),
   devTools: process.env.NODE_ENV !== "production",
 });
 

@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { setLogin } from "../../store/userSlice";
+import { setLogin } from "../../store/storageSlice";
 import {
   Text,
   Button,

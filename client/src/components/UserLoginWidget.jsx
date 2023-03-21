@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 `;
 
 const UserLoginWidget = () => {
-  const isAuth = useSelector((state) => !!state.user.user?.token);
+  const isAuth = useSelector((state) => !!state.storage.user?.token);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);

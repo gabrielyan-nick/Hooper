@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Button, FlexBetweenBox, Text, UserWidgetBtn } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
+import { ModalWindow, MyInfo } from "./index";
 
 const Avatar = styled.img`
   width: 50px;
@@ -16,14 +17,29 @@ const Username = styled(Text)`
 `;
 
 const UserWidget = () => {
-  const { picturePath, username } = useSelector((state) => state.user.user);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { picturePath, username } = useSelector((state) => state.storage.user);
   const name = username.slice(0, 15);
 
+  const opeUserWidgetModal = () => setIsModalOpen(true);
+  const closUserWidgetModal = () => setIsModalOpen(false);
+
   return (
-    <UserWidgetBtn style={{ fontFamily: "inherit" }}>
-      <Username>{name || null}</Username>
-      <Avatar src={picturePath || null} />
-    </UserWidgetBtn>
+    <>
+      <UserWidgetBtn
+        style={{ fontFamily: "inherit" }}
+        onClick={opeUserWidgetModal}
+      >
+        <Username>{name || null}</Username>
+        <Avatar src={picturePath || null} />
+      </UserWidgetBtn>
+
+      <ModalWindow
+        opened={isModalOpen}
+        closeModal={closUserWidgetModal}
+        closeClickOutside={false}
+      ><MyInfo/></ModalWindow>
+    </>
   );
 };
 

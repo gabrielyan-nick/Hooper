@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { MainMap, UserLoginWidget, LoadingScreen } from "../components";
-import { setTheme } from "../store/userSlice";
+import { setTheme, setLogout } from "../store/storageSlice";
 import { Wrapper } from "../components/microComponets";
-import { setLogout } from "../store/userSlice";
 
 const MainPage = () => {
   const [isLoadingScreen, setIsLoadingScreen] = useState(true);
   const dispatch = useDispatch();
-  const theme = useSelector((state) => state.user.theme);
+  const theme = useSelector((state) => state.storage.theme);
 
   const onChangeTheme = () => dispatch(setTheme());
   const onLogout = () => dispatch(setLogout());

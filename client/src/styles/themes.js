@@ -1,6 +1,10 @@
 export const lightTheme = {
   lightGreen: "#05b962",
   greenUserWidget: "#025a30be",
+  greenIconBtn: "#026d3ab0",
+  orangeIconBtn: "#dd3f0aab",
+  green: "#026d3a",
+  orange: "#D04516",
   greenMain: `linear-gradient(92.83deg,
     #00914C
      0,
@@ -22,6 +26,7 @@ export const lightTheme = {
   text: "#2c2522",
   textSecondary: "#55433C",
   inputBg: "#ebe6e3",
+  textWrapperBg: "#ebe6e39e",
   inputBorder: "2px solid #00914C",
   btnPrimary: `linear-gradient(92.83deg,
     #00914C
@@ -62,6 +67,7 @@ export const darkTheme = {
   text: "#dbdada",
   textSecondary: "#b8b3b3",
   inputBg: "#aca4a4",
+  textWrapperBg: "#bc60403d",
   inputBorder: "2px solid #a0310c",
   selectBg: `linear-gradient(92.83deg,
     #024d299a    0,

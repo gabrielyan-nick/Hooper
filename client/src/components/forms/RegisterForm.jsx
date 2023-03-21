@@ -90,7 +90,9 @@ const RegisterForm = forwardRef((props, ref) => {
       fontWeight: 700,
       margin: "5px 0 25px",
       paddingLeft: "5px",
-      boxShadow: state.isFocused ? "0 0 2px 0 black inset" : "none",
+      boxShadow: state.isFocused
+        ? "0 0 2px 0 black inset"
+        : " rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px",
       border: "none",
       color: "FFF",
     }),

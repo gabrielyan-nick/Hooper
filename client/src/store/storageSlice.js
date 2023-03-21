@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = { theme: "light", user: null };
 
-const userSlice = createSlice({
-  name: "user",
+const storageSlice = createSlice({
+  name: "storage",
   initialState,
   reducers: {
     setTheme: (state) => {
@@ -15,8 +15,12 @@ const userSlice = createSlice({
     setLogout: (state) => {
       state.user = null;
     },
+    setFavCourts: (state, action) => {
+      state.user.favouriteCourts = action.payload;
+    },
   },
 });
 
-export const { setTheme, setLogin, setLogout } = userSlice.actions;
-export default userSlice.reducer;
+export const { setTheme, setLogin, setLogout, setFavCourts } =
+storageSlice.actions;
+export default storageSlice.reducer;

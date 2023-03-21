@@ -39,8 +39,8 @@ const userSchema = new mongoose.Schema(
     favouriteCourts: {
       type: [
         {
-          type: Schema.Types.ObjectId,
-          ref: "Court",
+          _id: { type: Schema.Types.ObjectId, ref: "Court" },
+          name: String,
         },
       ],
       default: [],

@@ -13,7 +13,7 @@ import {
 } from "./index";
 
 const MainMap = ({ closeLoadingScreen }) => {
-  const theme = useSelector((state) => state.user.theme);
+  const theme = useSelector((state) => state.storage.theme);
   const [currentMarkerId, setCurrentMarkerId] = useState(null);
   const [viewState, setViewState] = useState({
     longitude: 36.40292260918253,

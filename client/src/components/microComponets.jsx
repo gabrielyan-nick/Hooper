@@ -39,8 +39,40 @@ export const IconButton = styled.button`
   }
 `;
 
+export const IconBtnBg = styled.button`
+  border-radius: 20px;
+  position: relative;
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: ${(props) =>
+    props.color === "green"
+      ? lightTheme.greenIconBtn
+      : props.color === "orange"
+      ? lightTheme.orangeIconBtn
+      : "transparent"};
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+    rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
+  &:hover {
+    background: ${(props) =>
+      props.color === "green"
+        ? lightTheme.green
+        : props.color === "orange"
+        ? lightTheme.orange
+        : "transparent"};
+  }
+  &:active {
+    transform: scale(0.93);
+  }
+`;
+
 export const CloseBtn = styled(IconButton)`
-  border-radius: 5px;
+  border-radius: 7px;
+  padding: 3px;
   background-color: #e02504;
   transition: background-color 0.3s;
   box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
@@ -90,10 +122,27 @@ export const Input = styled.input`
   border-radius: 7px;
   margin: ${(props) => props.m || 0};
   border: ${(props) => props.border || "none"};
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
   &:focus {
     outline: none;
     box-shadow: ${(props) => props.boxSh || "0 0 2px 0 #000000 inset"};
     outline: ${(props) => props.theme.inputBorder};
+  }
+`;
+
+export const TextLineWrapper = styled.div`
+  background: ${(props) => props.bg || props.theme.textWrapperBg};
+  width: 100%;
+  padding: ${(props) => props.p || "9px 15px"};
+  border-radius: 7px;
+  margin: ${(props) => props.m || 0};
+  border: ${(props) => props.border || "none"};
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
+  overflow-x: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;
 
@@ -194,52 +243,19 @@ export const Button = styled.button`
   height: ${(props) => props.height || "44px"};
   word-break: keep-all;
   z-index: ${(props) => props.zi || 0};
-  &::after,
-  ::before {
-    border-radius: 80px;
-  }
-  &:after {
-    background-image: ${(props) => props.bgColors || props.theme.btnPrimary};
-    bottom: 4px;
-    content: "";
-    display: block;
-    left: 4px;
-    overflow: hidden;
-    position: absolute;
-    right: 4px;
-    top: 4px;
-    transition: all 200ms ease-out;
-    z-index: -1;
-    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
-      rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
-  }
-  &:hover:not(:disabled):after {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    transition-timing-function: ease-in;
+  border-radius: 80px;
+  background: ${(props) => props.bgColors || props.theme.btnPrimary};
+  transition: all 200ms ease-out;
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+    rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
+  &:hover:not(:disabled) {
+    box-shadow: none;
   }
   &:active:not(:disabled) {
     color: #ccc;
+    transform: scale(0.96);
   }
-  &:active:not(:disabled):after {
-    background-image: linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.2),
-        rgba(0, 0, 0, 0.2)
-      ),
-      ${(props) =>
-        props.bgColors ||
-        `linear-gradient(92.83deg,
-      #0a8314
-       0,
-       #024d29 100%)`};
-    bottom: 4px;
-    left: 4px;
-    right: 4px;
-    top: 4px;
-  }
+
   &:disabled {
     cursor: default;
     opacity: 0.8;
