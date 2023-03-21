@@ -109,16 +109,13 @@ export const ModalWrapper = styled.div`
   height: 100%;
   overflow: auto;
   background-color: #09000cb9;
-  /* display: flex; */
-  /* justify-content: center; */
-  /* align-items: center; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const ModalContent = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin: 150px 0;
   background: ${(props) => props.bg || props.theme.popupBg};
   border-radius: 10px;
   min-height: 100px;
