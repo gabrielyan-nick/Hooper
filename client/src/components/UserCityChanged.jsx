@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import Select from "react-select";
+import styled, { useTheme } from "styled-components";
 import {
   Button,
   FlexBetweenBox,
@@ -12,30 +14,143 @@ import {
 } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
 import { AvatarChanged } from "./index";
-import { ChangeIcon } from "./svgIcons";
-
-const ChangeCityBtn = styled(IconBtnBg)`
-  position: absolute;
-  border-radius: 7px;
-  right: 5px;
-  top: 9px;
-`;
+import { ChangeIcon, CloseIcon, SaveIcon } from "./svgIcons";
+import { cities } from "../data";
 
 const Wrapper = styled.div`
   position: relative;
 `;
 
+const ChangeBtn = styled(IconBtnBg)`
+  position: absolute;
+  border-radius: 7px;
+  right: 5px;
+  top: 7px;
+  padding: 2px;
+`;
+
+const CancelBtn = styled(IconBtnBg)`
+  position: absolute;
+  top: -17px;
+  right: -17px;
+  padding: 2px;
+  border-radius: 7px;
+`;
+
+const SaveBtn = styled(IconBtnBg)`
+  position: absolute;
+  bottom: -17px;
+  right: -17px;
+  padding: 2px;
+  border-radius: 7px;
+`;
+
 const UserCityChanged = ({ city }) => {
+  const [isChanged, setIsChanged] = useState(false);
+  const theme = useTheme();
+  const changeRef = useRef(null);
+  const saveCloseRef = useRef(null);
+  const nodeRef = isChanged ? saveCloseRef : changeRef;
+
+  const selectStyles = {
+    control: (baseStyles, state) => ({
+      ...baseStyles,
+      borderRadius: "7px",
+      backgroundColor: theme.inputBg,
+      outline: state.isFocused ? theme.inputBorder : "none",
+      fontFamily: "Golos Text, sans-serif",
+      fontWeight: 600,
+      fontSize: "20px",
+      height: "42px",
+      paddingLeft: "5px",
+      boxShadow: state.isFocused
+        ? "0 0 2px 0 black inset"
+        : " rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px",
+      border: "none",
+      color: "FFF",
+    }),
+    option: (baseStyles, state) => ({
+      ...baseStyles,
+      fontFamily: "Golos Text, sans-serif",
+      fontWeight: 700,
+      background: state.isFocused ? theme.selectBg : "transparent",
+      color: state.isFocused ? "#fff" : "#333",
+    }),
+    menuList: (baseStyles, state) => ({
+      ...baseStyles,
+      maxHeight: "170px",
+      borderRadius: "10px",
+      background: theme.inputBg,
+      "&::-webkit-scrollbar": {
+        width: "7px",
+        backgroundColor: "#BDA69E",
+        borderRadius: "10px",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        background: theme.scrollbar,
+        borderRadius: "10px",
+      },
+    }),
+    menu: (baseStyles, state) => ({
+      ...baseStyles,
+      borderRadius: "10px",
+    }),
+    dropdownIndicator: (baseStyles, state) => ({
+      ...baseStyles,
+      color: state.isFocused ? "#a0310c" : "#2c2522",
+      "&:hover": {
+        color: "#a0310c",
+      },
+    }),
+    placeholder: (baseStyles, state) => ({
+      ...baseStyles,
+      color: theme.placeholderText,
+      fontSize: "16px",
+    }),
+  };
+
+  const cancelChange = () => setIsChanged(false);
+  const changeCity = () => setIsChanged(true);
+
   return (
     <Wrapper>
-      <TextLineWrapper p="9px 33px 9px 15px">
-        <Text fS="20px">
-          <span>{city.label || null}</span>
-        </Text>
-      </TextLineWrapper>
-      <ChangeCityBtn color="green">
-        <ChangeIcon />
-      </ChangeCityBtn>
+      <SwitchTransition mode="out-in">
+        <CSSTransition
+          timeout={100}
+          key={isChanged}
+          classNames="select-switch"
+          nodeRef={nodeRef}
+        >
+          {isChanged ? (
+            <div ref={saveCloseRef}>
+              <Select
+                options={cities}
+                styles={selectStyles}
+                placeholder="Виберіть місто"
+              />
+              <CancelBtn color="orange" onClick={cancelChange}>
+                <CloseIcon />
+              </CancelBtn>
+              <SaveBtn color="green">
+                <SaveIcon />
+              </SaveBtn>
+            </div>
+          ) : (
+            <>
+              <TextLineWrapper p="9px 33px 9px 15px" ref={changeRef}>
+                <Text fS="20px">
+                  <span style={{ paddingRight: "35px" }}>
+                    {city.label || null}
+                  </span>
+                </Text>
+              </TextLineWrapper>
+              <ChangeBtn color="green" onClick={changeCity} ref={changeRef}>
+                <ChangeIcon />
+              </ChangeBtn>
+            </>
+          )}
+        </CSSTransition>
+      </SwitchTransition>
     </Wrapper>
   );
 };

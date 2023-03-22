@@ -102,4 +102,26 @@ p {
 }
 
 
+.select-switch-enter{
+   opacity: 0.5;
+   transform: scale(0.93);
+   transition: opacity 300ms, transform 300ms;
+}
+.select-switch-enter-active{
+   opacity: 1;
+   transform: scale(1);
+     transition: opacity 300ms, transform 300ms;
+}
+.select-switch-exit{
+   opacity: 1;
+   transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+.select-switch-exit-active{
+   opacity: 0.5;
+   transform: scale(0.93);
+  transition: opacity 300ms, transform 300ms;
+}
+
+
 `;

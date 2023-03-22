@@ -26,7 +26,6 @@ const FirstLineWrapper = styled.div`
 `;
 
 const TextWrapper = styled.div`
-  padding: 10px 0;
   height: 100%;
   display: flex;
   flex-direction: column;

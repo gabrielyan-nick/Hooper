@@ -33,8 +33,8 @@ const CancelBtn = styled(IconBtnBg)`
 
 const SaveBtn = styled(IconBtnBg)`
   position: absolute;
-  bottom: -9px;
-  left: -10px;
+  top: -8px;
+  left: -12px;
   padding: 7px; ;
 `;
 
