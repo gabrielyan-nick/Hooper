@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setLogin } from "../store/storageSlice";
 import Select from "react-select";
 import styled, { useTheme } from "styled-components";
 import {
@@ -11,9 +12,10 @@ import {
   TextLineWrapper,
   FlexCenterBox,
   IconBtnBg,
+  IconSpinnerWrapper,
 } from "./microComponets";
-import { darkTheme, lightTheme } from "../styles/themes";
-import { AvatarChanged } from "./index";
+import { BasketballMarker } from "./index";
+import { useUpdateUserInfoMutation } from "../api/userApi";
 import { ChangeIcon, CloseIcon, SaveIcon } from "./svgIcons";
 import { cities } from "../data";
 
@@ -46,11 +48,15 @@ const SaveBtn = styled(IconBtnBg)`
 `;
 
 const UserCityChanged = ({ city }) => {
+  const [selectValue, setSelectValue] = useState(null);
+  const { token, _id } = useSelector((state) => state.storage.user);
   const [isChanged, setIsChanged] = useState(false);
   const theme = useTheme();
   const changeRef = useRef(null);
   const saveCloseRef = useRef(null);
   const nodeRef = isChanged ? saveCloseRef : changeRef;
+  const [updateCity, result] = useUpdateUserInfoMutation();
+  const dispatch = useDispatch();
 
   const selectStyles = {
     control: (baseStyles, state) => ({
@@ -109,6 +115,23 @@ const UserCityChanged = ({ city }) => {
     }),
   };
 
+  const handleSelectValue = (value) => {
+    setSelectValue(value);
+  };
+
+  const onSaveChangedCity = () => {
+    if (city.value !== selectValue.value) {
+      const formData = new FormData();
+      formData.append("city", JSON.stringify(selectValue));
+      updateCity({ _id, token, formData })
+        .then((result) => {
+          result.data && dispatch(setLogin(result.data));
+          setIsChanged(false);
+        })
+        .catch((e) => console.log(e));
+    } else setIsChanged(false);
+  };
+
   const cancelChange = () => setIsChanged(false);
   const changeCity = () => setIsChanged(true);
 
@@ -127,12 +150,19 @@ const UserCityChanged = ({ city }) => {
                 options={cities}
                 styles={selectStyles}
                 placeholder="Виберіть місто"
+                onChange={handleSelectValue}
               />
               <CancelBtn color="orange" onClick={cancelChange}>
                 <CloseIcon />
               </CancelBtn>
-              <SaveBtn color="green">
-                <SaveIcon />
+              <SaveBtn color="green" onClick={onSaveChangedCity}>
+                {result.isLoading ? (
+                  <IconSpinnerWrapper>
+                    <BasketballMarker size={23} />
+                  </IconSpinnerWrapper>
+                ) : (
+                  <SaveIcon />
+                )}
               </SaveBtn>
             </div>
           ) : (

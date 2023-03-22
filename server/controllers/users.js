@@ -6,14 +6,22 @@ export const updateUserInfo = async (req, res) => {
     const { id } = req.params;
     const { ...data } = req.body;
     const token = req.headers.authorization.split(" ")[1];
+    let obj;
+    
+    if (data.city) {
+      obj = { city: JSON.parse(data.city) };
+    } else {
+      obj = data;
+    }
 
     const updatedUser = await User.findByIdAndUpdate(
       id,
       {
-        ...data,
+        ...obj,
       },
       { new: true }
     );
+
     // await Message.updateMany({ user: id }, { avatar: picturePath });
     res.status(200).json({
       _id: updatedUser._id,
