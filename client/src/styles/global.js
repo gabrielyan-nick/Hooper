@@ -16,24 +16,25 @@ export default createGlobalStyle`
   .mapboxgl-popup-tip {
   display: none;
 }
-  p {
+p {
     margin: 0;
     padding: 0;
   }
 
+.photo-modal-overlay-appear,
 .modal-overlay-appear {
   opacity: 0;
 }
-
+.photo-modal-overlay-appear-done,
 .modal-overlay-appear-done {
   opacity: 1;
   transition: opacity 300ms;
 }
-
+.photo-modal-overlay-exit,
 .modal-overlay-exit {
   opacity: 1;
 }
-
+.photo-modal-overlay-exit-active,
 .modal-overlay-exit-active {
   opacity: 0;
   transition: opacity 300ms;
@@ -79,6 +80,26 @@ export default createGlobalStyle`
   transition: opacity 300ms, transform 400ms;
 }
 
+.icons-switch-enter{
+   opacity: 0.5;
+   transform: scale(0.8);
+   transition: opacity 300ms, transform 200ms;
+}
+.icons-switch-enter-active{
+   opacity: 1;
+   transform: scale(1);
+     transition: opacity 300ms, transform 200ms;
+}
+.icons-switch-exit{
+   opacity: 1;
+   transform: scale(1);
+  transition: opacity 300ms, transform 200ms;
+}
+.icons-switch-exit-active{
+   opacity: 0.5;
+   transform: scale(0.8);
+  transition: opacity 300ms, transform 200ms;
+}
 
 
 `;

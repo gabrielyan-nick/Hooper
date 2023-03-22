@@ -17,6 +17,25 @@ export const FavouriteIcon = ({ size = 25, color = "green" }) => {
   );
 };
 
+export const ChangeIcon = ({ size = 23 }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={`${size}px`}
+      height={`${size}px`}
+    >
+      <g data-name="Layer 2">
+        <path
+          fill="#f5ccbc"
+          d="M4 9h13l-1.6 1.2a1 1 0 00-.2 1.4 1 1 0 00.8.4 1 1 0 00.6-.2l4-3a1 1 0 000-1.59l-3.86-3a1 1 0 00-1.23 1.58L17.08 7H4a1 1 0 000 2zm16 7H7l1.6-1.2a1 1 0 00-1.2-1.6l-4 3a1 1 0 000 1.59l3.86 3a1 1 0 00.61.21 1 1 0 00.79-.39 1 1 0 00-.17-1.4L6.92 18H20a1 1 0 000-2z"
+          data-name="swap"
+        />
+      </g>
+    </svg>
+  );
+};
+
 export const ChangeAvatarIcon = ({ size = 23 }) => {
   return (
     <svg
@@ -24,6 +43,7 @@ export const ChangeAvatarIcon = ({ size = 23 }) => {
       viewBox="0 0 48 48"
       width={`${size}px`}
       height={`${size}px`}
+      style={{ cursor: "pointer" }}
     >
       <path
         fill="#ecc1ad"

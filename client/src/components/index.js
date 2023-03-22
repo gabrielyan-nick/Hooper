@@ -7,6 +7,7 @@ export { default as CourtChat } from "./CourtChat";
 export { default as LoadingScreen } from "./LoadingScreen";
 export { default as UserLoginWidget } from "./UserLoginWidget";
 export { default as ModalWindow } from "./ModalWindow";
+export { default as PhotoWindow } from "./PhotoWindow";
 export { default as LoginRegisterScreen } from "./LoginRegisterScreen";
 export { IconWithTooltip } from "./CourtInfo";
 export { LoginFormWrapper, LoginForm, LoginAfterReg } from "./forms/LoginForm";
@@ -16,3 +17,5 @@ export { default as ResetPassForm } from "./forms/ResetPassForm";
 export { default as UserWidget } from "./UserWidget";
 export { default as MyInfo } from "./MyInfo";
 export { default as AvatarChanged } from "./AvatarChanged";
+export { default as UserCityChanged } from "./UserCityChanged";
+

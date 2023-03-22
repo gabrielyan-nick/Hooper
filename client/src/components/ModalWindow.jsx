@@ -107,7 +107,7 @@ export const ModalWrapper = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: visible;
   background-color: #09000cb9;
   display: flex;
   justify-content: center;
@@ -123,7 +123,7 @@ export const ModalContent = styled.div`
   border-radius: 10px;
   min-height: 100px;
   padding: 5px 5px;
-  overflow: hidden;
+  overflow: visible;
   @media ${(props) => props.theme.media.wideScreen} {
     width: 27%;
   }

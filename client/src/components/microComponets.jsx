@@ -40,11 +40,18 @@ export const IconButton = styled.button`
 `;
 
 export const IconBtnBg = styled.button`
+  appearance: none;
+  background-clip: padding-box;
+  background-color: initial;
+  background-image: none;
+  border-style: none;
+  box-sizing: border-box;
   border-radius: 20px;
   position: relative;
   border: none;
   margin: 0;
   padding: 0;
+  user-select: none;
   background: ${(props) =>
     props.color === "green"
       ? lightTheme.greenIconBtn
@@ -57,6 +64,7 @@ export const IconBtnBg = styled.button`
   transition: all 0.3s ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
     rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
+
   &:hover {
     background: ${(props) =>
       props.color === "green"
@@ -65,8 +73,13 @@ export const IconBtnBg = styled.button`
         ? lightTheme.orange
         : "transparent"};
   }
-  &:active {
+  &:active:not(:disabled) {
     transform: scale(0.93);
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.8;
   }
 `;
 
@@ -131,6 +144,7 @@ export const Input = styled.input`
 `;
 
 export const TextLineWrapper = styled.div`
+  position: relative;
   background: ${(props) => props.bg || props.theme.textWrapperBg};
   width: 100%;
   padding: ${(props) => props.p || "9px 15px"};
@@ -277,4 +291,17 @@ export const BtnSpinnerWrapper = styled.span`
   border-radius: 50%;
   position: relative;
   animation: ${rollAnim} 1s ease-in-out infinite alternate;
+`;
+
+const rotateAnim = keyframes`
+   0% { transform: rotate(0deg) } 100% { transform: rotate(360deg)};
+`;
+
+export const IconSpinnerWrapper = styled.span`
+  display: block;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  position: relative;
+  animation: ${rotateAnim} 1s ease-in-out infinite alternate;
 `;

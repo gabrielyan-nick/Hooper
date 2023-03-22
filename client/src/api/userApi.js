@@ -20,7 +20,20 @@ export const userApi = createApi({
         };
       },
     }),
+    updateUserInfo: builder.mutation({
+      query(data) {
+        const { _id, token, formData } = data;
+        return {
+          url: `/users/${_id}`,
+          method: "PATCH",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
-export const { useAddRemoveFavMutation } = userApi;
+export const { useAddRemoveFavMutation, useUpdateUserInfoMutation } = userApi;

@@ -7,7 +7,12 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-import {courtsRoutes, authRoutes, markersRoutes} from './routes/index.js'
+import {
+  courtsRoutes,
+  authRoutes,
+  markersRoutes,
+  usersRoutes,
+} from "./routes/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,9 +27,10 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
-app.use('/auth', authRoutes);
-app.use('/courts', courtsRoutes);
-app.use('/markers', markersRoutes);
+app.use("/auth", authRoutes);
+app.use("/courts", courtsRoutes);
+app.use("/markers", markersRoutes);
+app.use("/users", usersRoutes);
 
 const PORT = process.env.PORT || 8800;
 mongoose

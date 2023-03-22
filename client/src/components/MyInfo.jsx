@@ -8,9 +8,11 @@ import {
   UserWidgetBtn,
   TextLineWrapper,
   FlexCenterBox,
+  IconBtnBg,
 } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
-import { AvatarChanged } from "./index";
+import { AvatarChanged, UserCityChanged } from "./index";
+import { ChangeIcon } from "./svgIcons";
 
 const Wrapper = styled.div`
   padding: 30px 5px 20px;
@@ -32,10 +34,11 @@ const TextWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const MyInfo = () => {
+const MyInfo = ({ openPhoto }) => {
   const { picturePath, username, city, favouriteCourts } = useSelector(
     (state) => state.storage.user
   );
+
   return (
     <Wrapper>
       <FirstLineWrapper>
@@ -43,11 +46,9 @@ const MyInfo = () => {
           <TextLineWrapper>
             <Text fS="22px">{username || null}</Text>
           </TextLineWrapper>
-          <TextLineWrapper>
-            <Text fS="20px">м. {city.label || null}</Text>
-          </TextLineWrapper>
+          <UserCityChanged city={city} />
         </TextWrapper>
-        <AvatarChanged photo={picturePath} />
+        <AvatarChanged photo={picturePath} openPhoto={openPhoto} />
       </FirstLineWrapper>
     </Wrapper>
   );
