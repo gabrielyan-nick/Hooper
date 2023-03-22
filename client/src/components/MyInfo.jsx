@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 const FirstLineWrapper = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 52% 48%;
+  grid-template-columns: 58% 42%;
   width: 100%;
 `;
 
