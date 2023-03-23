@@ -41,6 +41,7 @@ const userSchema = new mongoose.Schema(
         {
           _id: { type: Schema.Types.ObjectId, ref: "Court" },
           name: String,
+          sport: String,
         },
       ],
       default: [],

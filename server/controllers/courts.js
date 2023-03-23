@@ -36,7 +36,7 @@ export const addRemoveFav = async (req, res) => {
     const { courtId } = req.params;
     const { _id } = req.body;
     const user = await User.findById(_id);
-    console.log(req.body);
+
     if (!user) res.status(404).json({ message: "User not found" });
 
     const court = await Court.findById(courtId);
@@ -50,7 +50,11 @@ export const addRemoveFav = async (req, res) => {
         (court) => court._id != courtId
       );
     } else {
-      user.favouriteCourts.push({ _id: court._id, name: court.name });
+      user.favouriteCourts.push({
+        _id: court._id,
+        name: court.name,
+        sport: court.sport,
+      });
     }
 
     await user.save();

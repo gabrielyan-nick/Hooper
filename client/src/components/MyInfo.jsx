@@ -11,7 +11,7 @@ import {
   IconBtnBg,
 } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
-import { AvatarChanged, UserCityChanged } from "./index";
+import { AvatarChanged, UserCityChanged, FavouriteCourts } from "./index";
 import { ChangeIcon } from "./svgIcons";
 
 const Wrapper = styled.div`
@@ -49,7 +49,7 @@ const MyInfo = ({ openPhoto }) => {
         </TextWrapper>
         <AvatarChanged photo={picturePath} openPhoto={openPhoto} />
       </FirstLineWrapper>
-      
+      <FavouriteCourts corts={favouriteCourts} />
     </Wrapper>
   );
 };

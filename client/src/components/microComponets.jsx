@@ -106,7 +106,6 @@ export const Text = styled.p`
       : props.color === "secondary"
       ? props.theme.textSecondary
       : props.theme.text};
-  margin: 0;
   text-align: ${(props) => (props.centred ? "center" : "inherit")};
   margin: ${(props) => props.m || 0}; ;
 `;
