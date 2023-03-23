@@ -121,7 +121,7 @@ const PhotoModalContent = styled.div`
 `;
 
 const Img = styled.img`
-  max-height: 95vh;
+  max-height: 92vh;
   border-radius: 7px;
 `;
 

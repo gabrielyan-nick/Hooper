@@ -136,6 +136,28 @@ export const EnterIcon = ({ size = 23 }) => {
   );
 };
 
+export const ShowHideIcon = ({ size = 27 }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={`${size}px`}
+      height={`${size}px`}
+      viewBox="0 0 29 29"
+      xmlSpace="preserve"
+    >
+      <path
+        fill="transparent"
+        stroke="#f5ccbc"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit={10}
+        strokeWidth={2}
+        d="M20.5 11.5l-6 6-6-6"
+      />
+    </svg>
+  );
+};
+
 export const CloseIcon = ({ size = 23, color = "#f8d4c5" }) => {
   return (
     <svg

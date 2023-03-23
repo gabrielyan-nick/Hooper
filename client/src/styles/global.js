@@ -123,5 +123,20 @@ p {
   transition: opacity 300ms, transform 300ms;
 }
 
+.court-enter {
+  opacity: 0;
+}
+.court-enter-done {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.court-exit {
+  opacity: 1;
+}
+.court-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
 
 `;

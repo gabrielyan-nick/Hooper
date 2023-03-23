@@ -28,35 +28,18 @@ const CourtHeader = styled(FlexBetweenBox)`
 `;
 
 const CourtPopup = forwardRef((props, ref) => {
-  const { token, _id, favouriteCourts } = useSelector(
-    (state) => state.storage.user
-  );
-
-  const dispatch = useDispatch();
   const {
     data: court = {},
     isLoading,
     isError,
     error,
   } = useGetCourtQuery(props.courtId);
-  console.log(court);
-  const isFavCourt = favouriteCourts.some((item) => court._id === item._id);
-
-  const [addRemoveFav, result] = useAddRemoveFavMutation();
-
-  const onAddRemoveFav = async () => {
-    const res = await addRemoveFav({ _id, courtId: court._id, token });
-    if (!res.error && res.data) {
-      dispatch(setFavCourts(res.data));
-    }
-  };
+  // console.log(court);
 
   return (
     <PopupWrapper ref={ref}>
       <CourtHeader>
-        <IconButton onClick={onAddRemoveFav}>
-          {isFavCourt ? <FavouriteIcon color="gold" /> : <FavouriteIcon />}
-        </IconButton>
+        <AddRemoveFavourite courtId={court._id} />
         <Title>{court.name}</Title>
         <IconButton onClick={props.onClose}>
           <CloseIcon />
@@ -71,3 +54,28 @@ const CourtPopup = forwardRef((props, ref) => {
 });
 
 export default CourtPopup;
+
+const AddRemoveFavourite = ({ courtId }) => {
+  const { user = {} } = useSelector((state) => state.storage);
+  const dispatch = useDispatch();
+  const isFavCourt = user?.favouriteCourts.some((item) => courtId === item._id);
+  const [addRemoveFav, result] = useAddRemoveFavMutation();
+
+  const onAddRemoveFav = async () => {
+    if (user !== null) {
+      const res = await addRemoveFav({
+        _id: user._id,
+        courtId,
+        token: user.token,
+      });
+      if (!res.error && res.data) {
+        dispatch(setFavCourts(res.data));
+      }
+    }
+  };
+  return (
+    <IconButton onClick={onAddRemoveFav}>
+      {isFavCourt ? <FavouriteIcon color="gold" /> : <FavouriteIcon />}
+    </IconButton>
+  );
+};
