@@ -78,7 +78,7 @@ const FavouriteCourts = ({ courts }) => {
           27 * displayedCourts.length + 7 * displayedCourts.length + 13
         }px`);
     if (courts.length === 0) listRef.current.style.height = "35px";
-  }, [showAll]);
+  }, [showAll, courts]);
 
   const showHideList = () => {
     setShowAll(!showAll);
