@@ -106,14 +106,14 @@ const PhotoModal = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: visible;
+  overflow: auto;
 `;
 
 const PhotoModalContent = styled.div`
   position: relative;
   background-color: transparent;
   max-width: 95vw;
-  overflow: visible;
+  overflow: auto;
   & img {
     display: block;
     max-width: 100%;

@@ -49,6 +49,7 @@ const MyInfo = ({ openPhoto }) => {
         </TextWrapper>
         <AvatarChanged photo={picturePath} openPhoto={openPhoto} />
       </FirstLineWrapper>
+      
     </Wrapper>
   );
 };
