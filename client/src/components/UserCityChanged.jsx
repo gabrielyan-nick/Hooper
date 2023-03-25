@@ -152,7 +152,11 @@ const UserCityChanged = ({ city }) => {
                 placeholder="Виберіть місто"
                 onChange={handleSelectValue}
               />
-              <CancelBtn color="orange" onClick={cancelChange}>
+              <CancelBtn
+                color="orange"
+                onClick={cancelChange}
+                disabled={result.isLoading}
+              >
                 <CloseIcon />
               </CancelBtn>
               <SaveBtn color="green" onClick={onSaveChangedCity}>
