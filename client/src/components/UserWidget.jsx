@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Button, FlexBetweenBox, Text, UserWidgetBtn } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
-import { ModalWindow, MyInfo, PhotoWindow } from "./index";
+import { ModalWindow, MyInfo, PhotoWindow, CourtPopup } from "./index";
 
 const Avatar = styled.img`
   width: 50px;
@@ -18,13 +19,29 @@ const Username = styled(Text)`
 `;
 
 const UserWidget = () => {
+  const [modalType, setModalType] = useState("userInfo");
+  const [courtId, setCourtId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const { picturePath, username } = useSelector((state) => state.storage.user);
   const name = username.slice(0, 15);
+  const myInfoRef = useRef(null);
+  const courtRef = useRef(null);
+  const nodeRef = modalType === "userInfo" ? myInfoRef : courtRef;
 
-  const opeUserWidgetModal = () => setIsModalOpen(true);
-  const closUserWidgetModal = () => setIsModalOpen(false);
+  const changeModalType = (type, id = null) => {
+    setCourtId(id);
+    setModalType(type);
+  };
+
+  const openUserWidgetModal = () => setIsModalOpen(true);
+  const closeUserWidgetModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => {
+      modalType === "court" && setModalType("userInfo");
+      setCourtId(null);
+    }, 300);
+  };
 
   const openPhotoModal = () => setIsPhotoModalOpen(true);
   const closePhotoModal = () => setIsPhotoModalOpen(false);
@@ -33,7 +50,7 @@ const UserWidget = () => {
     <>
       <UserWidgetBtn
         style={{ fontFamily: "inherit" }}
-        onClick={opeUserWidgetModal}
+        onClick={openUserWidgetModal}
       >
         <Username>{name || null}</Username>
         <Avatar src={picturePath || null} />
@@ -41,10 +58,35 @@ const UserWidget = () => {
 
       <ModalWindow
         opened={isModalOpen}
-        closeModal={closUserWidgetModal}
+        closeModal={closeUserWidgetModal}
         closeClickOutside={false}
+        isEmptyHeader={false}
       >
-        <MyInfo openPhoto={openPhotoModal} />
+        <SwitchTransition mode="out-in">
+          <CSSTransition
+            nodeRef={nodeRef}
+            key={modalType}
+            classNames="switch"
+            timeout={300}
+          >
+            {modalType === "userInfo" ? (
+              <MyInfo
+                openPhoto={openPhotoModal}
+                closeModal={closeUserWidgetModal}
+                changeModalType={changeModalType}
+                ref={myInfoRef}
+              />
+            ) : (
+              <CourtPopup
+                courtId={courtId}
+                closeModal={closeUserWidgetModal}
+                ref={courtRef}
+                changeModalType={changeModalType}
+                backBtn
+              />
+            )}
+          </CSSTransition>
+        </SwitchTransition>
       </ModalWindow>
       <PhotoWindow
         image={picturePath}

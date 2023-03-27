@@ -28,13 +28,16 @@ const UserLoginWidget = () => {
         {isAuth ? (
           <UserWidget />
         ) : (
-          <UserWidgetBtn p='12px 30px' onClick={openModal}>Увійти</UserWidgetBtn>
+          <UserWidgetBtn p="12px 30px" onClick={openModal}>
+            Увійти
+          </UserWidgetBtn>
         )}
       </Wrapper>
       <ModalWindow
         opened={isModalOpen}
         closeModal={closeModal}
         closeClickOutside={false}
+        isEmptyHeader={false}
       >
         <LoginRegisterScreen closeModal={closeModal} />
       </ModalWindow>

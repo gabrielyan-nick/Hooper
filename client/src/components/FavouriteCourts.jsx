@@ -51,7 +51,7 @@ const EmptyText = styled(Text)`
 const ShowHideBtn = styled(IconBtnBg)`
   position: absolute;
   bottom: -17px;
-  left: 47%;
+  left: 15%;
   border-radius: 7px;
 `;
 
@@ -61,7 +61,7 @@ const ShowHideBtnWrapper = styled.div`
   transition: transform 0.3s;
 `;
 
-const FavouriteCourts = ({ courts }) => {
+const FavouriteCourts = ({ courts, changeModalType }) => {
   const displayedListLength = 3;
   const [showAll, setShowAll] = useState(false);
   const displayedCourts = showAll
@@ -108,7 +108,11 @@ const FavouriteCourts = ({ courts }) => {
                 mountOnEnter
                 unmountOnExit
               >
-                <FavCourt court={court} ref={itemRef[court._id]} />
+                <FavCourt
+                  court={court}
+                  ref={itemRef[court._id]}
+                  changeModalType={changeModalType}
+                />
               </CSSTransition>
             ))
           ) : (
@@ -162,14 +166,19 @@ const markers = {
 
 const FavCourt = memo(
   forwardRef((props, ref) => {
-    const { court } = props;
+    const { court, changeModalType } = props;
+    const onChangeToCourt = () => changeModalType("court", court._id);
+
     return (
       <LineWrapper ref={ref}>
         {markers[court.sport]}
         <Text fS="18px">
           <span>{court.name}</span>
         </Text>
-        <GoToBtn color={court.sport === "basketball" ? "orange" : "green"}>
+        <GoToBtn
+          color={court.sport === "basketball" ? "orange" : "green"}
+          onClick={onChangeToCourt}
+        >
           <EnterIcon />
         </GoToBtn>
       </LineWrapper>

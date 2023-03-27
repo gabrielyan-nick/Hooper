@@ -97,6 +97,14 @@ export const CloseBtn = styled(IconButton)`
   }
 `;
 
+export const BackBtn = styled(IconBtnBg)`
+  border-radius: 7px;
+  background: ${lightTheme.orange};
+  &:hover {
+    background: #9e1b04;
+  }
+`;
+
 export const Text = styled.p`
   font-size: ${(props) => props.fS || "inherit"};
   font-weight: ${(props) => props.fW || 600};

@@ -11,7 +11,6 @@ const MainPage = () => {
   const theme = useSelector((state) => state.storage.theme);
 
   const onChangeTheme = () => dispatch(setTheme());
-  const onLogout = () => dispatch(setLogout());
   const closeLoadingScreen = () => setIsLoadingScreen(false);
 
   return (
@@ -21,7 +20,6 @@ const MainPage = () => {
       ) : (
         <>
           <ChangeThemeBtn onClick={onChangeTheme} />
-          <LogoutBtn onClick={onLogout} />
           <UserLoginWidget />
         </>
       )}
@@ -43,6 +41,3 @@ const ChangeThemeBtn = styled.button`
   background-color: ${(props) => props.theme.color};
 `;
 
-const LogoutBtn = styled(ChangeThemeBtn)`
-  top: 70px;
-`;

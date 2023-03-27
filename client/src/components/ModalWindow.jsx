@@ -11,6 +11,7 @@ const ModalWindow = ({
   closeModal,
   children,
   closeClickOutside = true,
+  isEmptyHeader = true,
 }) => {
   const [animationIn, setAnimationIn] = useState(false);
   const contentRef = useRef(null);
@@ -87,11 +88,13 @@ const ModalWindow = ({
           classNames="modal-content"
         >
           <ModalContent ref={contentRef}>
-            <ModalHeader>
-              <CloseBtn onClick={onCloseModal}>
-                <CloseIcon />
-              </CloseBtn>
-            </ModalHeader>
+            {isEmptyHeader && (
+              <ModalHeader>
+                <CloseBtn onClick={onCloseModal}>
+                  <CloseIcon />
+                </CloseBtn>
+              </ModalHeader>
+            )}
             {children}
           </ModalContent>
         </CSSTransition>
@@ -124,6 +127,7 @@ export const ModalContent = styled.div`
   min-height: 100px;
   padding: 5px 5px;
   overflow: visible;
+  overflow-x: hidden;
   @media ${(props) => props.theme.media.wideScreen} {
     width: 27%;
   }
@@ -138,7 +142,7 @@ export const ModalContent = styled.div`
   }
 `;
 
-const ModalHeader = styled.div`
+export const ModalHeader = styled.div`
   display: flex;
   justify-content: flex-end;
 `;

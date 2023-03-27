@@ -157,16 +157,12 @@ export const LoginForm = forwardRef((props, ref) => {
 
 export const LoginFormWrapper = forwardRef((props, ref) => {
   return (
-    <>
+    <div ref={ref}>
       <Text fS="20px" fW={700} m="15px 0 40px" centred>
         Увійдіть до свого акаунту
       </Text>
-      <LoginForm
-        ref={ref}
-        closeModal={props.closeModal}
-        changeForm={props.changeForm}
-      />
-    </>
+      <LoginForm closeModal={props.closeModal} changeForm={props.changeForm} />
+    </div>
   );
 });
 

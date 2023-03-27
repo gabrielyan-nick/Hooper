@@ -8,44 +8,87 @@ import {
   IconButton,
   Title,
   CourtImg,
+  CloseBtn,
+  IconBtnBg,
+  BackBtn,
 } from "./microComponets";
-import { FavouriteIcon, CloseIcon, BasketballCourtIcon } from "./svgIcons";
+import {
+  FavouriteIcon,
+  CloseIcon,
+  BasketballCourtIcon,
+  ShowHideIcon,
+  BackIcon,
+} from "./svgIcons";
 import { CourtInfo, CourtPlayers, CourtChat } from "./index";
 import { useAddRemoveFavMutation } from "../api/userApi";
 import { setFavCourts } from "../store/storageSlice";
+import { lightTheme } from "../styles/themes";
 
 const PopupWrapper = styled.div`
   width: 100%;
   min-height: 300px;
-  max-height: 700px;
-  border-radius: 20px;
   background: ${(props) => props.theme.popupBg};
-  box-shadow: 0 0 5px 0 #001107;
 `;
 
-const CourtHeader = styled(FlexBetweenBox)`
-  padding: 3px 7px;
+const CourtImage = styled(CourtImg)`
+  width: 103%;
+  transform: translateX(-5px);
+  margin-top: 5px;
+`;
+
+const ImgWrapper = styled.div`
+  position: relative;
+`;
+
+const FavBtn = styled(IconBtnBg)`
+  position: absolute;
+  bottom: 9px;
+  padding: 1px;
+  border-radius: 7px;
+  background: ${(props) => props.theme.popupBg};
+  &:hover {
+    background: ${(props) => props.theme.popupBg};
+  }
+`;
+
+const CourtTitle = styled(Title)`
+  margin: ${(props) => (props.backBtn ? 0 : "0 auto")};
 `;
 
 const CourtPopup = forwardRef((props, ref) => {
+  const { closeModal, changeModalType, backBtn = false } = props;
   const {
     data: court = {},
     isLoading,
     isError,
     error,
   } = useGetCourtQuery(props.courtId);
-  // console.log(court);
+
+  const onBackToUserInfo = () => changeModalType("userInfo");
 
   return (
     <PopupWrapper ref={ref}>
-      <CourtHeader>
-        <AddRemoveFavourite courtId={court._id} />
-        <Title>{court.name}</Title>
-        <IconButton onClick={props.onClose}>
+      <FlexBetweenBox>
+        {backBtn && (
+          <BackBtn onClick={onBackToUserInfo}>
+            <BackIcon />
+          </BackBtn>
+        )}
+        <CourtTitle>{court.name}</CourtTitle>
+        <CloseBtn onClick={closeModal}>
           <CloseIcon />
-        </IconButton>
-      </CourtHeader>
-      <CourtImg src={court.picturePath} />
+        </CloseBtn>
+      </FlexBetweenBox>
+      <ImgWrapper>
+        <CourtImage src={court.picturePath} />
+        <FavBtn>
+          <AddRemoveFavourite
+            courtId={court._id}
+            changeModalType={changeModalType}
+          />
+        </FavBtn>
+      </ImgWrapper>
+
       <CourtInfo data={court} />
       <CourtPlayers />
       <CourtChat />
@@ -55,7 +98,7 @@ const CourtPopup = forwardRef((props, ref) => {
 
 export default CourtPopup;
 
-const AddRemoveFavourite = ({ courtId }) => {
+const AddRemoveFavourite = ({ courtId, changeModalType }) => {
   const { user = {} } = useSelector((state) => state.storage);
   const dispatch = useDispatch();
   const isFavCourt = user?.favouriteCourts.some((item) => courtId === item._id);
@@ -71,11 +114,15 @@ const AddRemoveFavourite = ({ courtId }) => {
       if (!res.error && res.data) {
         dispatch(setFavCourts(res.data));
       }
-    }
+    } else changeModalType("logReg");
   };
   return (
     <IconButton onClick={onAddRemoveFav}>
-      {isFavCourt ? <FavouriteIcon color="gold" /> : <FavouriteIcon />}
+      {isFavCourt ? (
+        <FavouriteIcon size={27} color="gold" />
+      ) : (
+        <FavouriteIcon size={27} />
+      )}
     </IconButton>
   );
 };

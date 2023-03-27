@@ -1,4 +1,4 @@
-import React, { useState, useRef, forwardRef } from "react";
+import React, { useState, useRef, forwardRef, Fragment } from "react";
 import { useSelector } from "react-redux";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import styled, { useTheme, css } from "styled-components";
@@ -10,6 +10,9 @@ import {
   FlexCenterBox,
   IconButton,
   BtnSpinner,
+  CloseBtn,
+  FlexBetweenBox,
+  BackBtn,
 } from "./microComponets";
 import {
   LoginForm,
@@ -18,8 +21,15 @@ import {
   LoginAfterReg,
   ForgotPassForm,
 } from "../components";
+import { CloseIcon, BackIcon } from "./svgIcons";
+// import { ModalHeader } from "./ModalWindow";
 
-const LoginRegisterScreen = ({ closeModal }) => {
+const Header = styled(FlexBetweenBox)`
+  justify-content: ${(props) => (props.backBtn ? "space-between" : "flex-end")};
+`;
+
+const LoginRegisterScreen = forwardRef((props, ref) => {
+  const { closeModal, changeModalType, backBtn = false } = props;
   const [formType, setFormType] = useState("login");
   const loginRef = useRef(null);
   const registerRef = useRef(null);
@@ -38,35 +48,49 @@ const LoginRegisterScreen = ({ closeModal }) => {
     setFormType(type);
   };
 
+  const onBackToCourt = () => changeModalType("court");
+
   return (
-    <SwitchTransition mode="out-in">
-      <CSSTransition
-        nodeRef={nodeRef}
-        key={formType}
-        classNames="switch"
-        timeout={300}
-      >
-        {formType === "login" ? (
-          <LoginFormWrapper
-            ref={nodeRef}
-            changeForm={changeFormType}
-            closeModal={closeModal}
-          />
-        ) : formType === "loginAfterReg" ? (
-          <LoginAfterReg
-            ref={nodeRef}
-            closeModal={closeModal}
-            changeForm={changeFormType}
-          />
-        ) : formType === "forgotPass" ? (
-          <ForgotPassForm ref={forgotPassRef} changeForm={changeFormType} />
-        ) : (
-          <RegisterForm ref={nodeRef} changeForm={changeFormType} />
+    <div ref={ref}>
+      <Header backBtn={backBtn}>
+        {backBtn && (
+          <BackBtn onClick={onBackToCourt}>
+            <BackIcon />
+          </BackBtn>
         )}
-      </CSSTransition>
-    </SwitchTransition>
+        <CloseBtn onClick={closeModal}>
+          <CloseIcon />
+        </CloseBtn>
+      </Header>
+      <SwitchTransition mode="out-in">
+        <CSSTransition
+          nodeRef={nodeRef}
+          key={formType}
+          classNames="switch"
+          timeout={300}
+        >
+          {formType === "login" ? (
+            <LoginFormWrapper
+              ref={nodeRef}
+              changeForm={changeFormType}
+              closeModal={closeModal}
+            />
+          ) : formType === "loginAfterReg" ? (
+            <LoginAfterReg
+              ref={nodeRef}
+              closeModal={closeModal}
+              changeForm={changeFormType}
+            />
+          ) : formType === "forgotPass" ? (
+            <ForgotPassForm ref={forgotPassRef} changeForm={changeFormType} />
+          ) : (
+            <RegisterForm ref={nodeRef} changeForm={changeFormType} />
+          )}
+        </CSSTransition>
+      </SwitchTransition>
+    </div>
   );
-};
+});
 
 export const FormWrapper = styled.div`
   width: 100%;
