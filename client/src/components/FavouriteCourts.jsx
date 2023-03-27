@@ -176,7 +176,7 @@ const FavCourt = memo(
           <span>{court.name}</span>
         </Text>
         <GoToBtn
-          color={court.sport === "basketball" ? "orange" : "green"}
+          color="green"
           onClick={onChangeToCourt}
         >
           <EnterIcon />

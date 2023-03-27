@@ -128,14 +128,16 @@ export const ModalContent = styled.div`
   padding: 5px 5px;
   overflow: visible;
   overflow-x: hidden;
+  max-width: 420px;
+
   @media ${(props) => props.theme.media.wideScreen} {
     width: 27%;
   }
   @media ${(props) => props.theme.media.desktop} {
-    width: 40%;
+    width: 65%;
   }
   @media ${(props) => props.theme.media.tablet} {
-    width: 60%;
+    width: 80%;
   }
   @media ${(props) => props.theme.media.mobile} {
     width: 95%;

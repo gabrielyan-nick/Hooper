@@ -82,8 +82,9 @@ const courtSchema = new mongoose.Schema(
     players: {
       type: [
         {
-          type: Schema.Types.ObjectId,
-          ref: "User",
+          _id: { type: Schema.Types.ObjectId, ref: "User" },
+          name: String,
+          createdAt: { type: Date, default: Date.now },
         },
       ],
       default: [],
@@ -91,17 +92,19 @@ const courtSchema = new mongoose.Schema(
     comingSoonPlayers: {
       type: [
         {
-          type: Schema.Types.ObjectId,
-          ref: "User",
+          _id: { type: Schema.Types.ObjectId, ref: "User" },
+          name: String,
+          createdAt: { type: Date, default: Date.now },
         },
       ],
       default: [],
     },
-    checkins: {
+    checkinPlayers: {
       type: [
         {
-          type: Schema.Types.ObjectId,
-          ref: "Checkin",
+          _id: { type: Schema.Types.ObjectId, ref: "User" },
+          name: String,
+          createdAt: { type: Date, default: Date.now },
         },
       ],
       default: [],

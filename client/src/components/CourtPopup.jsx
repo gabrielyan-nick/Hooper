@@ -40,7 +40,7 @@ const ImgWrapper = styled.div`
   position: relative;
 `;
 
-const FavBtn = styled(IconBtnBg)`
+const FavBtn = styled.div`
   position: absolute;
   bottom: 9px;
   padding: 1px;
@@ -56,14 +56,14 @@ const CourtTitle = styled(Title)`
 `;
 
 const CourtPopup = forwardRef((props, ref) => {
-  const { closeModal, changeModalType, backBtn = false } = props;
+  const { courtId, closeModal, changeModalType, backBtn = false } = props;
   const {
     data: court = {},
     isLoading,
     isError,
     error,
-  } = useGetCourtQuery(props.courtId);
-
+  } = useGetCourtQuery(courtId);
+  console.log(court);
   const onBackToUserInfo = () => changeModalType("userInfo");
 
   return (
