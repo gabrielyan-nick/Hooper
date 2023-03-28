@@ -68,19 +68,21 @@ export const checkInOnCourt = async (req, res) => {
   try {
     const { courtId } = req.params;
     const { _id, username } = req.body;
-    console.log(_id, username);
     const court = await Court.findById(courtId);
     if (!court) res.status(404).json({ message: "Court not found" });
 
     court.checkinPlayers.unshift({
-      _id: _id,
-      username: username,
+      _id,
+      username,
     });
 
-    court.players.unshift({
-      _id: _id,
-      username: username,
-    });
+    const isOnCourt = court.players.some((player) => player._id == _id);
+    if (!isOnCourt) {
+      court.players.unshift({
+        _id,
+        username,
+      });
+    }
 
     setTimeout(async () => {
       const index = court.players.findIndex((player) => player._id == _id);

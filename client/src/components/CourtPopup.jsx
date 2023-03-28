@@ -64,7 +64,7 @@ const CourtPopup = forwardRef((props, ref) => {
     isError,
     error,
   } = useGetCourtQuery(courtId);
-  // console.log(court);
+  console.log(court);
 
   const onBackToUserInfo = () => changeModalType("userInfo");
 
@@ -92,7 +92,7 @@ const CourtPopup = forwardRef((props, ref) => {
       </ImgWrapper>
 
       <CourtInfo data={court} />
-      <CourtChat />
+      {/* <CourtChat /> */}
       <CourtPlayers
         changeModalType={changeModalType}
         court={court}

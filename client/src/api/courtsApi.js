@@ -4,7 +4,7 @@ import { serverUrl } from "../config";
 export const courtsApi = createApi({
   reducerPath: "courts",
   baseQuery: fetchBaseQuery({ baseUrl: serverUrl }),
-  tagTypes: ["Courts"],
+  tagTypes: ["Courts", "Players"],
   endpoints: (builder) => ({
     getMarkers: builder.query({
       query: () => "/markers",
@@ -23,6 +23,7 @@ export const courtsApi = createApi({
     }),
     getCourtPlayers: builder.query({
       query: (courtId) => `/courts/${courtId}/players`,
+      providesTags: ["Players"],
     }),
     checkIn: builder.mutation({
       query(data) {
@@ -36,6 +37,7 @@ export const courtsApi = createApi({
           },
         };
       },
+      invalidateTags: ["Players"],
     }),
   }),
 });
@@ -45,5 +47,5 @@ export const {
   useAddCourtMutation,
   useGetCourtQuery,
   useCheckInMutation,
-  useGetCourtPlayersQuery
+  useGetCourtPlayersQuery,
 } = courtsApi;

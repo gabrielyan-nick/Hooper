@@ -140,7 +140,10 @@ export const ModalContent = styled.div`
     width: 80%;
   }
   @media ${(props) => props.theme.media.mobile} {
-    width: 95%;
+    width: 99%;
+  }
+  @media ${(props) => props.theme.media.smallMobile} {
+    width: 99%;
   }
 `;
 

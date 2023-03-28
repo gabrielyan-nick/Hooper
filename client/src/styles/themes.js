@@ -45,7 +45,8 @@ export const lightTheme = {
     wideScreen: "(min-width: 1400px)",
     desktop: "(min-width: 800px) and (max-width: 1400px)",
     tablet: "(min-width: 500px) and (max-width: 800px)",
-    mobile: "(max-width: 500px)",
+    mobile: "(min-width: 370px) and (max-width: 500px)",
+    smallMobile: "(max-width: 370px)",
   },
 };
 
@@ -90,6 +91,7 @@ export const darkTheme = {
     wideScreen: "(min-width: 1400px)",
     desktop: "(min-width: 800px) and (max-width: 1400px)",
     tablet: "(min-width: 500px) and (max-width: 800px)",
-    mobile: "(max-width: 500px)",
+    mobile: "(min-width: 370px) and (max-width: 500px)",
+    smallMobile: "(max-width: 370px)",
   },
 };

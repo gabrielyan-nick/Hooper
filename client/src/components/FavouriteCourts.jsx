@@ -98,27 +98,24 @@ const FavouriteCourts = ({ courts, changeModalType }) => {
       <Title>Улюблені майданчики</Title>
       <ListWrapper ref={listRef}>
         <TransitionGroup component={null}>
-          {courts.length ? (
-            displayedCourts.map((court) => (
-              <CSSTransition
-                timeout={0}
-                key={court._id}
-                classNames="court"
-                nodeRef={itemRef[court._id]}
-                mountOnEnter
-                unmountOnExit
-              >
-                <FavCourt
-                  court={court}
-                  ref={itemRef[court._id]}
-                  changeModalType={changeModalType}
-                />
-              </CSSTransition>
-            ))
-          ) : (
-            <EmptyText>Немає</EmptyText>
-          )}
+          {displayedCourts.map((court) => (
+            <CSSTransition
+              timeout={0}
+              key={court._id}
+              classNames="court"
+              nodeRef={itemRef[court._id]}
+              mountOnEnter
+              unmountOnExit
+            >
+              <FavCourt
+                court={court}
+                ref={itemRef[court._id]}
+                changeModalType={changeModalType}
+              />
+            </CSSTransition>
+          ))}
         </TransitionGroup>
+        {!courts.length && <EmptyText>Немає</EmptyText>}
         {courts.length > displayedListLength && (
           <span style={{ height: "1px" }}>
             <ShowHideBtn
@@ -175,10 +172,7 @@ const FavCourt = memo(
         <Text fS="18px">
           <span>{court.name}</span>
         </Text>
-        <GoToBtn
-          color="green"
-          onClick={onChangeToCourt}
-        >
+        <GoToBtn color="green" onClick={onChangeToCourt}>
           <EnterIcon />
         </GoToBtn>
       </LineWrapper>
