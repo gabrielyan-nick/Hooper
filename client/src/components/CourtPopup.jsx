@@ -11,6 +11,7 @@ import {
   CloseBtn,
   IconBtnBg,
   BackBtn,
+  Button,
 } from "./microComponets";
 import {
   FavouriteIcon,
@@ -63,7 +64,8 @@ const CourtPopup = forwardRef((props, ref) => {
     isError,
     error,
   } = useGetCourtQuery(courtId);
-  console.log(court);
+  // console.log(court);
+
   const onBackToUserInfo = () => changeModalType("userInfo");
 
   return (
@@ -90,8 +92,12 @@ const CourtPopup = forwardRef((props, ref) => {
       </ImgWrapper>
 
       <CourtInfo data={court} />
-      <CourtPlayers />
       <CourtChat />
+      <CourtPlayers
+        changeModalType={changeModalType}
+        court={court}
+        courtId={courtId}
+      />
     </PopupWrapper>
   );
 });

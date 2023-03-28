@@ -21,8 +21,29 @@ export const courtsApi = createApi({
     getCourt: builder.query({
       query: (id) => `/courts/${id}`,
     }),
+    getCourtPlayers: builder.query({
+      query: (courtId) => `/courts/${courtId}/players`,
+    }),
+    checkIn: builder.mutation({
+      query(data) {
+        const { courtId, formData, token } = data;
+        return {
+          url: `/courts/${courtId}/checkin`,
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetMarkersQuery, useAddCourtMutation, useGetCourtQuery } =
-  courtsApi;
+export const {
+  useGetMarkersQuery,
+  useAddCourtMutation,
+  useGetCourtQuery,
+  useCheckInMutation,
+  useGetCourtPlayersQuery
+} = courtsApi;

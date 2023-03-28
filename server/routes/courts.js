@@ -1,6 +1,12 @@
 import express from "express";
 import multer from "multer";
-import { addCourt, getCourt, addRemoveFav, checkInOnCourt } from "../controllers/courts.js";
+import {
+  addCourt,
+  getCourt,
+  addRemoveFav,
+  checkInOnCourt,
+  getCourtPlayers,
+} from "../controllers/courts.js";
 import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -16,5 +22,9 @@ router.get("/:id", getCourt);
 router.patch("/:courtId/fav", upload.none(), verifyToken, addRemoveFav);
 
 // CHECK-IN
-router.post("/:courtId/checkin", verifyToken, checkInOnCourt);
+router.post("/:courtId/checkin", upload.none(), verifyToken, checkInOnCourt);
+
+// GET PLAYERS LIST
+router.get("/:courtId/players", getCourtPlayers);
+
 export default router;

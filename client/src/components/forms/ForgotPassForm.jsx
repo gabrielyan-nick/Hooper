@@ -1,5 +1,4 @@
 import React, { useState, useRef, forwardRef } from "react";
-import { useDispatch } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -9,19 +8,11 @@ import {
   Button,
   Input,
   Label,
-  FlexCenterBox,
-  IconButton,
   BtnSpinnerWrapper,
-  TextButton,
   FlexBetweenBox,
 } from "./../microComponets";
 import { useForgotPassMutation } from "../../api/authApi";
-import {
-  PassIconBtn,
-  ErrorText,
-  FormWrapper,
-  SubmitErrorText,
-} from "../LoginRegisterScreen";
+import { ErrorText, FormWrapper } from "../LoginRegisterScreen";
 import { BasketballMarker } from "../markers";
 import { lightTheme } from "../../styles/themes";
 
@@ -51,7 +42,6 @@ const ForgotPassForm = forwardRef((props, ref) => {
 
   const onSubmit = async (formData) => {
     const res = await submit(formData);
-    console.log(res);
     if (!res.error && res.data) {
       setSubmitSuccess(true);
       reset();

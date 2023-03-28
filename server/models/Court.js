@@ -83,7 +83,7 @@ const courtSchema = new mongoose.Schema(
       type: [
         {
           _id: { type: Schema.Types.ObjectId, ref: "User" },
-          name: String,
+          username: String,
           createdAt: { type: Date, default: Date.now },
         },
       ],
@@ -93,7 +93,7 @@ const courtSchema = new mongoose.Schema(
       type: [
         {
           _id: { type: Schema.Types.ObjectId, ref: "User" },
-          name: String,
+          username: String,
           createdAt: { type: Date, default: Date.now },
         },
       ],
@@ -103,7 +103,7 @@ const courtSchema = new mongoose.Schema(
       type: [
         {
           _id: { type: Schema.Types.ObjectId, ref: "User" },
-          name: String,
+          username: String,
           createdAt: { type: Date, default: Date.now },
         },
       ],

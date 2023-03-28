@@ -67,19 +67,19 @@ export const addRemoveFav = async (req, res) => {
 export const checkInOnCourt = async (req, res) => {
   try {
     const { courtId } = req.params;
-    const { _id, name } = req.body;
-
+    const { _id, username } = req.body;
+    console.log(_id, username);
     const court = await Court.findById(courtId);
     if (!court) res.status(404).json({ message: "Court not found" });
 
     court.checkinPlayers.unshift({
-      _id,
-      name,
+      _id: _id,
+      username: username,
     });
 
     court.players.unshift({
-      _id,
-      name,
+      _id: _id,
+      username: username,
     });
 
     setTimeout(async () => {
@@ -91,9 +91,21 @@ export const checkInOnCourt = async (req, res) => {
     }, 5 * 60 * 1000);
 
     await court.save();
-
-    res.status(200).json({message: 'Successful'});
+    res.status(200).json({ message: "Successful" });
   } catch (e) {
-    res.status(500).json({message: 'Unknown error'});
+    res.status(500).json({ message: "Unknown error" });
+  }
+};
+
+export const getCourtPlayers = async (req, res) => {
+  try {
+    const { courtId } = req.params;
+    const court = await Court.findById(courtId);
+    if (!court) res.status(404).json({ message: "Court not found" });
+    res
+      .status(200)
+      .json({ players: court.players, checkinPlayers: court.checkinPlayers });
+  } catch (e) {
+    res.status(500).json({ message: "Unknown error" });
   }
 };
