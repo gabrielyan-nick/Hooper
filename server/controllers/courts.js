@@ -25,7 +25,19 @@ export const getCourt = async (req, res) => {
     if (!court) {
       return res.status(404).json({ message: "Court not found" });
     }
-    res.status(200).json(court);
+
+    res.status(200).json({
+      cover: court.cover,
+      hoopsCount: court.hoopsCount,
+      isPrivate: court.isPrivate,
+      lighting: court.lighting,
+      location: court.location,
+      messages: court.messages,
+      name: court.name,
+      picturePath: court.picturePath,
+      sport: court.sport,
+      _id: court._id,
+    });
   } catch (e) {
     res.status(500).json(e.message);
   }
@@ -104,9 +116,18 @@ export const getCourtPlayers = async (req, res) => {
     const { courtId } = req.params;
     const court = await Court.findById(courtId);
     if (!court) res.status(404).json({ message: "Court not found" });
+
+    const uniquePlayers = court.checkinPlayers.reduce((acc, obj) => {
+      const exists = acc.some((item) => item.username === obj.username);
+      if (!exists) {
+        acc.push(obj);
+      }
+      return acc;
+    }, []);
+
     res
       .status(200)
-      .json({ players: court.players, checkinPlayers: court.checkinPlayers });
+      .json({ players: court.players, checkinPlayers: uniquePlayers });
   } catch (e) {
     res.status(500).json({ message: "Unknown error" });
   }

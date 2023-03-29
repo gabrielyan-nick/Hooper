@@ -272,18 +272,16 @@ export const Button = styled.button`
   &:hover:not(:disabled) {
     box-shadow: none;
   }
-  &:active:not(:disabled) {
+  &:active:not(:disabled),
+  &:focus {
     color: #ccc;
     transform: scale(0.96);
+    box-shadow: none;
   }
 
   &:disabled {
     cursor: default;
     opacity: 0.8;
-  }
-  &:focus:not(:active) {
-    outline: 2px solid #01442f;
-    border-radius: 80px;
   }
 `;
 

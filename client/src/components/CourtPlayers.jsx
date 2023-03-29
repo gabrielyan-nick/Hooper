@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, forwardRef, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useCheckInMutation, useGetCourtPlayersQuery } from "../api/courtsApi";
@@ -7,7 +7,9 @@ import {
   TextLineWrapper,
   FlexBetweenBox,
   Text,
+  IconBtnBg,
 } from "./microComponets";
+import { EnterIcon } from "./svgIcons";
 
 const CourtPlayers = ({ changeModalType, court, courtId }) => {
   const { user } = useSelector((state) => state.storage);
@@ -34,48 +36,116 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
     } else changeModalType("logReg");
   };
 
-  const getUniquePlayers = (arr) => {
-    return arr?.reduce((acc, obj) => {
-      const exists = acc.some((item) => item.username === obj.username);
-      if (!exists) {
-        acc.push(obj);
-      }
-      return acc;
-    }, []);
-  };
-
   return (
-    <>
-      <CourtPlayersWrapper>
+    <div>
+      <TitlesWrapper>
+        <Title>Були тут</Title>
+        <Title>
+          Зараз на {court.sport === "basketball" ? "майданчику" : "полі"}
+        </Title>
+      </TitlesWrapper>
+      <PlayersList>
         <ColumnWrapper>
-          <Title>Були тут</Title>
-          <PlayersList>
-            {getUniquePlayers(data?.checkinPlayers)?.map((player) => (
-              <Text key={player.createdAt}>{player.username}</Text>
-            ))}
-          </PlayersList>
+          {data?.checkinPlayers?.map((player) => (
+            <Player
+              key={player.createdAt}
+              user={player}
+              changeModalType={changeModalType}
+            />
+          ))}
         </ColumnWrapper>
+        <Divider />
         <ColumnWrapper>
-          <Title>
-            Зараз на {court.sport === "basketball" ? "майданчику" : "полі"}
-          </Title>
-          <PlayersList>
-            {data?.players?.map((player) => (
-              <Text key={player.createdAt}>{player.username}</Text>
-            ))}
-          </PlayersList>
+          {data?.players?.map((player) => (
+            <Player
+              key={player.createdAt}
+              user={player}
+              changeModalType={changeModalType}
+            />
+          ))}
         </ColumnWrapper>
-      </CourtPlayersWrapper>
+      </PlayersList>
       <CheckInBtn onClick={checkInOnCourt}>
         Я на {court.sport === "basketball" ? "майданчику" : "полі"}
       </CheckInBtn>
-    </>
+    </div>
+    // <CourtPlayersWrapper>
+    //   <ColumnWrapper>
+    //     <PlayersList>
+    //       {data?.checkinPlayers?.map((player) => (
+    //         <Text key={player.createdAt}>{player.username}</Text>
+    //       ))}
+    //     </PlayersList>
+    //   </ColumnWrapper>
+    //   <ColumnWrapper>
+    //     <PlayersList>
+    //       {data?.players?.map((player) => (
+    //         <Text key={player.createdAt}>{player.username}</Text>
+    //       ))}
+    //     </PlayersList>
+    //   </ColumnWrapper>
+    // </CourtPlayersWrapper>
+    // <CheckInBtn onClick={checkInOnCourt}>
+    //   Я на {court.sport === "basketball" ? "майданчику" : "полі"}
+    // </CheckInBtn>
   );
 };
 
+const Player = memo(
+  forwardRef((props, ref) => {
+    const { user, changeModalType } = props;
+    const onChangeToUser = () => changeModalType("user");
+
+    return (
+      <LineWrapper ref={ref}>
+        <UserName>{user.username}</UserName>
+        <GoToBtn color="green" onClick={onChangeToUser}>
+          <EnterIcon />
+        </GoToBtn>
+      </LineWrapper>
+    );
+  })
+);
+
+const LineWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  gap: 5px;
+  height: 25px;
+  align-items: center;
+  & + div {
+    margin-top: 3px;
+  }
+`;
+
+const UserName = styled(Text)`
+  width: 83%;
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+`;
+
+const GoToBtn = styled(IconBtnBg)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1px;
+  border-radius: 7px;
+`;
+
 const PlayersList = styled(TextLineWrapper)`
-  min-height: 50px;
-  height: calc(100% - 24px);
+  min-height: 30px;
+  display: flex;
+  padding: 3px 0;
+`;
+
+const Divider = styled.div`
+  width: 3px;
+  border-radius: 80px;
+  background-color: ${(props) => props.theme.textSecondary};
 `;
 
 const Title = styled.h6`
@@ -89,8 +159,15 @@ const Title = styled.h6`
   }
 `;
 
+const TitlesWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 10px;
+`;
+
 const ColumnWrapper = styled.div`
   width: 50%;
+  padding: 0 3px 0 7px;
 `;
 
 const CourtPlayersWrapper = styled(FlexBetweenBox)`
