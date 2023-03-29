@@ -1,4 +1,13 @@
-import React, { useEffect, useState, forwardRef, memo } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+  forwardRef,
+  createRef,
+  memo,
+} from "react";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useCheckInMutation, useGetCourtPlayersQuery } from "../api/courtsApi";
@@ -9,7 +18,8 @@ import {
   Text,
   IconBtnBg,
 } from "./microComponets";
-import { EnterIcon } from "./svgIcons";
+import { EnterIcon, ShowHideIcon } from "./svgIcons";
+import { ShowHideBtnWrapper } from "./FavouriteCourts";
 
 const CourtPlayers = ({ changeModalType, court, courtId }) => {
   const { user } = useSelector((state) => state.storage);
@@ -20,7 +30,47 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
     isSuccess,
     refetch,
   } = useGetCourtPlayersQuery(courtId);
-  console.log(data);
+  const displayedListLength = 3;
+  const [showAll, setShowAll] = useState(false);
+  const displayedCheckInPlayers = showAll
+    ? data.checkinPlayers
+    : data.checkinPlayers?.slice(0, displayedListLength);
+  const displayedPlayers = showAll
+    ? data.players
+    : data.players?.slice(0, displayedListLength);
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    showAll
+      ? (listRef.current.style.height = `${
+          28 * data.checkinPlayers?.length +
+          (data.checkinPlayers?.length > displayedListLength ? 8 : 3)
+        }px`)
+      : (listRef.current.style.height = `${
+          28 * displayedCheckInPlayers?.length +
+          (data.checkinPlayers?.length > displayedListLength ? 8 : 3)
+        }px`);
+  }, [showAll, data]);
+
+  const showHideList = () => {
+    setShowAll(!showAll);
+  };
+
+  const createRefsFromArray = (arr) => {
+    return arr?.reduce((acc, { createdAt }) => {
+      acc[createdAt] = createRef();
+      return acc;
+    }, {});
+  };
+
+  const checkInPlayersRef = useMemo(
+    () => createRefsFromArray(data.checkinPlayers),
+    [data.checkinPlayers]
+  );
+  const playersRef = useMemo(
+    () => createRefsFromArray(data.players),
+    [data.players]
+  );
 
   const checkInOnCourt = () => {
     if (user !== null) {
@@ -44,50 +94,67 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
           Зараз на {court.sport === "basketball" ? "майданчику" : "полі"}
         </Title>
       </TitlesWrapper>
-      <PlayersList>
+      <PlayersList listLenght={data.checkinPlayers?.length} ref={listRef}>
         <ColumnWrapper>
-          {data?.checkinPlayers?.map((player) => (
-            <Player
-              key={player.createdAt}
-              user={player}
-              changeModalType={changeModalType}
-            />
-          ))}
+          <TransitionGroup component={null}>
+            {displayedCheckInPlayers?.map((player) => (
+              <CSSTransition
+                timeout={0}
+                key={player.createdAt}
+                classNames="court"
+                nodeRef={checkInPlayersRef[player.createdAt]}
+                mountOnEnter
+                unmountOnExit
+              >
+                <Player
+                  key={player.createdAt}
+                  user={player}
+                  changeModalType={changeModalType}
+                  ref={checkInPlayersRef[player.createdAt]}
+                />
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
         </ColumnWrapper>
         <Divider />
         <ColumnWrapper>
-          {data?.players?.map((player) => (
-            <Player
-              key={player.createdAt}
-              user={player}
-              changeModalType={changeModalType}
-            />
-          ))}
+          <TransitionGroup component={null}>
+            {displayedPlayers?.map((player) => (
+              <CSSTransition
+                timeout={0}
+                key={player.createdAt}
+                classNames="court"
+                nodeRef={playersRef[player.createdAt]}
+                mountOnEnter
+                unmountOnExit
+              >
+                <Player
+                  key={player.createdAt}
+                  user={player}
+                  changeModalType={changeModalType}
+                  ref={playersRef[player.createdAt]}
+                />
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
         </ColumnWrapper>
       </PlayersList>
+      {data.checkinPlayers?.length > displayedListLength && (
+        <div style={{ height: "1px", position: "relative", width: "100%" }}>
+          <ShowHideBtn
+            color={`${showAll ? "orange" : "green"}`}
+            onClick={showHideList}
+          >
+            <ShowHideBtnWrap showAll={showAll}>
+              <ShowHideIcon size={25} />
+            </ShowHideBtnWrap>
+          </ShowHideBtn>
+        </div>
+      )}
       <CheckInBtn onClick={checkInOnCourt}>
         Я на {court.sport === "basketball" ? "майданчику" : "полі"}
       </CheckInBtn>
     </div>
-    // <CourtPlayersWrapper>
-    //   <ColumnWrapper>
-    //     <PlayersList>
-    //       {data?.checkinPlayers?.map((player) => (
-    //         <Text key={player.createdAt}>{player.username}</Text>
-    //       ))}
-    //     </PlayersList>
-    //   </ColumnWrapper>
-    //   <ColumnWrapper>
-    //     <PlayersList>
-    //       {data?.players?.map((player) => (
-    //         <Text key={player.createdAt}>{player.username}</Text>
-    //       ))}
-    //     </PlayersList>
-    //   </ColumnWrapper>
-    // </CourtPlayersWrapper>
-    // <CheckInBtn onClick={checkInOnCourt}>
-    //   Я на {court.sport === "basketball" ? "майданчику" : "полі"}
-    // </CheckInBtn>
   );
 };
 
@@ -106,6 +173,17 @@ const Player = memo(
     );
   })
 );
+
+const ShowHideBtnWrap = styled(ShowHideBtnWrapper)`
+  height: 25px;
+`;
+
+const ShowHideBtn = styled(IconBtnBg)`
+  position: absolute;
+  bottom: -16px;
+  left: 15%;
+  border-radius: 7px;
+`;
 
 const LineWrapper = styled.div`
   position: relative;
@@ -137,9 +215,11 @@ const GoToBtn = styled(IconBtnBg)`
 `;
 
 const PlayersList = styled(TextLineWrapper)`
+  position: relative;
   min-height: 30px;
   display: flex;
-  padding: 3px 0;
+  padding: ${(props) => (props.listLenght > 3 ? "3px 0 10px 0" : "3px 0")};
+  transition: height 0.2s;
 `;
 
 const Divider = styled.div`
@@ -168,12 +248,6 @@ const TitlesWrapper = styled.div`
 const ColumnWrapper = styled.div`
   width: 50%;
   padding: 0 3px 0 7px;
-`;
-
-const CourtPlayersWrapper = styled(FlexBetweenBox)`
-  margin-top: 10px;
-  align-items: normal;
-  gap: 5px;
 `;
 
 const CheckInBtn = styled(Button)`

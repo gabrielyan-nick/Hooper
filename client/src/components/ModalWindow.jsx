@@ -119,6 +119,10 @@ export const ModalWrapper = styled.div`
     align-items: flex-start;
     padding: 40px 0;
   }
+  @media ${(props) => props.theme.media.mobile} {
+    align-items: flex-start;
+    padding: 40px 0;
+  }
 `;
 
 export const ModalContent = styled.div`

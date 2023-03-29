@@ -55,7 +55,7 @@ const ShowHideBtn = styled(IconBtnBg)`
   border-radius: 7px;
 `;
 
-const ShowHideBtnWrapper = styled.div`
+export const ShowHideBtnWrapper = styled.div`
   height: 27px;
   transform: ${(props) => (props.showAll ? "rotate(180deg)" : "rotate(0deg")};
   transition: transform 0.3s;
@@ -124,9 +124,6 @@ const FavouriteCourts = ({ courts, changeModalType }) => {
             >
               <ShowHideBtnWrapper showAll={showAll}>
                 <ShowHideIcon
-                  style={{
-                    width: "100px",
-                  }}
                 />
               </ShowHideBtnWrapper>
             </ShowHideBtn>
