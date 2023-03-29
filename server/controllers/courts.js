@@ -105,6 +105,27 @@ export const checkInOnCourt = async (req, res) => {
     }, 5 * 60 * 1000);
 
     await court.save();
+
+    res.status(200).json({ message: "Successful" });
+  } catch (e) {
+    res.status(500).json({ message: "Unknown error" });
+  }
+};
+
+export const checkOutOnCourt = async (req, res) => {
+  try {
+    const { courtId } = req.params;
+    const { _id } = req.body;
+    const court = await Court.findById(courtId);
+    if (!court) res.status(404).json({ message: "Court not found" });
+
+    const isOnCourt = court.players.some((player) => player._id == _id);
+    if (isOnCourt) {
+      court.players = court.players.filter((player) => player._id != _id);
+    }
+
+    await court.save();
+
     res.status(200).json({ message: "Successful" });
   } catch (e) {
     res.status(500).json({ message: "Unknown error" });

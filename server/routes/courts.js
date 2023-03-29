@@ -5,6 +5,7 @@ import {
   getCourt,
   addRemoveFav,
   checkInOnCourt,
+  checkOutOnCourt,
   getCourtPlayers,
 } from "../controllers/courts.js";
 import { verifyToken } from "../middleware/auth.js";
@@ -23,6 +24,9 @@ router.patch("/:courtId/fav", upload.none(), verifyToken, addRemoveFav);
 
 // CHECK-IN
 router.post("/:courtId/checkin", upload.none(), verifyToken, checkInOnCourt);
+
+// CHECK-OUT
+router.post("/:courtId/checkout", upload.none(), verifyToken, checkOutOnCourt);
 
 // GET PLAYERS LIST
 router.get("/:courtId/players", getCourtPlayers);

@@ -248,7 +248,7 @@ export const Button = styled.button`
   justify-content: center;
   line-height: ${(props) => props.lh || "24px"};
   margin: ${(props) => props.m || 0};
-  outline: none;
+  /* outline: none; */
   overflow: visible;
   padding: ${(props) => props.p || "10px 20px"};
   pointer-events: auto;
@@ -269,16 +269,15 @@ export const Button = styled.button`
   transition: all 200ms ease-out;
   box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
     rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
+  transform: scale(1);
   &:hover:not(:disabled) {
     box-shadow: none;
   }
-  &:active:not(:disabled),
-  &:focus {
+  &:active:not(:disabled) {
     color: #ccc;
     transform: scale(0.96);
     box-shadow: none;
   }
-
   &:disabled {
     cursor: default;
     opacity: 0.8;
@@ -286,7 +285,7 @@ export const Button = styled.button`
 `;
 
 const rollAnim = keyframes`
-   0% { transform: translateX(-150%) rotate(0deg) ; } 100% { transform: translateX(150%) rotate(360deg)};
+   0% { transform: translateX(-120%) rotate(0deg) } 100% { transform: translateX(120%) rotate(360deg)};
 `;
 
 export const BtnSpinnerWrapper = styled.span`

@@ -6,32 +6,42 @@ import React, {
   forwardRef,
   createRef,
   memo,
+  useCallback,
 } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { useCheckInMutation, useGetCourtPlayersQuery } from "../api/courtsApi";
+import {
+  useCheckInMutation,
+  useGetCourtPlayersQuery,
+  useCheckOutMutation,
+} from "../api/courtsApi";
 import {
   Button,
   TextLineWrapper,
   FlexBetweenBox,
   Text,
   IconBtnBg,
+  BtnSpinnerWrapper,
 } from "./microComponets";
 import { EnterIcon, ShowHideIcon } from "./svgIcons";
 import { ShowHideBtnWrapper } from "./FavouriteCourts";
+import { lightTheme } from "../styles/themes";
+import { BasketballMarker, FootballMarker } from "./markers";
 
 const CourtPlayers = ({ changeModalType, court, courtId }) => {
   const { user } = useSelector((state) => state.storage);
   const [checkIn, result] = useCheckInMutation();
+  const [checkOut, res] = useCheckOutMutation();
   const {
     data = {},
     isLoading,
-    isSuccess,
+    isFetching,
     refetch,
   } = useGetCourtPlayersQuery(courtId);
   const displayedListLength = 3;
   const [showAll, setShowAll] = useState(false);
+
   const displayedCheckInPlayers = showAll
     ? data.checkinPlayers
     : data.checkinPlayers?.slice(0, displayedListLength);
@@ -39,6 +49,18 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
     ? data.players
     : data.players?.slice(0, displayedListLength);
   const listRef = useRef(null);
+  const isOnCourt = data.players?.some((player) => player._id === user._id);
+
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
+
+  useEffect(() => {
+    listRef.current.style.height = `${
+      28 * displayedCheckInPlayers?.length +
+      (data.checkinPlayers?.length > displayedListLength ? 8 : 3)
+    }px`;
+  }, [data]);
 
   useEffect(() => {
     showAll
@@ -50,7 +72,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
           28 * displayedCheckInPlayers?.length +
           (data.checkinPlayers?.length > displayedListLength ? 8 : 3)
         }px`);
-  }, [showAll, data]);
+  }, [showAll]);
 
   const showHideList = () => {
     setShowAll(!showAll);
@@ -79,7 +101,18 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
       formData.append("username", user.username);
       checkIn({ courtId, formData, token: user.token })
         .then((result) => {
-          console.log(result);
+          refetch();
+        })
+        .catch((e) => console.log(e));
+    } else changeModalType("logReg");
+  };
+
+  const checkOutOnCourt = () => {
+    if (user !== null) {
+      const formData = new FormData();
+      formData.append("_id", user._id);
+      checkOut({ courtId, formData, token: user.token })
+        .then((result) => {
           refetch();
         })
         .catch((e) => console.log(e));
@@ -151,9 +184,33 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
           </ShowHideBtn>
         </div>
       )}
-      <CheckInBtn onClick={checkInOnCourt}>
-        Я на {court.sport === "basketball" ? "майданчику" : "полі"}
-      </CheckInBtn>
+
+      {!isOnCourt ? (
+        <CheckInBtn
+          onClick={checkInOnCourt}
+          style={{ width: checkInWidth[court.sport] }}
+          disabled={result.isLoading || isFetching}
+        >
+          {result.isLoading || isFetching ? (
+            <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
+          ) : (
+            `Я на ${court.sport === "basketball" ? "майданчику" : "полі"}`
+          )}
+        </CheckInBtn>
+      ) : (
+        <CheckInBtn
+          bgColors={lightTheme.btnSecondary}
+          onClick={checkOutOnCourt}
+          style={{ width: checkOutWidth[court.sport] }}
+          disabled={res.isLoading || isFetching}
+        >
+          {res.isLoading || isFetching ? (
+            <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
+          ) : (
+            `Пішов з ${court.sport === "basketball" ? "майданчика" : "поля"}`
+          )}
+        </CheckInBtn>
+      )}
     </div>
   );
 };
@@ -173,6 +230,21 @@ const Player = memo(
     );
   })
 );
+
+const markers = {
+  basketball: <BasketballMarker size={27} />,
+  football: <FootballMarker size={27} />,
+};
+
+const checkInWidth = {
+  basketball: "162px",
+  football: "101px",
+};
+
+const checkOutWidth = {
+  basketball: "190px",
+  football: "132px",
+};
 
 const ShowHideBtnWrap = styled(ShowHideBtnWrapper)`
   height: 25px;
@@ -253,7 +325,8 @@ const ColumnWrapper = styled.div`
 const CheckInBtn = styled(Button)`
   padding: 5px 15px;
   margin: 20px auto 0;
-  height: auto;
+  height: 34px;
+  transition: box-shadow 200ms, transform 200ms;
 `;
 
 export default CourtPlayers;

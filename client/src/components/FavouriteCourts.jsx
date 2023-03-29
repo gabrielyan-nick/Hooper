@@ -72,10 +72,10 @@ const FavouriteCourts = ({ courts, changeModalType }) => {
   useEffect(() => {
     showAll
       ? (listRef.current.style.height = `${
-          27 * courts.length + 7 * courts.length + 13
+          34 * courts.length  + 13
         }px`)
       : (listRef.current.style.height = `${
-          27 * displayedCourts.length + 7 * displayedCourts.length + 13
+          34 * displayedCourts.length +  13
         }px`);
     if (courts.length === 0) listRef.current.style.height = "35px";
   }, [showAll, courts]);
