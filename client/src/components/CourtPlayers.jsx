@@ -6,8 +6,8 @@ import React, {
   forwardRef,
   createRef,
   memo,
-  useCallback,
 } from "react";
+import PropTypes from "prop-types";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
@@ -16,6 +16,11 @@ import {
   useGetCourtPlayersQuery,
   useCheckOutMutation,
 } from "../api/courtsApi";
+import {
+  setModalTypeForNav,
+  setCourtIdForNav,
+  setUserIdForNav,
+} from "../store/navigateSlice";
 import {
   Button,
   TextLineWrapper,
@@ -33,6 +38,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
   const { user } = useSelector((state) => state.storage);
   const [checkIn, result] = useCheckInMutation();
   const [checkOut, res] = useCheckOutMutation();
+  const dispatch = useDispatch();
   const {
     data = {},
     isLoading,
@@ -49,11 +55,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
     ? data.players
     : data.players?.slice(0, displayedListLength);
   const listRef = useRef(null);
-  const isOnCourt = data.players?.some((player) => player._id === user._id);
-
-  useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
+  const isOnCourt = data.players?.some((player) => player._id === user?._id);
 
   useEffect(() => {
     listRef.current.style.height = `${
@@ -104,7 +106,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
           refetch();
         })
         .catch((e) => console.log(e));
-    } else changeModalType("logReg");
+    } else changeModalType({ type: "logReg" });
   };
 
   const checkOutOnCourt = () => {
@@ -116,7 +118,12 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
           refetch();
         })
         .catch((e) => console.log(e));
-    } else changeModalType("logReg");
+    } else changeModalType({ type: "logReg" });
+  };
+
+  const navigateDispatch = () => {
+    dispatch(setModalTypeForNav("court"));
+    dispatch(setCourtIdForNav(courtId));
   };
 
   return (
@@ -144,6 +151,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
                   user={player}
                   changeModalType={changeModalType}
                   ref={checkInPlayersRef[player.createdAt]}
+                  navDispatch={navigateDispatch}
                 />
               </CSSTransition>
             ))}
@@ -166,6 +174,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
                   user={player}
                   changeModalType={changeModalType}
                   ref={playersRef[player.createdAt]}
+                  navDispatch={navigateDispatch}
                 />
               </CSSTransition>
             ))}
@@ -188,7 +197,9 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
       {!isOnCourt ? (
         <CheckInBtn
           onClick={checkInOnCourt}
-          style={{ width: checkInWidth[court.sport] }}
+          style={{
+            width: checkInWidth[court.sport],
+          }}
           disabled={result.isLoading || isFetching}
         >
           {result.isLoading || isFetching ? (
@@ -201,13 +212,13 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
         <CheckInBtn
           bgColors={lightTheme.btnSecondary}
           onClick={checkOutOnCourt}
-          style={{ width: checkOutWidth[court.sport] }}
+          style={{ width: "101px" }}
           disabled={res.isLoading || isFetching}
         >
           {res.isLoading || isFetching ? (
             <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
           ) : (
-            `Пішов з ${court.sport === "basketball" ? "майданчика" : "поля"}`
+            "Пішов"
           )}
         </CheckInBtn>
       )}
@@ -217,9 +228,11 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
 
 const Player = memo(
   forwardRef((props, ref) => {
-    const { user, changeModalType } = props;
-    const onChangeToUser = () => changeModalType("user");
-
+    const { user, changeModalType, navDispatch } = props;
+    const onChangeToUser = () => {
+      changeModalType({ type: "userInfo", userid: user._id });
+      navDispatch();
+    };
     return (
       <LineWrapper ref={ref}>
         <UserName>{user.username}</UserName>
@@ -231,6 +244,13 @@ const Player = memo(
   })
 );
 
+const CheckInBtn = styled(Button)`
+  padding: 5px 15px;
+  margin: 20px auto 5px;
+  height: 34px;
+  transition: box-shadow 200ms, transform 200ms;
+`;
+
 const markers = {
   basketball: <BasketballMarker size={27} />,
   football: <FootballMarker size={27} />,
@@ -239,11 +259,6 @@ const markers = {
 const checkInWidth = {
   basketball: "162px",
   football: "101px",
-};
-
-const checkOutWidth = {
-  basketball: "190px",
-  football: "132px",
 };
 
 const ShowHideBtnWrap = styled(ShowHideBtnWrapper)`
@@ -322,11 +337,15 @@ const ColumnWrapper = styled.div`
   padding: 0 3px 0 7px;
 `;
 
-const CheckInBtn = styled(Button)`
-  padding: 5px 15px;
-  margin: 20px auto 0;
-  height: 34px;
-  transition: box-shadow 200ms, transform 200ms;
-`;
-
 export default CourtPlayers;
+
+CourtPlayers.propTypes = {
+  changeModalType: PropTypes.func.isRequired,
+  court: PropTypes.object.isRequired,
+  courtId: PropTypes.string.isRequired,
+};
+
+Player.propTypes = {
+  changeModalType: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+};

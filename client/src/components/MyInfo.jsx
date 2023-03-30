@@ -16,27 +16,10 @@ import { AvatarChanged, UserCityChanged, FavouriteCourts } from "./index";
 import { ChangeIcon, CloseIcon } from "./svgIcons";
 import { ModalHeader } from "./ModalWindow";
 import { setLogout } from "../store/storageSlice";
-
-const Wrapper = styled.div`
-  padding: 30px 5px 20px;
-`;
-
-const FirstLineWrapper = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 58% 42%;
-  width: 100%;
-`;
-
-const TextWrapper = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  justify-content: space-between;
-`;
+import { setUserIdForNav } from "../store/navigateSlice";
 
 const MyInfo = forwardRef((props, ref) => {
+  const { closeModal, openPhoto, changeModalType } = props;
   const { picturePath, username, city, favouriteCourts } = useSelector(
     (state) => state.storage.user
   );
@@ -44,10 +27,15 @@ const MyInfo = forwardRef((props, ref) => {
 
   const onLogout = () => dispatch(setLogout());
 
+  const closeInfo = () => {
+    closeModal();
+    dispatch(setUserIdForNav(""));
+  };
+
   return (
     <div ref={ref}>
       <ModalHeader>
-        <CloseBtn onClick={props.closeModal}>
+        <CloseBtn onClick={closeInfo}>
           <CloseIcon />
         </CloseBtn>
       </ModalHeader>
@@ -59,16 +47,17 @@ const MyInfo = forwardRef((props, ref) => {
             </TextLineWrapper>
             <UserCityChanged city={city} />
           </TextWrapper>
-          <AvatarChanged photo={picturePath} openPhoto={props.openPhoto} />
+          <AvatarChanged photo={picturePath} openPhoto={openPhoto} />
         </FirstLineWrapper>
         <FavouriteCourts
           courts={favouriteCourts}
-          changeModalType={props.changeModalType}
+          changeModalType={changeModalType}
+          modalType={"myInfo"}
         />
         <Button
           onClick={onLogout}
           bgColors={lightTheme.btnSecondary}
-          style={{ margin: "0 auto" }}
+          style={{ margin: "20px auto 0" }}
         >
           Вийти з акаунта
         </Button>
@@ -78,3 +67,22 @@ const MyInfo = forwardRef((props, ref) => {
 });
 
 export default MyInfo;
+
+export const Wrapper = styled.div`
+  padding: 30px 5px 5px;
+`;
+
+export const FirstLineWrapper = styled.div`
+  display: grid;
+  align-items: center;
+  grid-template-columns: 58% 42%;
+  width: 100%;
+`;
+
+export const TextWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  justify-content: space-between;
+`;

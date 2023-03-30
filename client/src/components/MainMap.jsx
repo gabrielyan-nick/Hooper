@@ -12,11 +12,17 @@ import {
   LoadingScreen,
   ModalWindow,
   LoginRegisterScreen,
+  UserInfo,
+  MyInfo,
 } from "./index";
+import { setCourtIdForNav } from "../store/navigateSlice";
 
 const MainMap = ({ closeLoadingScreen }) => {
   const theme = useSelector((state) => state.storage.theme);
-  const [currentCourtId, setCurrentCourtId] = useState(null);
+  const userIdNav = useSelector((state) => state.navigate.userId);
+  const dispatch = useDispatch();
+  const [courtId, setCourtId] = useState(null);
+  const [userId, setUserId] = useState(userIdNav);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [viewState, setViewState] = useState({
     longitude: 36.40292260918253,
@@ -26,8 +32,14 @@ const MainMap = ({ closeLoadingScreen }) => {
   const [modalType, setModalType] = useState("court");
   const logRegRef = useRef(null);
   const courtRef = useRef(null);
-  const nodeRef = modalType === "court" ? courtRef : logRegRef;
-
+  const userRef = useRef(null);
+  const nodeRef =
+    modalType === "court"
+      ? courtRef
+      : modalType === "logReg"
+      ? logRegRef
+      : userRef;
+  console.log(userId, userIdNav);
   const {
     data: markers = [],
     isLoading,
@@ -36,19 +48,22 @@ const MainMap = ({ closeLoadingScreen }) => {
   } = useGetMarkersQuery();
 
   const onOpenCourtPopup = (id) => {
-    setCurrentCourtId(id);
+    dispatch(setCourtIdForNav(id));
+    setCourtId(id);
     setIsPopupOpen(true);
   };
   const onCloseCourtPopup = () => {
     setIsPopupOpen(false);
     setTimeout(() => {
-      modalType === "logReg" && setModalType("court");
+      (modalType === "logReg" || modalType === "userInfo") &&
+        setModalType("court");
     }, 300);
   };
 
-  const changeModalType = (type) => {
+  const changeModalType = ({ type, courtid = null, userid = userIdNav }) => {
     setModalType(type);
-    // setCourtId(id);
+    setCourtId(courtid);
+    setUserId(userid);
   };
 
   return (
@@ -93,17 +108,24 @@ const MainMap = ({ closeLoadingScreen }) => {
           >
             {modalType === "court" ? (
               <CourtPopup
-                courtId={currentCourtId}
+                courtId={courtId}
                 closeModal={onCloseCourtPopup}
                 changeModalType={changeModalType}
                 ref={courtRef}
               />
-            ) : (
+            ) : modalType === "logReg" ? (
               <LoginRegisterScreen
                 closeModal={onCloseCourtPopup}
                 ref={logRegRef}
                 changeModalType={changeModalType}
                 backBtn
+              />
+            ) : (
+              <UserInfo
+                id={userId}
+                closeModal={onCloseCourtPopup}
+                changeModalType={changeModalType}
+                ref={userRef}
               />
             )}
           </CSSTransition>

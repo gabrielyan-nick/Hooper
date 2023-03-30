@@ -1,13 +1,24 @@
 import User from "../models/User.js";
 import Message from "../models/Message.js";
 
+export const getUserInfo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) res.status(404).json("User not found");
+    res.status(200).json(user);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+};
+
 export const updateUserInfo = async (req, res) => {
   try {
     const { id } = req.params;
     const { ...data } = req.body;
     const token = req.headers.authorization.split(" ")[1];
     let obj;
-    
+
     if (data.city) {
       obj = { city: JSON.parse(data.city) };
     } else {
@@ -32,7 +43,7 @@ export const updateUserInfo = async (req, res) => {
       token: token,
       favouriteCourts: updatedUser.favouriteCourts,
     });
-  } catch (error) {
-    res.status(409).json({ message: error.message });
+  } catch (e) {
+    res.status(409).json({ message: e.message });
   }
 };

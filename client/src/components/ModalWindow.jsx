@@ -130,7 +130,7 @@ export const ModalContent = styled.div`
   border-radius: 10px;
   min-height: 100px;
   padding: 5px 5px;
-  overflow: visible;
+  /* overflow: visible; */
   overflow-x: hidden;
   max-width: 420px;
 
@@ -144,10 +144,10 @@ export const ModalContent = styled.div`
     width: 80%;
   }
   @media ${(props) => props.theme.media.mobile} {
-    width: 99%;
+    width: 98%;
   }
   @media ${(props) => props.theme.media.smallMobile} {
-    width: 99%;
+    width: 98%;
   }
 `;
 

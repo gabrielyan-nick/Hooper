@@ -4,7 +4,13 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Button, FlexBetweenBox, Text, UserWidgetBtn } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
-import { ModalWindow, MyInfo, PhotoWindow, CourtPopup } from "./index";
+import {
+  ModalWindow,
+  MyInfo,
+  PhotoWindow,
+  CourtPopup,
+  UserInfo,
+} from "./index";
 
 const Avatar = styled.img`
   width: 50px;
@@ -19,27 +25,38 @@ const Username = styled(Text)`
 `;
 
 const UserWidget = () => {
-  const [modalType, setModalType] = useState("userInfo");
+  const [modalType, setModalType] = useState("myInfo");
+  const userid = useSelector((state) => state.navigate.userId);
   const [courtId, setCourtId] = useState(null);
+  const [userId, setUserId] = useState(userid);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const { picturePath, username } = useSelector((state) => state.storage.user);
   const name = username.slice(0, 15);
   const myInfoRef = useRef(null);
   const courtRef = useRef(null);
-  const nodeRef = modalType === "userInfo" ? myInfoRef : courtRef;
+  const userRef = useRef(null);
+  const nodeRef =
+    modalType === "myInfo"
+      ? myInfoRef
+      : modalType === "court"
+      ? courtRef
+      : userRef;
 
-  const changeModalType = (type, id = null) => {
-    setCourtId(id);
+  const changeModalType = ({ type, courtid = null, userid = null }) => {
     setModalType(type);
+    setCourtId(courtid);
+    setUserId(userid);
   };
 
   const openUserWidgetModal = () => setIsModalOpen(true);
   const closeUserWidgetModal = () => {
     setIsModalOpen(false);
     setTimeout(() => {
-      modalType === "court" && setModalType("userInfo");
+      (modalType === "court" || modalType === "userInfo") &&
+        setModalType("myInfo");
       setCourtId(null);
+      setUserId(null);
     }, 300);
   };
 
@@ -69,20 +86,26 @@ const UserWidget = () => {
             classNames="switch"
             timeout={300}
           >
-            {modalType === "userInfo" ? (
+            {modalType === "myInfo" ? (
               <MyInfo
                 openPhoto={openPhotoModal}
                 closeModal={closeUserWidgetModal}
                 changeModalType={changeModalType}
                 ref={myInfoRef}
               />
-            ) : (
+            ) : modalType === "court" ? (
               <CourtPopup
                 courtId={courtId}
                 closeModal={closeUserWidgetModal}
                 ref={courtRef}
                 changeModalType={changeModalType}
-                backBtn
+              />
+            ) : (
+              <UserInfo
+                id={userId}
+                closeModal={closeUserWidgetModal}
+                changeModalType={changeModalType}
+                ref={userRef}
               />
             )}
           </CSSTransition>

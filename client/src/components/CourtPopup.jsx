@@ -1,4 +1,5 @@
 import React, { forwardRef } from "react";
+import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useGetCourtQuery } from "../api/courtsApi";
@@ -23,61 +24,49 @@ import {
 import { CourtInfo, CourtPlayers, CourtChat } from "./index";
 import { useAddRemoveFavMutation } from "../api/userApi";
 import { setFavCourts } from "../store/storageSlice";
-import { lightTheme } from "../styles/themes";
-
-const PopupWrapper = styled.div`
-  width: 100%;
-  min-height: 300px;
-  background: ${(props) => props.theme.popupBg};
-`;
-
-const CourtImage = styled(CourtImg)`
-  width: 103%;
-  transform: translateX(-5px);
-  margin-top: 5px;
-`;
-
-const ImgWrapper = styled.div`
-  position: relative;
-`;
-
-const FavBtn = styled.div`
-  position: absolute;
-  bottom: 9px;
-  padding: 1px;
-  border-radius: 7px;
-  background: ${(props) => props.theme.popupBg};
-  &:hover {
-    background: ${(props) => props.theme.popupBg};
-  }
-`;
-
-const CourtTitle = styled(Title)`
-  margin: ${(props) => (props.backBtn ? 0 : "0 auto")};
-`;
+import {
+  setUserIdForNav,
+  setCourtIdForNav,
+  setModalTypeForNav,
+} from "../store/navigateSlice";
 
 const CourtPopup = forwardRef((props, ref) => {
-  const { courtId, closeModal, changeModalType, backBtn = false } = props;
+  const { courtId, closeModal, changeModalType } = props;
+  const dispatch = useDispatch();
+  const { modalType, userId } = useSelector((state) => state.navigate);
   const {
     data: court = {},
     isLoading,
     isError,
     error,
   } = useGetCourtQuery(courtId);
-  console.log(court);
 
-  const onBackToUserInfo = () => changeModalType("userInfo");
+  const onBackToUserInfo = () => {
+    if (modalType === "userInfo" || modalType === "court") {
+      changeModalType({ type: "userInfo", userid: userId });
+    } else changeModalType({ type: "myInfo" });
+  };
+
+  const closeCourt = () => {
+    closeModal();
+    setTimeout(() => {
+      dispatch(setModalTypeForNav("court"));
+      dispatch(setUserIdForNav(""));
+    }, 300);
+  };
 
   return (
     <PopupWrapper ref={ref}>
       <FlexBetweenBox>
-        {backBtn && (
+        {(modalType === "userInfo" ||
+          modalType === "myInfo" ||
+          userId !== "") && (
           <BackBtn onClick={onBackToUserInfo}>
             <BackIcon />
           </BackBtn>
         )}
         <CourtTitle>{court.name}</CourtTitle>
-        <CloseBtn onClick={closeModal}>
+        <CloseBtn onClick={closeCourt}>
           <CloseIcon />
         </CloseBtn>
       </FlexBetweenBox>
@@ -120,7 +109,7 @@ const AddRemoveFavourite = ({ courtId, changeModalType }) => {
       if (!res.error && res.data) {
         dispatch(setFavCourts(res.data));
       }
-    } else changeModalType("logReg");
+    } else changeModalType({ type: "logReg" });
   };
   return (
     <IconButton onClick={onAddRemoveFav}>
@@ -131,4 +120,47 @@ const AddRemoveFavourite = ({ courtId, changeModalType }) => {
       )}
     </IconButton>
   );
+};
+
+const PopupWrapper = styled.div`
+  width: 100%;
+  min-height: 300px;
+  background: ${(props) => props.theme.popupBg};
+`;
+
+const CourtImage = styled(CourtImg)`
+  width: 104%;
+  transform: translateX(-5px);
+  margin-top: 5px;
+`;
+
+const ImgWrapper = styled.div`
+  position: relative;
+`;
+
+const FavBtn = styled.div`
+  position: absolute;
+  bottom: 9px;
+  padding: 1px;
+  border-radius: 7px;
+  background: ${(props) => props.theme.popupBg};
+  &:hover {
+    background: ${(props) => props.theme.popupBg};
+  }
+`;
+
+const CourtTitle = styled(Title)`
+  margin: ${(props) => (props.backBtn ? 0 : "0 auto")};
+`;
+
+CourtPopup.propTypes = {
+  courtId: PropTypes.string,
+  closeModal: PropTypes.func.isRequired,
+  changeModalType: PropTypes.func.isRequired,
+  backBtn: PropTypes.bool,
+};
+
+AddRemoveFavourite.propTypes = {
+  courtId: PropTypes.string,
+  changeModalType: PropTypes.func.isRequired,
 };

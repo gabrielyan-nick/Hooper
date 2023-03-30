@@ -17,26 +17,6 @@ import {
   IconButton,
 } from "./microComponets";
 
-const CourtInfoWrapper = styled(FlexBetweenBox)`
-  padding: 5px 10px;
-`;
-const CourtInfoDataWrapper = styled(FlexCenterBox)`
-  flex-basis: 33%;
-  gap: 5px;
-`;
-
-const basketballCover = {
-  rubber: "Резина",
-  beton: "Бетон",
-  asphalt: "Асфальт",
-  indoor: "Зал",
-};
-
-const footballCover = {
-  natural: "Натуральне",
-  synthetic: "Синтетичне",
-};
-
 const CourtInfo = ({ data }) => {
   const coverIcon =
     data.sport === "basketball" ? (
@@ -103,4 +83,24 @@ export const IconWithTooltip = ({ icon, tooltip, id, place = "top" }) => {
       </Tooltip>
     </>
   );
+};
+
+const CourtInfoWrapper = styled(FlexBetweenBox)`
+  padding: 5px 10px;
+`;
+const CourtInfoDataWrapper = styled(FlexCenterBox)`
+  flex-basis: 33%;
+  gap: 5px;
+`;
+
+const basketballCover = {
+  rubber: "Резина",
+  beton: "Бетон",
+  asphalt: "Асфальт",
+  indoor: "Зал",
+};
+
+const footballCover = {
+  natural: "Натуральне",
+  synthetic: "Синтетичне",
 };

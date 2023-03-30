@@ -16,6 +16,7 @@ export { default as ForgotPassForm } from "./forms/ForgotPassForm";
 export { default as ResetPassForm } from "./forms/ResetPassForm";
 export { default as UserWidget } from "./UserWidget";
 export { default as MyInfo } from "./MyInfo";
+export { default as UserInfo } from "./UserInfo";
 export { default as AvatarChanged } from "./AvatarChanged";
 export { default as UserCityChanged } from "./UserCityChanged";
 export { default as FavouriteCourts } from "./FavouriteCourts";

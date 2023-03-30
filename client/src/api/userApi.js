@@ -5,6 +5,9 @@ export const userApi = createApi({
   reducerPath: "user",
   baseQuery: fetchBaseQuery({ baseUrl: serverUrl }),
   endpoints: (builder) => ({
+    getUserInfo: builder.query({
+      query: (id) => `/users/${id}`,
+    }),
     addRemoveFav: builder.mutation({
       query(data) {
         const { _id, courtId, token } = data;
@@ -36,4 +39,4 @@ export const userApi = createApi({
   }),
 });
 
-export const { useAddRemoveFavMutation, useUpdateUserInfoMutation } = userApi;
+export const { useAddRemoveFavMutation, useUpdateUserInfoMutation, useGetUserInfoQuery } = userApi;

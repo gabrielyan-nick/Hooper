@@ -48,7 +48,7 @@ const LoginRegisterScreen = forwardRef((props, ref) => {
     setFormType(type);
   };
 
-  const onBackToCourt = () => changeModalType("court");
+  const onBackToCourt = () => changeModalType({ type: "court" });
 
   return (
     <div ref={ref}>

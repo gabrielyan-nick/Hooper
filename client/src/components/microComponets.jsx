@@ -288,17 +288,17 @@ const rollAnim = keyframes`
    0% { transform: translateX(-120%) rotate(0deg) } 100% { transform: translateX(120%) rotate(360deg)};
 `;
 
+const rotateAnim = keyframes`
+   0% { transform: rotate(0deg) } 100% { transform: rotate(360deg)};
+`;
+
 export const BtnSpinnerWrapper = styled.span`
   display: block;
   width: 30px;
   height: 30px;
   border-radius: 50%;
   position: relative;
-  animation: ${rollAnim} 1s ease-in-out infinite alternate;
-`;
-
-const rotateAnim = keyframes`
-   0% { transform: rotate(0deg) } 100% { transform: rotate(360deg)};
+  animation: ${rotateAnim} 1s ease-in-out infinite alternate;
 `;
 
 export const IconSpinnerWrapper = styled.span`

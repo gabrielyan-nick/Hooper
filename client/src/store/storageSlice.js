@@ -22,5 +22,5 @@ const storageSlice = createSlice({
 });
 
 export const { setTheme, setLogin, setLogout, setFavCourts } =
-storageSlice.actions;
+  storageSlice.actions;
 export default storageSlice.reducer;
