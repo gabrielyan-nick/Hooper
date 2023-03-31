@@ -20,7 +20,7 @@ import { useGetUserInfoQuery } from "../api/userApi";
 import { FirstLineWrapper, Wrapper, TextWrapper } from "./MyInfo";
 
 const UserInfo = forwardRef((props, ref) => {
-  const { id, closeModal, changeModalType } = props;
+  const { id, closeModal, changeModalType, openPhoto, setUserPhoto } = props;
   const dispatch = useDispatch();
   const { courtId } = useSelector((state) => state.navigate);
   const { data = {}, isLoading } = useGetUserInfoQuery(id);
@@ -35,6 +35,11 @@ const UserInfo = forwardRef((props, ref) => {
     changeModalType({ type: "court" });
     dispatch(setModalTypeForNav("court"));
     dispatch(setUserIdForNav(""));
+  };
+
+  const openUserPhoto = () => {
+    openPhoto();
+    setUserPhoto(data.picturePath);
   };
 
   return (
@@ -60,7 +65,11 @@ const UserInfo = forwardRef((props, ref) => {
             </TextLineWrapper>
           </TextWrapper>
           <FlexCenterBox>
-            <Avatar src={data.picturePath} style={{ marginLeft: "10px" }} />
+            <Avatar
+              src={data.picturePath}
+              style={{ marginLeft: "10px" }}
+              onClick={openUserPhoto}
+            />
           </FlexCenterBox>
         </FirstLineWrapper>
         <FavouriteCourts

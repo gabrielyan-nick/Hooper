@@ -14,6 +14,7 @@ import {
   LoginRegisterScreen,
   UserInfo,
   MyInfo,
+  PhotoWindow,
 } from "./index";
 import { setCourtIdForNav } from "../store/navigateSlice";
 
@@ -29,6 +30,8 @@ const MainMap = ({ closeLoadingScreen }) => {
     latitude: 49.91435295466242,
     zoom: 14,
   });
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [userPhoto, setUserPhoto] = useState(null);
   const [modalType, setModalType] = useState("court");
   const logRegRef = useRef(null);
   const courtRef = useRef(null);
@@ -39,7 +42,7 @@ const MainMap = ({ closeLoadingScreen }) => {
       : modalType === "logReg"
       ? logRegRef
       : userRef;
-  console.log(userId, userIdNav);
+
   const {
     data: markers = [],
     isLoading,
@@ -65,6 +68,9 @@ const MainMap = ({ closeLoadingScreen }) => {
     setCourtId(courtid);
     setUserId(userid);
   };
+
+  const openPhotoModal = () => setIsPhotoModalOpen(true);
+  const closePhotoModal = () => setIsPhotoModalOpen(false);
 
   return (
     <>
@@ -126,11 +132,18 @@ const MainMap = ({ closeLoadingScreen }) => {
                 closeModal={onCloseCourtPopup}
                 changeModalType={changeModalType}
                 ref={userRef}
+                openPhoto={openPhotoModal}
+                setUserPhoto={setUserPhoto}
               />
             )}
           </CSSTransition>
         </SwitchTransition>
       </ModalWindow>
+      <PhotoWindow
+        image={userPhoto}
+        opened={isPhotoModalOpen}
+        closeModal={closePhotoModal}
+      />
     </>
   );
 };

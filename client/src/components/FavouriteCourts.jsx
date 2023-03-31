@@ -34,7 +34,7 @@ const FavouriteCourts = ({ courts, changeModalType, modalType, id = null }) => {
     ? courts
     : courts?.slice(0, displayedListLength);
   const listRef = useRef(null);
-  console.log(courts);
+
   useEffect(() => {
     showAll
       ? (listRef.current.style.height = `${34 * courts?.length + 13}px`)

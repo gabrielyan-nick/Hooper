@@ -20,3 +20,5 @@ export { default as UserInfo } from "./UserInfo";
 export { default as AvatarChanged } from "./AvatarChanged";
 export { default as UserCityChanged } from "./UserCityChanged";
 export { default as FavouriteCourts } from "./FavouriteCourts";
+export { default as AddCourtWidget } from "./AddCourtWidget";
+

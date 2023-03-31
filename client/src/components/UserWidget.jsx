@@ -31,6 +31,7 @@ const UserWidget = () => {
   const [userId, setUserId] = useState(userid);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [userPhoto, setUserPhoto] = useState(null);
   const { picturePath, username } = useSelector((state) => state.storage.user);
   const name = username.slice(0, 15);
   const myInfoRef = useRef(null);
@@ -106,13 +107,15 @@ const UserWidget = () => {
                 closeModal={closeUserWidgetModal}
                 changeModalType={changeModalType}
                 ref={userRef}
+                openPhoto={openPhotoModal}
+                setUserPhoto={setUserPhoto}
               />
             )}
           </CSSTransition>
         </SwitchTransition>
       </ModalWindow>
       <PhotoWindow
-        image={picturePath}
+        image={userPhoto !== null ? userPhoto : picturePath}
         opened={isPhotoModalOpen}
         closeModal={closePhotoModal}
       />

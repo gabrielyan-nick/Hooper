@@ -13,31 +13,31 @@ const PhotoWindow = ({ image, alt = "image", opened, closeModal }) => {
   const contentRef = useRef(null);
   const overlayRef = useRef(null);
 
-  const getModalSize = () => {
-    const img = imgRef.current;
-    const modal = contentRef.current;
-    modal.style.width = `${img.width}px`;
-    modal.style.height = `${img.height}px`;
-  };
+  // const getModalSize = () => {
+  //   const img = imgRef.current;
+  //   const modal = contentRef.current;
+  //   modal.style.width = `${img.width}px`;
+  //   modal.style.height = `${img.height}px`;
+  // };
 
   useEffect(() => {
     setAnimationIn(opened);
   }, [opened]);
 
-  useEffect(() => {
-    if (opened) {
-      getModalSize();
-    }
-  }, [image]);
+  // useEffect(() => {
+  //   if (opened) {
+  //     // getModalSize();
+  //   }
+  // }, [image]);
 
-  useEffect(() => {
-    if (opened) {
-      window.addEventListener("resize", getModalSize);
-      return () => {
-        window.removeEventListener("resize", getModalSize);
-      };
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (opened) {
+  //     window.addEventListener("resize", getModalSize);
+  //     return () => {
+  //       window.removeEventListener("resize", getModalSize);
+  //     };
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (opened) {

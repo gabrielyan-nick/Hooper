@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { MainMap, UserLoginWidget, LoadingScreen } from "../components";
+import { MainMap, UserLoginWidget, LoadingScreen, AddCourtWidget } from "../components";
 import { setTheme, setLogout } from "../store/storageSlice";
 import { Wrapper } from "../components/microComponets";
 
@@ -23,8 +23,8 @@ const MainPage = () => {
           <UserLoginWidget />
         </>
       )}
-
       <MainMap closeLoadingScreen={closeLoadingScreen} />
+      <AddCourtWidget/>
     </Wrapper>
   );
 };
