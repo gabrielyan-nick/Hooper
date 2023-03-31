@@ -23,18 +23,18 @@ const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker, isDisabled }) => {
   return (
     <Wrapper>
       <CSSTransition
-        in={addCourtMarker !== null}
-        timeout={200}
+        in={!!addCourtMarker}
+        timeout={300}
         classNames="roll-hide"
         unmountOnExit
-        mountOnEnter
-        onEnter={handleEnter}
       >
-        <RemoveMarkerBtn onClick={onRemoveMarker} disabled={isDisabled}>
-          <CloseIcon size={20} />
-        </RemoveMarkerBtn>
+        <div>
+          <RemoveMarkerBtn onClick={onRemoveMarker} disabled={isDisabled}>
+            <CloseIcon size={20} />
+          </RemoveMarkerBtn>
+        </div>
       </CSSTransition>
-      <AddCourtBtn color="orange" disabled={isDisabled}>
+      <AddCourtBtn color="orange" disabled={isDisabled || !addCourtMarker}>
         <AddCourtIcon />
       </AddCourtBtn>
     </Wrapper>
@@ -63,8 +63,7 @@ const AddCourtBtn = styled(UserWidgetBtn)`
     transition: all 0.3s;
   }
   &:disabled {
-    opacity: 0.3;
-    transition: none;
+    opacity: 0.5;
   }
 `;
 
@@ -73,6 +72,5 @@ const RemoveMarkerBtn = styled(CloseBtn)`
   border-radius: 50%;
   &:disabled {
     opacity: 0.3;
-    transition: none;
   }
 `;

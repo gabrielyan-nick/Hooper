@@ -88,7 +88,7 @@ export const CloseBtn = styled(IconButton)`
   padding: 3px;
   user-select: none;
   background-color: #e02504;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
   box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
     rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
     rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,

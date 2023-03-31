@@ -110,7 +110,7 @@ p {
 .select-switch-enter-active{
    opacity: 1;
    transform: scale(1);
-     transition: opacity 300ms, transform 300ms;
+  transition: opacity 300ms, transform 300ms;
 }
 .select-switch-exit{
    opacity: 1;
@@ -145,15 +145,16 @@ p {
 .roll-hide-enter-done {
   opacity: 1; 
   transform: translateX(0%) rotate(0deg);
-  transition: opacity 500ms, transform 500ms;
+  transition: all 500ms;
 }
 .roll-hide-exit {
   opacity: 1;
   transform: translateX(0%) rotate(0deg);
+  transition: all 500ms;
 }
 .roll-hide-exit-active {
   opacity: 0;
   transform: translateX(100%) rotate(100deg);
-  transition: opacity 500ms, transform 500ms;
+  transition: all 500ms;
 }
 `;

@@ -30,17 +30,17 @@ const MainPage = () => {
             setIsModalopen={setIsModalOpen}
             isModalopen={isModalOpen}
           />
+          <AddCourtWidget
+            addCourtMarker={addCourtMarker}
+            setAddCourtMarker={setAddCourtMarker}
+            isDisabled={isModalOpen}
+          />
         </>
       )}
       <MainMap
         closeLoadingScreen={closeLoadingScreen}
         setAddCourtMarker={setAddCourtMarker}
         addCourtMarker={addCourtMarker}
-      />
-      <AddCourtWidget
-        addCourtMarker={addCourtMarker}
-        setAddCourtMarker={setAddCourtMarker}
-        isDisabled={isModalOpen}
       />
     </Wrapper>
   );
