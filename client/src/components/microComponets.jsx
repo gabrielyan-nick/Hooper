@@ -65,7 +65,7 @@ export const IconBtnBg = styled.button`
   box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
     rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: ${(props) =>
       props.color === "green"
         ? lightTheme.green
@@ -79,7 +79,7 @@ export const IconBtnBg = styled.button`
 
   &:disabled {
     cursor: default;
-    opacity: 0.8;
+    opacity: 0.6;
   }
 `;
 

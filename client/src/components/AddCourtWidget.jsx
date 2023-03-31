@@ -7,7 +7,7 @@ import { AddCourtIcon } from "./svgIcons";
 
 const Wrapper = styled.div`
   position: absolute;
-  bottom: 30px;
+  bottom: 70px;
   right: 20px;
 `;
 
