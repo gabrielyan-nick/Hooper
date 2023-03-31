@@ -2,42 +2,91 @@ import React, { useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { Tooltip } from "react-tooltip";
 import {
   Button,
   UserWidgetBtn,
   IconBtnBg,
   FlexCenterBox,
   CloseBtn,
+  Text,
 } from "./microComponets";
-import { ModalWindow, LoginRegisterScreen, UserWidget } from "./index";
+import {
+  ModalWindow,
+  LoginRegisterScreen,
+  UserWidget,
+  AddCourtForm,
+} from "./index";
 import { AddCourtIcon, CloseIcon } from "./svgIcons";
 import { lightTheme } from "../styles/themes";
 
 const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker, isDisabled }) => {
+  const isAuth = useSelector((state) => !!state.storage.user?.token);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const onRemoveMarker = () => setAddCourtMarker(null);
 
-  const handleEnter = (node) => {
-    node.classList.add("roll-hide");
-  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
-    <Wrapper>
-      <CSSTransition
-        in={!!addCourtMarker}
-        timeout={300}
-        classNames="roll-hide"
-        unmountOnExit
-      >
-        <div>
-          <RemoveMarkerBtn onClick={onRemoveMarker} disabled={isDisabled}>
-            <CloseIcon size={20} />
-          </RemoveMarkerBtn>
+    <>
+      <Wrapper>
+        <CSSTransition
+          in={!!addCourtMarker}
+          timeout={300}
+          classNames="roll-hide"
+          unmountOnExit
+        >
+          <div>
+            <RemoveMarkerBtn
+              onClick={onRemoveMarker}
+              disabled={isDisabled}
+              isHidden={isDisabled}
+            >
+              <CloseIcon size={20} />
+            </RemoveMarkerBtn>
+          </div>
+        </CSSTransition>
+        {!addCourtMarker && (
+          <Tooltip
+            id="add"
+            openOnClick
+            style={{
+              borderRadius: "7px",
+              maxWidth: "90vw",
+              padding: "5px 7px",
+              background: "#363535d3",
+            }}
+          >
+            <Text fontSize="14px" color="#f5ebeb">
+              Вкажіть місце на карті
+            </Text>
+          </Tooltip>
+        )}
+        <div data-tooltip-id="add" data-tooltip-place="left">
+          <AddCourtBtn
+            color="orange"
+            disabled={isDisabled || !addCourtMarker}
+            onClick={openModal}
+            isHidden={isDisabled}
+          >
+            <AddCourtIcon />
+          </AddCourtBtn>
         </div>
-      </CSSTransition>
-      <AddCourtBtn color="orange" disabled={isDisabled || !addCourtMarker}>
-        <AddCourtIcon />
-      </AddCourtBtn>
-    </Wrapper>
+      </Wrapper>
+      <ModalWindow
+        opened={isModalOpen}
+        closeClickOutside={false}
+        isEmptyHeader={false}
+      >
+        {isAuth ? (
+          <AddCourtForm closeModal={closeModal} />
+        ) : (
+          <LoginRegisterScreen closeModal={closeModal} />
+        )}
+      </ModalWindow>
+    </>
   );
 };
 
@@ -63,7 +112,7 @@ const AddCourtBtn = styled(UserWidgetBtn)`
     transition: all 0.3s;
   }
   &:disabled {
-    opacity: 0.5;
+    opacity: ${(props) => (props.isHidden ? 0.2 : 0.7)};
   }
 `;
 
@@ -71,6 +120,6 @@ const RemoveMarkerBtn = styled(CloseBtn)`
   padding: 3px;
   border-radius: 50%;
   &:disabled {
-    opacity: 0.3;
+    opacity: 0.15;
   }
 `;

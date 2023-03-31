@@ -8,9 +8,14 @@ import React, {
   memo,
 } from "react";
 import PropTypes from "prop-types";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
+import {
+  TransitionGroup,
+  CSSTransition,
+  SwitchTransition,
+} from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { Tooltip } from "react-tooltip";
 import {
   useCheckInMutation,
   useGetCourtPlayersQuery,
@@ -29,7 +34,7 @@ import {
   IconBtnBg,
   BtnSpinnerWrapper,
 } from "./microComponets";
-import { EnterIcon, ShowHideIcon } from "./svgIcons";
+import { EnterIcon, ShowHideIcon, QuestionIcon } from "./svgIcons";
 import { ShowHideBtnWrapper } from "./FavouriteCourts";
 import { lightTheme } from "../styles/themes";
 import { BasketballMarker, FootballMarker } from "./markers";
@@ -47,7 +52,6 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
   } = useGetCourtPlayersQuery(courtId);
   const displayedListLength = 3;
   const [showAll, setShowAll] = useState(false);
-
   const displayedCheckInPlayers = showAll
     ? data.checkinPlayers
     : data.checkinPlayers?.slice(0, displayedListLength);
@@ -56,6 +60,9 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
     : data.players?.slice(0, displayedListLength);
   const listRef = useRef(null);
   const isOnCourt = data.players?.some((player) => player._id === user?._id);
+  const checkInRef = useRef(null);
+  const checkOutRef = useRef(null);
+  const nodeRef = isOnCourt ? checkInRef : checkOutRef;
 
   useEffect(() => {
     listRef.current.style.height = `${
@@ -193,35 +200,65 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
           </ShowHideBtn>
         </div>
       )}
-
-      {!isOnCourt ? (
-        <CheckInBtn
-          onClick={checkInOnCourt}
-          style={{
-            width: checkInWidth[court.sport],
-          }}
-          disabled={result.isLoading || isFetching}
+      <SwitchTransition mode="out-in">
+        <CSSTransition
+          nodeRef={nodeRef}
+          key={isOnCourt}
+          classNames="court"
+          timeout={300}
         >
-          {result.isLoading || isFetching ? (
-            <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
+          {!isOnCourt ? (
+            <CheckInBtn
+              ref={nodeRef}
+              onClick={checkInOnCourt}
+              style={{
+                width: checkInWidth[court.sport],
+              }}
+              disabled={result.isLoading || isFetching}
+            >
+              {result.isLoading || isFetching ? (
+                <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
+              ) : (
+                `Я на ${court.sport === "basketball" ? "майданчику" : "полі"}`
+              )}
+            </CheckInBtn>
           ) : (
-            `Я на ${court.sport === "basketball" ? "майданчику" : "полі"}`
+            <CheckOutWrapper ref={nodeRef}>
+              <CheckInBtn
+                bgColors={lightTheme.btnSecondary}
+                onClick={checkOutOnCourt}
+                style={{ width: "101px" }}
+                disabled={res.isLoading || isFetching}
+              >
+                {res.isLoading || isFetching ? (
+                  <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
+                ) : (
+                  "Пішов"
+                )}
+              </CheckInBtn>
+              <QuestionIconWrapper
+                type="button"
+                data-tooltip-id="help"
+                data-tooltip-place="top"
+              >
+                <QuestionIcon size={20} />
+                <Tooltip
+                  id="help"
+                  openOnClick
+                  style={{
+                    borderRadius: "7px",
+                    maxWidth: "90vw",
+                    padding: "5px 7px",
+                    backgroundColor: "#2b2a2adc",
+                  }}
+                >
+                  Відмітка автоматично зникає через 3 години
+                </Tooltip>
+              </QuestionIconWrapper>
+            </CheckOutWrapper>
           )}
-        </CheckInBtn>
-      ) : (
-        <CheckInBtn
-          bgColors={lightTheme.btnSecondary}
-          onClick={checkOutOnCourt}
-          style={{ width: "101px" }}
-          disabled={res.isLoading || isFetching}
-        >
-          {res.isLoading || isFetching ? (
-            <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
-          ) : (
-            "Пішов"
-          )}
-        </CheckInBtn>
-      )}
+        </CSSTransition>
+      </SwitchTransition>
     </div>
   );
 };
@@ -244,7 +281,20 @@ const Player = memo(
   })
 );
 
+const CheckOutWrapper = styled.div`
+  position: relative;
+  width: 102px;
+  margin: 0 auto;
+`;
+
+const QuestionIconWrapper = styled.div`
+  position: absolute;
+  top: 7px;
+  right: -35px;
+`;
+
 const CheckInBtn = styled(Button)`
+  position: relative;
   padding: 5px 15px;
   margin: 20px auto 5px;
   height: 34px;

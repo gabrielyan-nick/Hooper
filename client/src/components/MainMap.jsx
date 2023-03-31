@@ -17,6 +17,7 @@ import {
   PhotoWindow,
 } from "./index";
 import { setCourtIdForNav } from "../store/navigateSlice";
+import { MarkerIcon } from "./svgIcons";
 
 const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   const theme = useSelector((state) => state.storage.theme);
@@ -78,11 +79,6 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
     setAddCourtMarker({ lat, lng });
   };
 
-  const clickOnMarker = (e, id) => {
-    e.stopPropagation();
-    onOpenCourtPopup(id);
-  };
-
   return (
     <>
       <Map
@@ -114,7 +110,7 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
         ))}
         {addCourtMarker && (
           <Marker latitude={addCourtMarker.lat} longitude={addCourtMarker.lng}>
-            add
+            <MarkerIcon />
           </Marker>
         )}
       </Map>

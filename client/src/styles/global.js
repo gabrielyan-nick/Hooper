@@ -125,6 +125,7 @@ p {
 
 .court-enter {
   opacity: 0;
+  transition: opacity 300ms;
 }
 .court-enter-done {
   opacity: 1;
@@ -132,6 +133,7 @@ p {
 }
 .court-exit {
   opacity: 1;
+  transition: opacity 300ms;
 }
 .court-exit-active {
   opacity: 0;

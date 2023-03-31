@@ -24,7 +24,7 @@ const Username = styled(Text)`
   padding-left: 5px;
 `;
 
-const UserWidget = ({ isModalOpen, setIsModalOpen }) => {
+const UserWidget = ({ isModalOpen, setIsModalOpen, setAddCourtMarker }) => {
   const [modalType, setModalType] = useState("myInfo");
   const userid = useSelector((state) => state.navigate.userId);
   const [courtId, setCourtId] = useState(null);
@@ -92,6 +92,8 @@ const UserWidget = ({ isModalOpen, setIsModalOpen }) => {
                 openPhoto={openPhotoModal}
                 closeModal={closeUserWidgetModal}
                 changeModalType={changeModalType}
+                setIsModalOpen={setIsModalOpen}
+                setAddCourtMarker={setAddCourtMarker}
                 ref={myInfoRef}
               />
             ) : modalType === "court" ? (

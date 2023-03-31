@@ -29,6 +29,7 @@ const MainPage = () => {
           <UserLoginWidget
             setIsModalopen={setIsModalOpen}
             isModalopen={isModalOpen}
+            setAddCourtMarker={setAddCourtMarker}
           />
           <AddCourtWidget
             addCourtMarker={addCourtMarker}

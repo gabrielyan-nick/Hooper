@@ -19,13 +19,23 @@ import { setLogout } from "../store/storageSlice";
 import { setUserIdForNav } from "../store/navigateSlice";
 
 const MyInfo = forwardRef((props, ref) => {
-  const { closeModal, openPhoto, changeModalType } = props;
+  const {
+    closeModal,
+    openPhoto,
+    changeModalType,
+    setIsModalOpen,
+    setAddCourtMarker,
+  } = props;
   const { picturePath, username, city, favouriteCourts } = useSelector(
     (state) => state.storage.user
   );
   const dispatch = useDispatch();
 
-  const onLogout = () => dispatch(setLogout());
+  const onLogout = () => {
+    setIsModalOpen(false);
+    setAddCourtMarker(null);
+    dispatch(setLogout());
+  };
 
   const closeInfo = () => {
     closeModal();

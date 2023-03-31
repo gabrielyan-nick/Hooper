@@ -118,7 +118,7 @@ export const Text = styled.p`
       ? props.theme.text
       : props.color === "secondary"
       ? props.theme.textSecondary
-      : props.theme.text};
+      : props.color || props.theme.text};
   text-align: ${(props) => (props.centred ? "center" : "inherit")};
   margin: ${(props) => props.m || 0}; ;
 `;
