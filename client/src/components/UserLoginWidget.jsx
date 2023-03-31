@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   z-index: 10;
 `;
 
-const UserLoginWidget = () => {
+const UserLoginWidget = ({ isModalopen, setIsModalopen }) => {
   const isAuth = useSelector((state) => !!state.storage.user?.token);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -26,7 +26,10 @@ const UserLoginWidget = () => {
     <>
       <Wrapper>
         {isAuth ? (
-          <UserWidget />
+          <UserWidget
+            isModalOpen={isModalopen}
+            setIsModalOpen={setIsModalopen}
+          />
         ) : (
           <UserWidgetBtn p="12px 30px" onClick={openModal}>
             Увійти

@@ -138,5 +138,22 @@ p {
   transition: opacity 300ms;
 }
 
-
+.roll-hide-enter {
+  opacity: 0;
+  transform: translateX(100%) rotate(100deg);
+} 
+.roll-hide-enter-done {
+  opacity: 1; 
+  transform: translateX(0%) rotate(0deg);
+  transition: opacity 500ms, transform 500ms;
+}
+.roll-hide-exit {
+  opacity: 1;
+  transform: translateX(0%) rotate(0deg);
+}
+.roll-hide-exit-active {
+  opacity: 0;
+  transform: translateX(100%) rotate(100deg);
+  transition: opacity 500ms, transform 500ms;
+}
 `;

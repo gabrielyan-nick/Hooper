@@ -24,12 +24,12 @@ const Username = styled(Text)`
   padding-left: 5px;
 `;
 
-const UserWidget = () => {
+const UserWidget = ({ isModalOpen, setIsModalOpen }) => {
   const [modalType, setModalType] = useState("myInfo");
   const userid = useSelector((state) => state.navigate.userId);
   const [courtId, setCourtId] = useState(null);
   const [userId, setUserId] = useState(userid);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [userPhoto, setUserPhoto] = useState(null);
   const { picturePath, username } = useSelector((state) => state.storage.user);

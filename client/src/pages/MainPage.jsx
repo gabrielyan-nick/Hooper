@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { MainMap, UserLoginWidget, LoadingScreen, AddCourtWidget } from "../components";
+import {
+  MainMap,
+  UserLoginWidget,
+  LoadingScreen,
+  AddCourtWidget,
+} from "../components";
 import { setTheme, setLogout } from "../store/storageSlice";
 import { Wrapper } from "../components/microComponets";
 
 const MainPage = () => {
   const [isLoadingScreen, setIsLoadingScreen] = useState(true);
+  const [addCourtMarker, setAddCourtMarker] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
-  const theme = useSelector((state) => state.storage.theme);
 
   const onChangeTheme = () => dispatch(setTheme());
   const closeLoadingScreen = () => setIsLoadingScreen(false);
@@ -20,11 +26,22 @@ const MainPage = () => {
       ) : (
         <>
           <ChangeThemeBtn onClick={onChangeTheme} />
-          <UserLoginWidget />
+          <UserLoginWidget
+            setIsModalopen={setIsModalOpen}
+            isModalopen={isModalOpen}
+          />
         </>
       )}
-      <MainMap closeLoadingScreen={closeLoadingScreen} />
-      <AddCourtWidget/>
+      <MainMap
+        closeLoadingScreen={closeLoadingScreen}
+        setAddCourtMarker={setAddCourtMarker}
+        addCourtMarker={addCourtMarker}
+      />
+      <AddCourtWidget
+        addCourtMarker={addCourtMarker}
+        setAddCourtMarker={setAddCourtMarker}
+        isDisabled={isModalOpen}
+      />
     </Wrapper>
   );
 };
@@ -40,4 +57,3 @@ const ChangeThemeBtn = styled.button`
   z-index: 10;
   background-color: ${(props) => props.theme.color};
 `;
-

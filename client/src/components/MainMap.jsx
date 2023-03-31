@@ -18,7 +18,7 @@ import {
 } from "./index";
 import { setCourtIdForNav } from "../store/navigateSlice";
 
-const MainMap = ({ closeLoadingScreen }) => {
+const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   const theme = useSelector((state) => state.storage.theme);
   const userIdNav = useSelector((state) => state.navigate.userId);
   const dispatch = useDispatch();
@@ -72,6 +72,17 @@ const MainMap = ({ closeLoadingScreen }) => {
   const openPhotoModal = () => setIsPhotoModalOpen(true);
   const closePhotoModal = () => setIsPhotoModalOpen(false);
 
+  const handleMapClick = (e) => {
+    const lng = e.lngLat.lng;
+    const lat = e.lngLat.lat;
+    setAddCourtMarker({ lat, lng });
+  };
+
+  const clickOnMarker = (e, id) => {
+    e.stopPropagation();
+    onOpenCourtPopup(id);
+  };
+
   return (
     <>
       <Map
@@ -82,21 +93,30 @@ const MainMap = ({ closeLoadingScreen }) => {
         onMove={(evt) => setViewState(evt.viewState)}
         mapStyle={theme === "light" ? lightTheme.mapStyle : darkTheme.mapStyle}
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+        onClick={handleMapClick}
       >
         {markers.map((marker) => (
-          <Marker
-            key={marker._id}
-            latitude={marker.location.coordinates[0]}
-            longitude={marker.location.coordinates[1]}
-            onClick={() => onOpenCourtPopup(marker.courtId)}
-          >
-            {marker.sport === "basketball" ? (
-              <BasketballMarker />
-            ) : (
-              <FootballMarker />
-            )}
-          </Marker>
+          <div key={marker._id} onClick={(e) => e.stopPropagation()}>
+            <Marker
+              latitude={marker.location.coordinates[0]}
+              longitude={marker.location.coordinates[1]}
+              onClick={() => {
+                onOpenCourtPopup(marker.courtId);
+              }}
+            >
+              {marker.sport === "basketball" ? (
+                <BasketballMarker />
+              ) : (
+                <FootballMarker />
+              )}
+            </Marker>
+          </div>
         ))}
+        {addCourtMarker && (
+          <Marker latitude={addCourtMarker.lat} longitude={addCourtMarker.lng}>
+            add
+          </Marker>
+        )}
       </Map>
 
       <ModalWindow
