@@ -134,7 +134,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
   };
 
   return (
-    <div>
+    <Wrapper>
       <TitlesWrapper>
         <Title>Були тут</Title>
         <Title>
@@ -259,7 +259,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
           )}
         </CSSTransition>
       </SwitchTransition>
-    </div>
+    </Wrapper>
   );
 };
 
@@ -280,6 +280,10 @@ const Player = memo(
     );
   })
 );
+
+const Wrapper = styled.div`
+  padding: 0 5px;
+`;
 
 const CheckOutWrapper = styled.div`
   position: relative;

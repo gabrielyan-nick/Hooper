@@ -27,6 +27,7 @@ const courtSchema = new mongoose.Schema(
     isPrivate: { type: Boolean, require: true, default: false },
     name: {
       type: String,
+      max: 23,
       required: true,
       default: function () {
         if (this.sport === "basketball") return "Баскетбольний майданчик";

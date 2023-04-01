@@ -110,7 +110,7 @@ export const ModalWrapper = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  /* overflow: auto; */
   background-color: #09000cb9;
   display: flex;
   justify-content: center;
@@ -129,9 +129,7 @@ export const ModalContent = styled.div`
   background: ${(props) => props.bg || props.theme.popupBg};
   border-radius: 10px;
   min-height: 100px;
-  padding: 5px 5px;
-  /* overflow: visible; */
-  overflow-x: hidden;
+  padding: 5px 0;
   max-width: 420px;
 
   @media ${(props) => props.theme.media.wideScreen} {
@@ -154,6 +152,7 @@ export const ModalContent = styled.div`
 export const ModalHeader = styled.div`
   display: flex;
   justify-content: flex-end;
+  padding: 0 5px;
 `;
 
 export default ModalWindow;

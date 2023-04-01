@@ -22,10 +22,10 @@ import {
   ForgotPassForm,
 } from "../components";
 import { CloseIcon, BackIcon } from "./svgIcons";
-// import { ModalHeader } from "./ModalWindow";
 
 const Header = styled(FlexBetweenBox)`
   justify-content: ${(props) => (props.backBtn ? "space-between" : "flex-end")};
+  padding: 0 5px;
 `;
 
 const LoginRegisterScreen = forwardRef((props, ref) => {
@@ -98,7 +98,7 @@ export const FormWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 0 7px 10px;
+  padding: 0 5px 10px;
 `;
 
 export const ErrorText = styled(Text)`

@@ -44,7 +44,7 @@ const UserInfo = forwardRef((props, ref) => {
 
   return (
     <div ref={ref}>
-      <FlexBetweenBox>
+      <FlexBetweenBox style={{ padding: "0 5px" }}>
         <BackBtn onClick={onBackToCourt}>
           <BackIcon />
         </BackBtn>

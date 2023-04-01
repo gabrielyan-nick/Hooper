@@ -105,7 +105,7 @@ const RegisterForm = forwardRef((props, ref) => {
     }),
     menuList: (baseStyles, state) => ({
       ...baseStyles,
-      maxHeight: "155px",
+      maxHeight: "170px",
       borderRadius: "10px",
       background: theme.inputBg,
       "&::-webkit-scrollbar": {

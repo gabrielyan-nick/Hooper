@@ -57,7 +57,7 @@ const CourtPopup = forwardRef((props, ref) => {
 
   return (
     <PopupWrapper ref={ref}>
-      <FlexBetweenBox>
+      <FlexBetweenBox style={{ padding: "0 5px" }}>
         {(modalType === "userInfo" ||
           modalType === "myInfo" ||
           userId !== "") && (
@@ -129,18 +129,19 @@ const PopupWrapper = styled.div`
 `;
 
 const CourtImage = styled(CourtImg)`
-  width: 104%;
-  transform: translateX(-5px);
-  margin-top: 5px;
+  width: 100%;
 `;
 
 const ImgWrapper = styled.div`
   position: relative;
+  width: 100%;
+  margin-top: 5px;
 `;
 
 const FavBtn = styled.div`
   position: absolute;
   bottom: 9px;
+  left: 5px;
   padding: 1px;
   border-radius: 7px;
   background: ${(props) => props.theme.popupBg};

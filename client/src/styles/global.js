@@ -125,7 +125,6 @@ p {
 
 .court-enter {
   opacity: 0;
-  transition: opacity 300ms;
 }
 .court-enter-done {
   opacity: 1;

@@ -120,7 +120,8 @@ export const Text = styled.p`
       ? props.theme.textSecondary
       : props.color || props.theme.text};
   text-align: ${(props) => (props.centred ? "center" : "inherit")};
-  margin: ${(props) => props.m || 0}; ;
+  margin: ${(props) => props.m || 0};
+  padding: ${(props) => props.p || 0};
 `;
 
 export const Title = styled.h3`
@@ -179,6 +180,7 @@ export const Label = styled.label`
   font-size: ${(props) => props.fS || "inherit"};
   color: ${(props) => props.color || props.theme.textSecondary};
   padding-left: ${(props) => props.pl || 0};
+  margin: ${(props) => props.m || 0};
 `;
 
 export const UserWidgetBtn = styled.button`
@@ -257,7 +259,6 @@ export const Button = styled.button`
   justify-content: center;
   line-height: ${(props) => props.lh || "24px"};
   margin: ${(props) => props.m || 0};
-  /* outline: none; */
   overflow: visible;
   padding: ${(props) => props.p || "10px 20px"};
   pointer-events: auto;

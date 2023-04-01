@@ -81,7 +81,10 @@ const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker, isDisabled }) => {
         isEmptyHeader={false}
       >
         {isAuth ? (
-          <AddCourtForm closeModal={closeModal} />
+          <AddCourtForm
+            closeModal={closeModal}
+            courtLocation={addCourtMarker}
+          />
         ) : (
           <LoginRegisterScreen closeModal={closeModal} />
         )}
