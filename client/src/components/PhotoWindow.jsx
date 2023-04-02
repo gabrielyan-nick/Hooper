@@ -107,6 +107,10 @@ const PhotoModal = styled.div`
   justify-content: center;
   align-items: center;
   overflow: auto;
+  @media (max-height: 650px) {
+    align-items: flex-start;
+    padding: 40px 0;
+  }
 `;
 
 const PhotoModalContent = styled.div`

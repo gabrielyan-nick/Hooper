@@ -1,5 +1,8 @@
 import React, { useState, forwardRef } from "react";
 import { useSelector } from "react-redux";
+import { CSSTransition } from "react-transition-group";
+import { storage } from "../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "@firebase/storage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
@@ -17,12 +20,7 @@ import {
   CloseBtn,
   FlexBetweenBox,
 } from "./../microComponets";
-import {
-  ShowPassIcon,
-  HidePassIcon,
-  QuestionIcon,
-  CloseIcon,
-} from "./../svgIcons";
+import { CloseIcon } from "./../svgIcons";
 import { useRegisterMutation } from "../../api/authApi";
 import { cities } from "../../data";
 import { darkTheme, lightTheme } from "../../styles/themes";
@@ -34,21 +32,25 @@ import {
   SubmitErrorText,
 } from "../LoginRegisterScreen";
 import { RadioButton } from "../index";
-import useMediaQuery from "../../hooks/useMediaQuery";
+import { useAddCourtMutation } from "../../api/courtsApi";
+import { BasketballMarker } from "../markers";
 
 const addCourtSchema = yup.object({
   name: yup.string().max(23, "Максимум 23 символи"),
   sport: yup.string().required("Виберіть тип майданчика"),
   cover: yup.string().required("Виберіть покриття"),
   hoopCount: yup.number(),
-  // lighting: yup.default(undefined),
 });
 
 const AddCourtForm = ({ courtLocation, closeModal }) => {
   const [typeValue, setTypeValue] = useState("");
   const [coverValue, setCoverValue] = useState(null);
   const [hoopCount, setHoopCount] = useState(null);
-  const [lighting, setLighting] = useState(undefined);
+  const [lighting, setLighting] = useState(null);
+  const [photo, setPhoto] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState(null);
+  const [submitForm, res, isLoading, isError, isSuccess] =
+    useAddCourtMutation();
   const {
     register,
     setValue,
@@ -92,8 +94,64 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
     setValue("hoopCount", value);
   };
 
+  const onClosePhoto = () => {
+    setPhotoUrl(null);
+  };
+
   const onSubmit = (data) => {
     console.log(data);
+    data.lighting === null && delete data.lighting;
+    if (photo) {
+      const imageRef = ref(storage, `courts/${photo.name}`);
+      uploadBytes(imageRef, photo)
+        .then(() => {
+          getDownloadURL(imageRef)
+            .then((url) => {
+              const formData = {
+                ...data,
+                photos: url,
+                location: {
+                  type: "Point",
+                  coordinates: [courtLocation.lat, courtLocation.lng],
+                },
+              };
+              submitForm(formData).then((res) => {
+                if (res.data) {
+                  reset();
+                  setTimeout(() => closeModal(), 3000);
+                } else reset();
+              });
+            })
+            .catch((e) => console.log(e));
+        })
+        .catch((e) => console.log(e));
+    } else {
+      const formData = {
+        ...data,
+        location: {
+          type: "Point",
+          coordinates: [courtLocation.lat, courtLocation.lng],
+        },
+      };
+      submitForm(formData).then((res) => {
+        if (res.data) {
+          reset();
+          setTimeout(() => closeModal(), 3000);
+        } else reset();
+      });
+    }
+  };
+
+  const onSetPhoto = (e) => {
+    const photo = e.target.files[0];
+    if (photo) {
+      const reader = new FileReader();
+      reader.readAsDataURL(photo);
+      reader.onload = () => {
+        setPhoto(photo);
+        setPhotoUrl(reader.result);
+      };
+    }
   };
 
   const selectStyles = {
@@ -158,7 +216,7 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
           <CloseIcon />
         </CloseBtn>
       </Header>
-      <FormWrapper>
+      <FormWrapper style={{ padding: "0 5px 5px" }}>
         <Text fS="20px" fW={700} m="10px 0 15px" centred>
           Вкажіть інформацію про майданчик
         </Text>
@@ -269,13 +327,47 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
                 <RadioErrorText>{errors.lighting?.message}</RadioErrorText>
               </Label>
               <AddPhotoBtn bgColors={lightTheme.btnSecondary} type="button">
-                Додати фото
+                <label htmlFor="photos">Додати фото</label>
+                <input
+                  id="photos"
+                  type="file"
+                  name="photos"
+                  hidden
+                  accept="image/png, image/jpg, image/jpeg"
+                  onChange={onSetPhoto}
+                />
               </AddPhotoBtn>
             </div>
           </GridWrapper>
-
-          <Button type="submit" style={{ margin: "40px auto 0" }}>
-            Додати
+          {photoUrl && (
+            <PhotoWrapper>
+              <ClosePhotoBtn type="button" onClick={onClosePhoto}>
+                <CloseIcon size={20} />
+              </ClosePhotoBtn>
+              <Photo src={photoUrl} />
+            </PhotoWrapper>
+          )}
+          {res.isError && (
+            <Text fS="18px" color="#ac2b04" centred>
+              Упс...Невідома помилка
+            </Text>
+          )}
+          {res.isSuccess && (
+            <Text fS="18px" color={lightTheme.green} centred>
+              Успішно
+            </Text>
+          )}
+          <Button
+            type="submit"
+            style={{ margin: "20px auto 0", width: "100px" }}
+          >
+            {res.isLoading ? (
+              <BtnSpinnerWrapper>
+                <BasketballMarker />
+              </BtnSpinnerWrapper>
+            ) : (
+              "Додати"
+            )}
           </Button>
         </form>
       </FormWrapper>
@@ -284,6 +376,28 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
 };
 
 export default AddCourtForm;
+
+const PhotoWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  position: relative;
+`;
+
+const ClosePhotoBtn = styled(CloseBtn)`
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  padding: 2px;
+`;
+
+const Photo = styled.img`
+  width: 100%;
+  max-height: 300px;
+  border-radius: 7px;
+  object-fit: contain;
+`;
 
 const GridWrapper = styled.div`
   display: grid;

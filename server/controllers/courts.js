@@ -34,7 +34,7 @@ export const getCourt = async (req, res) => {
       location: court.location,
       messages: court.messages,
       name: court.name,
-      picturePath: court.picturePath,
+      photos: court.photos,
       sport: court.sport,
       _id: court._id,
     });
@@ -102,7 +102,7 @@ export const checkInOnCourt = async (req, res) => {
         court.players.splice(index, 1);
         await court.save();
       }
-    }, 5 * 60 * 1000);
+    }, 3 * 60 * 60 * 1000);
 
     await court.save();
 

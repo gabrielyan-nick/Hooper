@@ -34,26 +34,25 @@ const courtSchema = new mongoose.Schema(
         else return "Футбольне поле";
       },
     },
-    picturePath: {
-      type: String,
+    photos: {
+      type: [String],
       require: true,
       default: function () {
         if (this.isPrivate) {
-          if (this.sport === "basketball")
-            return "/assets/basketball-court-private.jpg";
-          else if (this.sport === "football")
-            return "/assets/football-court-private.jpg";
+          if (this.sport === "basketball") {
+            return ["/assets/basketball-court-private.jpg"];
+          } else if (this.sport === "football") {
+            return ["/assets/football-court-private.jpg"];
+          }
         } else {
-          if (this.sport === "basketball")
-            return "/assets/basketball-court-notprivate.jpg";
-          else if (this.sport === "football")
-            return "/assets/football-court-notprivate.jpg";
+          if (this.sport === "basketball") {
+            return ["/assets/basketball-court-notprivate.jpg"];
+          } else if (this.sport === "football") {
+            return ["/assets/football-court-notprivate.jpg"];
+          }
         }
+        return [];
       },
-    },
-    photosPath: {
-      type: [String],
-      default: [],
     },
     location: {
       type: {

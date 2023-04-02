@@ -13,6 +13,7 @@ import {
   IconBtnBg,
   BackBtn,
   Button,
+  BtnSpinnerWrapper,
 } from "./microComponets";
 import {
   FavouriteIcon,
@@ -71,7 +72,8 @@ const CourtPopup = forwardRef((props, ref) => {
         </CloseBtn>
       </FlexBetweenBox>
       <ImgWrapper>
-        <CourtImage src={court.picturePath} />
+        <CourtImage src={court?.photos} />
+
         <FavBtn>
           <AddRemoveFavourite
             courtId={court._id}
@@ -112,20 +114,30 @@ const AddRemoveFavourite = ({ courtId, changeModalType }) => {
     } else changeModalType({ type: "logReg" });
   };
   return (
-    <IconButton onClick={onAddRemoveFav}>
-      {isFavCourt ? (
-        <FavouriteIcon size={27} color="gold" />
+    <AddFavBtn onClick={onAddRemoveFav}>
+      {result.isLoading ? (
+        <BtnSpinnerWrapper style={{ width: "27px", height: "27px" }}>
+          <FavouriteIcon size={27} color="#19665480" />
+        </BtnSpinnerWrapper>
+      ) : isFavCourt ? (
+        <FavouriteIcon size={27} color="#e4c307" />
       ) : (
-        <FavouriteIcon size={27} />
+        <FavouriteIcon size={27} color="#19665480" />
       )}
-    </IconButton>
+    </AddFavBtn>
   );
 };
+
+const AddFavBtn = styled(IconButton)`
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+    rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
+`;
 
 const PopupWrapper = styled.div`
   width: 100%;
   min-height: 300px;
   background: ${(props) => props.theme.popupBg};
+  border-radius: 10px;
 `;
 
 const CourtImage = styled(CourtImg)`
