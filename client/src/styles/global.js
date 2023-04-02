@@ -3,7 +3,7 @@ import normalize from "../../node_modules/modern-normalize/modern-normalize.css"
 
 export default createGlobalStyle`
  ${normalize}
-  body {
+  body, #root, .App, main {
     height: 100%;
     width: 100%;
     font-family: 'Golos Text', sans-serif;
