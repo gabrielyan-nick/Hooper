@@ -109,7 +109,7 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
     }),
     menuList: (baseStyles, state) => ({
       ...baseStyles,
-      maxHeight: "170px",
+      maxHeight: "147px",
       borderRadius: "10px",
       background: theme.inputBg,
       "&::-webkit-scrollbar": {
