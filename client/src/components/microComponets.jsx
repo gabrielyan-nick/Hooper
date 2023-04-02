@@ -4,7 +4,8 @@ import { BasketballMarker } from "./markers";
 
 export const Wrapper = styled.div`
   width: 100vw;
-  height: calc(100vh - 40px);
+  height: 100vh;
+  padding-bottom: 50px;
   position: relative;
 `;
 

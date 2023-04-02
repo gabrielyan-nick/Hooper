@@ -85,7 +85,7 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
         onLoad={closeLoadingScreen}
         reuseMaps
         {...viewState}
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%", height: "100vh" }}
         onMove={(evt) => setViewState(evt.viewState)}
         mapStyle={theme === "light" ? lightTheme.mapStyle : darkTheme.mapStyle}
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
