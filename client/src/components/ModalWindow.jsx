@@ -119,9 +119,7 @@ export const ModalWrapper = styled.div`
   &::-webkit-scrollbar {
         width: 0,
         height: 0,
-        opacity: 0;
       }
-
   @media (max-height: 650px) {
     align-items: flex-start;
     padding: 40px 0;
@@ -138,7 +136,6 @@ export const ModalContent = styled.div`
   min-height: 100px;
   padding: 5px 0;
   max-width: 420px;
-
   @media ${(props) => props.theme.media.wideScreen} {
     width: 27%;
   }

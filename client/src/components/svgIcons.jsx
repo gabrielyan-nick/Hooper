@@ -274,16 +274,6 @@ export const MarkerIcon = ({ size = 35 }) => {
   );
 };
 
-// export const CheckIcon = ({ size = 20 }) => {
-//   return (
-//     <svg viewBox="0 0 35.6 35.6" width={`${size}px`} height={`${size}px`}>
-//       <circle className="background" cx={17.8} cy={17.8} r={17.8} />
-//       <circle className="stroke" cx={17.8} cy={17.8} r={14.37} />
-//       <path className="check" d="M11.78 18.12L15.55 22.23 25.17 12.87" />
-//     </svg>
-//   );
-// };
-
 export const QuestionIcon = ({ size = 18 }) => {
   return (
     <svg

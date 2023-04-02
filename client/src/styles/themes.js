@@ -5,6 +5,7 @@ export const lightTheme = {
   orangeIconBtn: "#dd3f0aab",
   green: "#026d3a",
   orange: "#D04516",
+  red: "#b62006",
   greenMain: `linear-gradient(92.83deg,
     #00914C
      0,

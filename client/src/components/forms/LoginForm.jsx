@@ -170,7 +170,7 @@ export const LoginAfterReg = forwardRef((props, ref) => {
   return (
     <>
       <Text fS="20px" fW={700} m="15px 0 10px" centred>
-        Регістрація пройшла успішно
+        Реєстрація пройшла успішно
       </Text>
       <Text fS="17px" fW={700} m="15px 0 40px" centred>
         Увійдіть до свого акаунту

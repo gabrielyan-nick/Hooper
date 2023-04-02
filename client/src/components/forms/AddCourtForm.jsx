@@ -39,18 +39,23 @@ import useMediaQuery from "../../hooks/useMediaQuery";
 const addCourtSchema = yup.object({
   name: yup.string().max(23, "Максимум 23 символи"),
   sport: yup.string().required("Виберіть тип майданчика"),
+  cover: yup.string().required("Виберіть покриття"),
+  hoopCount: yup.number(),
+  // lighting: yup.default(undefined),
 });
 
 const AddCourtForm = ({ courtLocation, closeModal }) => {
   const [typeValue, setTypeValue] = useState("");
   const [coverValue, setCoverValue] = useState(null);
   const [hoopCount, setHoopCount] = useState(null);
+  const [lighting, setLighting] = useState(undefined);
   const {
     register,
     setValue,
     getValues,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(addCourtSchema) });
   const theme = useTheme();
@@ -58,6 +63,8 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
   const handleTypeChange = (e) => {
     setTypeValue(e.target.value);
     setValue("sport", e.target.value);
+    setCoverValue(null);
+    setValue("cover", null);
     setValue(
       "name",
       e.target.value === "basketball"
@@ -66,6 +73,11 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
         ? "Футбольне поле"
         : ""
     );
+  };
+
+  const handleLightingChange = (e) => {
+    setLighting(e.target.value);
+    setValue("lighting", e.target.value === "true" ? true : false);
   };
 
   const handleCoverChange = (selectedOption) => {
@@ -177,38 +189,35 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
               <ErrorText>{errors.name?.message}</ErrorText>
             </Label>
           </LabelWrapper>
-
-          <LabelWrapper>
-            <Label pl="10px">
-              Покриття
-              <Controller
-                name="cover"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    options={
-                      typeValue === "basketball"
-                        ? basketballCovers
-                        : typeValue === "football"
-                        ? footballCovers
-                        : []
-                    }
-                    styles={selectStyles}
-                    placeholder="Виберіть покриття"
-                    isDisabled={!typeValue}
-                    onChange={handleCoverChange}
-                    value={coverValue}
-                  />
-                )}
-              />
-              <ErrorText style={{ bottom: "-20px" }}>
-                {errors.cover?.message}
-              </ErrorText>
-            </Label>
-          </LabelWrapper>
-          <LabelWrapper>
-            <GridWrapper>
+          <GridWrapper>
+            <div>
+              <Label pl="10px">
+                Покриття
+                <Controller
+                  name="cover"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={
+                        typeValue === "basketball"
+                          ? basketballCovers
+                          : typeValue === "football"
+                          ? footballCovers
+                          : []
+                      }
+                      styles={selectStyles}
+                      placeholder="Виберіть..."
+                      isDisabled={!typeValue}
+                      onChange={handleCoverChange}
+                      value={coverValue}
+                    />
+                  )}
+                />
+                <ErrorText style={{ bottom: "-20px" }}>
+                  {errors.cover?.message}
+                </ErrorText>
+              </Label>
               <Label>
                 <div style={{ paddingLeft: "10px" }}>
                   Кількість{" "}
@@ -235,9 +244,36 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
                   )}
                 />
               </Label>
-              <Label pl="10px">Освітлення</Label>
-            </GridWrapper>
-          </LabelWrapper>
+            </div>
+            <div style={{ marginLeft: "auto" }}>
+              <Label>
+                Освітлення
+                <LightingRadioWrapper>
+                  <RadioButton
+                    label="Є"
+                    value={true}
+                    {...register("lighting")}
+                    onChange={handleLightingChange}
+                    checked={lighting === "true"}
+                  />
+                  <RadioButton
+                    label="Немає"
+                    value={false}
+                    {...register("lighting")}
+                    color={lightTheme.red}
+                    onChange={handleLightingChange}
+                    checked={lighting === "false"}
+                    closeIcon
+                  />
+                </LightingRadioWrapper>
+                <RadioErrorText>{errors.lighting?.message}</RadioErrorText>
+              </Label>
+              <AddPhotoBtn bgColors={lightTheme.btnSecondary} type="button">
+                Додати фото
+              </AddPhotoBtn>
+            </div>
+          </GridWrapper>
+
           <Button type="submit" style={{ margin: "40px auto 0" }}>
             Додати
           </Button>
@@ -251,8 +287,15 @@ export default AddCourtForm;
 
 const GridWrapper = styled.div`
   display: grid;
-  gap: 20px;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 60% 40%;
+  margin-top: 25px;
+`;
+
+const AddPhotoBtn = styled(Button)`
+  margin-top: 20px;
+  height: 38px;
+  border-radius: 10px;
+  padding: 10px;
 `;
 
 const Header = styled.div`
@@ -266,6 +309,13 @@ const RadioWrap = styled.div`
   display: flex;
   justify-content: space-around;
   margin-top: 10px;
+`;
+
+const LightingRadioWrapper = styled.div`
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
 const LabelWrapper = styled.div`
