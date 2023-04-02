@@ -110,18 +110,25 @@ export const ModalWrapper = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
   background-color: #09000cb9;
   display: flex;
   justify-content: center;
   align-items: center;
+  &::-webkit-scrollbar {
+        width: 0,
+        height: 0,
+        opacity: 0;
+      }
+
   @media (max-height: 650px) {
     align-items: flex-start;
     padding: 40px 0;
   }
   @media ${(props) => props.theme.media.mobile} {
     align-items: flex-start;
-    padding: 40px 0;
+    padding: 40px 0 60px;
   }
 `;
 
