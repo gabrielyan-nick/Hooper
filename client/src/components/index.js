@@ -23,3 +23,5 @@ export { default as FavouriteCourts } from "./FavouriteCourts";
 export { default as AddCourtWidget } from "./AddCourtWidget";
 export { default as AddCourtForm } from "./forms/AddCourtForm";
 export { default as RadioButton } from "./forms/RadioButton";
+export { default as CourtPhotosSlider } from "./CourtPhotosSlider";
+export { default as AddRemoveFavourite } from "./AddRemoveFavourite";

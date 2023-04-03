@@ -110,7 +110,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
       formData.append("username", user.username);
       checkIn({ courtId, formData, token: user.token })
         .then((result) => {
-          refetch();
+          // refetch();
         })
         .catch((e) => console.log(e));
     } else changeModalType({ type: "logReg" });

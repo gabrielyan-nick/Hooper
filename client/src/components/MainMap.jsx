@@ -130,7 +130,7 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
           >
             {modalType === "court" ? (
               <CourtPopup
-                courtId={courtId}
+                id={courtId}
                 closeModal={onCloseCourtPopup}
                 changeModalType={changeModalType}
                 ref={courtRef}

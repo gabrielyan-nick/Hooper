@@ -97,7 +97,7 @@ const UserWidget = ({ isModalOpen, setIsModalOpen, setAddCourtMarker }) => {
               />
             ) : modalType === "court" ? (
               <CourtPopup
-                courtId={courtId}
+                id={courtId}
                 closeModal={closeUserWidgetModal}
                 ref={courtRef}
                 changeModalType={changeModalType}

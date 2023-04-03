@@ -17,6 +17,28 @@ export const FavouriteIcon = ({ size = 25, color = "green" }) => {
   );
 };
 
+export const AddPhotoIcon = ({ size = 23 }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={`${size}px`}
+      height={`${size}px`}
+      viewBox="0 0 24 24"
+    >
+      <path fill="none" d="M0 0h24v24H0z" />
+      <path
+        fill="#d2e2d4"
+        d="M3 8c0 .55.45 1 1 1s1-.45 1-1V6h2c.55 0 1-.45 1-1s-.45-1-1-1H5V2c0-.55-.45-1-1-1s-1 .45-1 1v2H1c-.55 0-1 .45-1 1s.45 1 1 1h2v2z"
+      />
+      <circle fill="#6b4636" cx={13} cy={14} r={3} />
+      <path
+        fill="#314e3c"
+        d="M21 6h-3.17l-1.24-1.35A1.99 1.99 0 0015.12 4h-6.4c.17.3.28.63.28 1 0 1.1-.9 2-2 2H6v1c0 1.1-.9 2-2 2-.37 0-.7-.11-1-.28V20c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+      />
+    </svg>
+  );
+};
+
 export const ChangeIcon = ({ size = 23 }) => {
   return (
     <svg
@@ -131,6 +153,23 @@ export const EnterIcon = ({ size = 23 }) => {
       <path
         fill="#f5ccbc"
         d="M19 6a1 1 0 00-1 1v4a1 1 0 01-1 1H7.41l1.3-1.29a1 1 0 00-1.42-1.42l-3 3a1 1 0 00-.21.33 1 1 0 000 .76 1 1 0 00.21.33l3 3a1 1 0 001.42 0 1 1 0 000-1.42L7.41 14H17a3 3 0 003-3V7a1 1 0 00-1-1z"
+      />
+    </svg>
+  );
+};
+
+export const PrevNextArrow = ({ size = 25, dir = "prev" }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={`${size}px`}
+      height={`${size}px`}
+      viewBox="0 0 16 16"
+      style={{ transform: `rotate(${dir === "next" ? 180 : 0}deg)` }}
+    >
+      <path
+        fill="#ffffff"
+        d="M10.01 3.575a.75.75 0 01.04 1.06l-2.777 2.99 2.777 2.99a.75.75 0 11-1.1 1.02l-3.25-3.5a.75.75 0 010-1.02l3.25-3.5a.75.75 0 011.06-.04z"
       />
     </svg>
   );

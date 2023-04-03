@@ -57,7 +57,7 @@ export const IconBtnBg = styled.button`
       ? lightTheme.greenIconBtn
       : props.color === "orange"
       ? lightTheme.orangeIconBtn
-      : "transparent"};
+      : props.color || "transparent"};
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -71,7 +71,7 @@ export const IconBtnBg = styled.button`
         ? lightTheme.green
         : props.color === "orange"
         ? lightTheme.orange
-        : "transparent"};
+        : props.color || "transparent"};
   }
   &:active:not(:disabled) {
     transform: scale(0.93);

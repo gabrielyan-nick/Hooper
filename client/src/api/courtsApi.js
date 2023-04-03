@@ -5,6 +5,7 @@ export const courtsApi = createApi({
   reducerPath: "courts",
   baseQuery: fetchBaseQuery({ baseUrl: serverUrl }),
   tagTypes: ["Courts", "Players", "Markers"],
+  refetchOnFocus: true,
   endpoints: (builder) => ({
     getMarkers: builder.query({
       query: () => "/markers",
@@ -16,15 +17,31 @@ export const courtsApi = createApi({
         method: "POST",
         body: court,
       }),
-      invalidatesTags: ["Courts", "Markers"],
+      invalidatesTags: ["Markers"],
     }),
     getCourt: builder.query({
       query: (id) => `/courts/${id}`,
-      providesTags: ["Courts"],
+      providesTags: (result, error, id) => [{ type: "Courts", id }],
+    }),
+    updateCourtInfo: builder.mutation({
+      query(data) {
+        const { courtId, formData, token } = data;
+        return {
+          url: `/courts/${courtId}`,
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        };
+      },
+      invalidatesTags: (result, error, { courtId }) => [
+        { type: "Courts", courtId },
+      ],
     }),
     getCourtPlayers: builder.query({
-      query: (courtId) => `/courts/${courtId}/players`,
-      providesTags: ["Players"],
+      query: (id) => `/courts/${id}/players`,
+      providesTags: (result, error, id) => [{ type: "Players", id }],
     }),
     checkIn: builder.mutation({
       query(data) {
@@ -38,7 +55,9 @@ export const courtsApi = createApi({
           },
         };
       },
-      invalidateTags: ["Players", "Courts"],
+      invalidatesTags: (result, error, { courtId }) => [
+        { type: "Players", courtId },
+      ],
     }),
     checkOut: builder.mutation({
       query(data) {
@@ -52,7 +71,9 @@ export const courtsApi = createApi({
           },
         };
       },
-      invalidateTags: ["Players", "Courts"],
+      invalidatesTags: (result, error, { courtId }) => [
+        { type: "Players", courtId },
+      ],
     }),
   }),
 });
@@ -64,4 +85,5 @@ export const {
   useCheckInMutation,
   useGetCourtPlayersQuery,
   useCheckOutMutation,
+  useUpdateCourtInfoMutation
 } = courtsApi;

@@ -39,13 +39,13 @@ const addCourtSchema = yup.object({
   name: yup.string().max(23, "Максимум 23 символи"),
   sport: yup.string().required("Виберіть тип майданчика"),
   cover: yup.string().required("Виберіть покриття"),
-  hoopCount: yup.number(),
+  hoopsCount: yup.number(),
 });
 
 const AddCourtForm = ({ courtLocation, closeModal }) => {
   const [typeValue, setTypeValue] = useState("");
   const [coverValue, setCoverValue] = useState(null);
-  const [hoopCount, setHoopCount] = useState(null);
+  const [hoopsCount, setHoopsCount] = useState(null);
   const [lighting, setLighting] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [photoUrl, setPhotoUrl] = useState(null);
@@ -90,8 +90,8 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
 
   const handleCountChange = (selectedOption) => {
     const value = selectedOption ? selectedOption.value : "";
-    setHoopCount(selectedOption);
-    setValue("hoopCount", value);
+    setHoopsCount(selectedOption);
+    setValue("hoopsCount", value);
   };
 
   const onClosePhoto = () => {
@@ -99,7 +99,6 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     data.lighting === null && delete data.lighting;
     if (photo) {
       const imageRef = ref(storage, `courts/${photo.name}`);
@@ -288,16 +287,16 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
                   }`}
                 </div>
                 <Controller
-                  name="hoopCount"
+                  name="hoopsCount"
                   control={control}
                   render={({ field }) => (
                     <Select
                       {...field}
-                      options={hoopsCount}
+                      options={hoopsCountOptions}
                       styles={selectStyles}
                       placeholder="Виберіть..."
                       onChange={handleCountChange}
-                      value={hoopCount}
+                      value={hoopsCount}
                     />
                   )}
                 />
@@ -452,7 +451,7 @@ const footballCovers = [
   { value: "indoor", label: "Зал" },
 ];
 
-const hoopsCount = [
+const hoopsCountOptions = [
   { value: 1, label: "1" },
   { value: 2, label: "2" },
   { value: 3, label: "3" },
