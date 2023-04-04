@@ -1,5 +1,6 @@
 import React, { forwardRef } from "react";
 import PropTypes from "prop-types";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useGetCourtQuery } from "../api/courtsApi";
@@ -32,58 +33,36 @@ import {
 } from "../store/navigateSlice";
 
 const CourtPopup = forwardRef((props, ref) => {
-  const { id, closeModal, changeModalType } = props;
-  const dispatch = useDispatch();
-  const { modalType, userId, courtId } = useSelector((state) => state.navigate);
+  const { closeModal, history, goBack } = props;
+  const { courtId } = useParams();
   const {
     data: court = {},
     isLoading,
     isError,
     error,
-  } = useGetCourtQuery(id || courtId);
-
-  const onBackToUserInfo = () => {
-    if (modalType === "userInfo" || modalType === "court") {
-      changeModalType({ type: "userInfo", userid: userId });
-    } else changeModalType({ type: "myInfo" });
-  };
-
-  const closeCourt = () => {
-    closeModal();
-    setTimeout(() => {
-      dispatch(setModalTypeForNav("court"));
-      dispatch(setUserIdForNav(""));
-    }, 300);
-  };
+  } = useGetCourtQuery(courtId);
 
   return (
     <PopupWrapper ref={ref}>
       <FlexBetweenBox style={{ padding: "0 5px" }}>
-        {(modalType === "userInfo" ||
-          modalType === "myInfo" ||
-          userId !== "") && (
-          <BackBtn onClick={onBackToUserInfo}>
+        {history.length > 1 && history[history.length - 2] !== "/" && (
+          <BackBtn onClick={goBack}>
             <BackIcon />
           </BackBtn>
         )}
         <CourtTitle>{court.name}</CourtTitle>
-        <CloseBtn onClick={closeCourt}>
+        <CloseBtn onClick={closeModal}>
           <CloseIcon />
         </CloseBtn>
       </FlexBetweenBox>
       <CourtPhotosSlider
         courtId={courtId}
-        sport={court.sport}
+        sport={court?.sport}
         photos={court?.photos}
-        changeModalType={changeModalType}
       />
       <CourtInfo data={court} />
       {/* <CourtChat /> */}
-      <CourtPlayers
-        changeModalType={changeModalType}
-        court={court}
-        courtId={courtId}
-      />
+      <CourtPlayers court={court} courtId={courtId} />
     </PopupWrapper>
   );
 });
@@ -104,6 +83,5 @@ const CourtTitle = styled(Title)`
 CourtPopup.propTypes = {
   courtId: PropTypes.string,
   closeModal: PropTypes.func.isRequired,
-  changeModalType: PropTypes.func.isRequired,
   backBtn: PropTypes.bool,
 };

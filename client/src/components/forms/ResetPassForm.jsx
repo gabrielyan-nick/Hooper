@@ -20,7 +20,7 @@ import {
   ErrorText,
   FormWrapper,
   SubmitErrorText,
-} from "../LoginRegisterScreen";
+} from "../forms/RegisterForm";
 import { BasketballMarker } from "../markers";
 import { ShowPassIcon, HidePassIcon } from "../svgIcons";
 import { lightTheme } from "../../styles/themes";

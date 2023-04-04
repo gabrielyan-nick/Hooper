@@ -1,6 +1,7 @@
 import React, { useState, useMemo, Fragment, useRef, useEffect } from "react";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Map, { Marker, Popup } from "react-map-gl";
 import { lightTheme, darkTheme } from "../styles/themes";
@@ -21,29 +22,15 @@ import { MarkerIcon } from "./svgIcons";
 
 const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   const theme = useSelector((state) => state.storage.theme);
-  const userIdNav = useSelector((state) => state.navigate.userId);
   const dispatch = useDispatch();
-  const [courtId, setCourtId] = useState(null);
-  const [userId, setUserId] = useState(userIdNav);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewState, setViewState] = useState({
     longitude: 36.40292260918253,
     latitude: 49.91435295466242,
     zoom: 14,
   });
-  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
-  const [userPhoto, setUserPhoto] = useState(null);
-  const [modalType, setModalType] = useState("court");
-  const logRegRef = useRef(null);
-  const courtRef = useRef(null);
-  const userRef = useRef(null);
-  const nodeRef =
-    modalType === "court"
-      ? courtRef
-      : modalType === "logReg"
-      ? logRegRef
-      : userRef;
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const {
     data: markers = [],
     isLoading,
@@ -51,27 +38,18 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
     error,
   } = useGetMarkersQuery();
 
+  useEffect(() => {
+    location.pathname !== "/" && setIsModalOpen(true);
+  }, []);
+
   const onOpenCourtPopup = (id) => {
-    dispatch(setCourtIdForNav(id));
-    setCourtId(id);
-    setIsPopupOpen(true);
+    setIsModalOpen(true);
+    navigate(`/courts/${id}`);
   };
-  const onCloseCourtPopup = () => {
-    setIsPopupOpen(false);
-    setTimeout(() => {
-      (modalType === "logReg" || modalType === "userInfo") &&
-        setModalType("court");
-    }, 300);
+  const onCloseModal = () => {
+    setIsModalOpen(false);
+    navigate(`/`);
   };
-
-  const changeModalType = ({ type, courtid = null, userid = userIdNav }) => {
-    setModalType(type);
-    setCourtId(courtid);
-    setUserId(userid);
-  };
-
-  const openPhotoModal = () => setIsPhotoModalOpen(true);
-  const closePhotoModal = () => setIsPhotoModalOpen(false);
 
   const handleMapClick = (e) => {
     const lng = e.lngLat.lng;
@@ -115,51 +93,7 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
         )}
       </Map>
 
-      <ModalWindow
-        opened={isPopupOpen}
-        closeModal={onCloseCourtPopup}
-        closeClickOutside={false}
-        isEmptyHeader={false}
-      >
-        <SwitchTransition mode="out-in">
-          <CSSTransition
-            nodeRef={nodeRef}
-            key={modalType}
-            classNames="switch"
-            timeout={300}
-          >
-            {modalType === "court" ? (
-              <CourtPopup
-                id={courtId}
-                closeModal={onCloseCourtPopup}
-                changeModalType={changeModalType}
-                ref={courtRef}
-              />
-            ) : modalType === "logReg" ? (
-              <LoginRegisterScreen
-                closeModal={onCloseCourtPopup}
-                ref={logRegRef}
-                changeModalType={changeModalType}
-                backBtn
-              />
-            ) : (
-              <UserInfo
-                id={userId}
-                closeModal={onCloseCourtPopup}
-                changeModalType={changeModalType}
-                ref={userRef}
-                openPhoto={openPhotoModal}
-                setUserPhoto={setUserPhoto}
-              />
-            )}
-          </CSSTransition>
-        </SwitchTransition>
-      </ModalWindow>
-      <PhotoWindow
-        image={userPhoto}
-        opened={isPhotoModalOpen}
-        closeModal={closePhotoModal}
-      />
+      <ModalWindow opened={isModalOpen} closeModal={onCloseModal} />
     </>
   );
 };

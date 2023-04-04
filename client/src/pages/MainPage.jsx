@@ -13,7 +13,6 @@ import { Wrapper } from "../components/microComponets";
 const MainPage = () => {
   const [isLoadingScreen, setIsLoadingScreen] = useState(true);
   const [addCourtMarker, setAddCourtMarker] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
 
   const onChangeTheme = () => dispatch(setTheme());
@@ -27,14 +26,11 @@ const MainPage = () => {
         <>
           <ChangeThemeBtn onClick={onChangeTheme} />
           <UserLoginWidget
-            setIsModalopen={setIsModalOpen}
-            isModalopen={isModalOpen}
             setAddCourtMarker={setAddCourtMarker}
           />
           <AddCourtWidget
             addCourtMarker={addCourtMarker}
             setAddCourtMarker={setAddCourtMarker}
-            isDisabled={isModalOpen}
           />
         </>
       )}

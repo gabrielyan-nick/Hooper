@@ -36,7 +36,7 @@ function App() {
           <BrowserRouter>
             <main>
               <Routes>
-                <Route path="/" element={<MainPage />} />
+                <Route path="/*" element={<MainPage />} />
                 <Route
                   path="/reset-password/:token"
                   element={<ResetPassPage />}

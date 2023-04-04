@@ -1,5 +1,6 @@
 import React, { useState, useRef, forwardRef } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
@@ -14,18 +15,18 @@ import {
   FlexCenterBox,
   IconButton,
   BtnSpinnerWrapper,
+  ModalHeader,
+  CloseBtn,
 } from "./../microComponets";
-import { ShowPassIcon, HidePassIcon, QuestionIcon } from "./../svgIcons";
+import {
+  ShowPassIcon,
+  HidePassIcon,
+  QuestionIcon,
+  CloseIcon,
+} from "./../svgIcons";
 import { useRegisterMutation } from "../../api/authApi";
 import { cities } from "../../data";
 import { darkTheme, lightTheme } from "../../styles/themes";
-import {
-  QuestionIconWrapper,
-  PassIconBtn,
-  ErrorText,
-  FormWrapper,
-  SubmitErrorText,
-} from "../LoginRegisterScreen";
 import { BasketballMarker } from "../markers";
 
 const registerSchema = yup
@@ -53,7 +54,7 @@ const registerErrors = {
 };
 
 const RegisterForm = forwardRef((props, ref) => {
-  const { changeForm } = props;
+  const { closeModal } = props;
   const [isPassVisible, setIsPassVisible] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const {
@@ -64,18 +65,19 @@ const RegisterForm = forwardRef((props, ref) => {
   } = useForm({ resolver: yupResolver(registerSchema) });
   const [submit, { isLoading, isError, error }] = useRegisterMutation();
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const onSubmit = async (formData) => {
     const res = await submit(formData);
     if (!res.error && res.data) {
-      changeForm("loginAfterReg");
+      navigate("/log-reg");
     } else if (res.error.status === 500) {
       setSubmitError(true);
     }
   };
 
-  const changeToLogin = () => {
-    changeForm("login");
+  const onChangeToLogin = () => {
+    navigate("/login");
   };
 
   const togglePassVisible = () => setIsPassVisible(!isPassVisible);
@@ -136,113 +138,157 @@ const RegisterForm = forwardRef((props, ref) => {
   };
 
   return (
-    <FormWrapper ref={ref}>
-      <Text fS="20px" fW={700} m="15px 0 40px" centred>
-        Зареєструйтесь, щоб мати більше можливостей
-      </Text>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Label pl="10px">
-          Ім'я користувача
-          <Input {...register("username")} m="5px 0 25px" />
-          <ErrorText>
-            {errors.username?.message ||
-              (isError &&
-                error.data === "Username already exist" &&
-                registerErrors[error.data])}
-          </ErrorText>
-        </Label>
-        <Label pl="10px">
-          Пароль
-          <Input
-            {...register("password")}
-            type={isPassVisible ? "text" : "password"}
-            m="5px 0 25px"
-            p="9px 40px 9px 15px"
-          />
-          <PassIconBtn onClick={togglePassVisible} type="button">
-            {isPassVisible ? <ShowPassIcon /> : <HidePassIcon />}
-          </PassIconBtn>
-          <ErrorText>{errors.password?.message}</ErrorText>
-        </Label>
-        <Label pl="10px">
-          Email
-          <QuestionIconWrapper
-            type="button"
-            data-tooltip-id={"email"}
-            data-tooltip-place={"top"}
-          >
-            <QuestionIcon />
-            <Tooltip
-              id={"email"}
-              openOnClick
-              style={{
-                borderRadius: "15px",
-                maxWidth: "95vw",
-                backgroundColor: "#443630",
-              }}
+    <>
+      <ModalHeader empty>
+        <CloseBtn onClick={closeModal}>
+          <CloseIcon />
+        </CloseBtn>
+      </ModalHeader>
+      <FormWrapper ref={ref}>
+        <Text fS="20px" fW={700} m="15px 0 40px" centred>
+          Зареєструйтесь, щоб мати більше можливостей
+        </Text>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Label pl="10px">
+            Ім'я користувача
+            <Input {...register("username")} m="5px 0 25px" />
+            <ErrorText>
+              {errors.username?.message ||
+                (isError &&
+                  error.data === "Username already exist" &&
+                  registerErrors[error.data])}
+            </ErrorText>
+          </Label>
+          <Label pl="10px">
+            Пароль
+            <Input
+              {...register("password")}
+              type={isPassVisible ? "text" : "password"}
+              m="5px 0 25px"
+              p="9px 40px 9px 15px"
+            />
+            <PassIconBtn onClick={togglePassVisible} type="button">
+              {isPassVisible ? <ShowPassIcon /> : <HidePassIcon />}
+            </PassIconBtn>
+            <ErrorText>{errors.password?.message}</ErrorText>
+          </Label>
+          <Label pl="10px">
+            Email
+            <QuestionIconWrapper
+              type="button"
+              data-tooltip-id={"email"}
+              data-tooltip-place={"top"}
             >
-              email використовується лише для відновлення паролю
-            </Tooltip>
-          </QuestionIconWrapper>
-          <Input {...register("email")} m="5px 0 25px" />
-          <ErrorText>
-            {errors.email?.message ||
-              (isError &&
-                error.data === "Email already exist" &&
-                registerErrors[error.data])}
-          </ErrorText>
-        </Label>
-        <Label pl="10px">
-          Місто
-          <Controller
-            name="city"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                options={cities}
-                styles={selectStyles}
-                placeholder="Виберіть ваше місто"
-              />
-            )}
-          />
-          <ErrorText style={{ bottom: "-20px" }}>
-            {errors.city?.message}
-          </ErrorText>
-        </Label>
-        {submitError && (
-          <SubmitErrorText>Упс...невідома помилка</SubmitErrorText>
-        )}
-        <FlexCenterBox>
-          <Button
-            type="submit"
-            disabled={isLoading}
-            width="170px"
-            onClick={() => setSubmitError(false)}
-          >
-            {isLoading ? (
-              <BtnSpinnerWrapper>
-                <BasketballMarker />
-              </BtnSpinnerWrapper>
-            ) : (
-              "Зареєструватись"
-            )}
-          </Button>
-        </FlexCenterBox>
-      </form>
-      <Text fS="17px" fW={700} m="10px 0" color="secondary" centred>
-        Або увійдіть, якщо вже маєте акаунт
-      </Text>
-      <Button
-        disabled={isLoading}
-        p="10px 60px"
-        onClick={changeToLogin}
-        bgColors={lightTheme.btnSecondary}
-      >
-        Увійти
-      </Button>
-    </FormWrapper>
+              <QuestionIcon />
+              <Tooltip
+                id={"email"}
+                openOnClick
+                style={{
+                  borderRadius: "15px",
+                  maxWidth: "95vw",
+                  backgroundColor: "#443630",
+                }}
+              >
+                email використовується лише для відновлення паролю
+              </Tooltip>
+            </QuestionIconWrapper>
+            <Input {...register("email")} m="5px 0 25px" />
+            <ErrorText>
+              {errors.email?.message ||
+                (isError &&
+                  error.data === "Email already exist" &&
+                  registerErrors[error.data])}
+            </ErrorText>
+          </Label>
+          <Label pl="10px">
+            Місто
+            <Controller
+              name="city"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  options={cities}
+                  styles={selectStyles}
+                  placeholder="Виберіть ваше місто"
+                />
+              )}
+            />
+            <ErrorText style={{ bottom: "-20px" }}>
+              {errors.city?.message}
+            </ErrorText>
+          </Label>
+          {submitError && (
+            <SubmitErrorText>Упс...невідома помилка</SubmitErrorText>
+          )}
+          <FlexCenterBox>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              width="170px"
+              onClick={() => setSubmitError(false)}
+            >
+              {isLoading ? (
+                <BtnSpinnerWrapper>
+                  <BasketballMarker />
+                </BtnSpinnerWrapper>
+              ) : (
+                "Зареєструватись"
+              )}
+            </Button>
+          </FlexCenterBox>
+        </form>
+        <Text fS="17px" fW={700} m="10px 0" color="secondary" centred>
+          Або увійдіть, якщо вже маєте акаунт
+        </Text>
+        <Button
+          disabled={isLoading}
+          p="10px 60px"
+          onClick={onChangeToLogin}
+          bgColors={lightTheme.btnSecondary}
+        >
+          Увійти
+        </Button>
+      </FormWrapper>
+    </>
   );
 });
 
 export default RegisterForm;
+
+export const FormWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 5px 10px;
+`;
+
+export const ErrorText = styled(Text)`
+  font-family: "Play", sans-serif;
+  position: absolute;
+  top: 65px;
+  left: 10px;
+  color: #ac2b04;
+`;
+
+export const PassIconBtn = styled(IconButton)`
+  position: absolute;
+  top: 33px;
+  right: 15px;
+`;
+
+export const QuestionIconWrapper = styled(IconButton)`
+  position: absolute;
+  top: 0px;
+  left: 60px;
+`;
+
+export const SubmitErrorText = styled.p`
+  font-family: "Play", sans-serif;
+  font-weight: 600;
+  color: #ac2b04;
+  padding: 0 0 10px;
+  text-align: center;
+`;

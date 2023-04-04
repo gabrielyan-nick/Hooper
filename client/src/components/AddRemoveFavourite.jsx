@@ -1,42 +1,20 @@
 import React, { forwardRef } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useGetCourtQuery } from "../api/courtsApi";
-import {
-  FlexBetweenBox,
-  FlexCenterBox,
-  IconButton,
-  Title,
-  CourtImg,
-  CloseBtn,
-  IconBtnBg,
-  BackBtn,
-  Button,
-  BtnSpinnerWrapper,
-} from "./microComponets";
-import {
-  FavouriteIcon,
-  CloseIcon,
-  BasketballCourtIcon,
-  ShowHideIcon,
-  BackIcon,
-} from "./svgIcons";
-import { CourtInfo, CourtPlayers, CourtChat, CourtPhotosSlider } from "./index";
+import { IconBtnBg, BtnSpinnerWrapper } from "./microComponets";
+import { FavouriteIcon } from "./svgIcons";
 import { useAddRemoveFavMutation } from "../api/userApi";
 import { setFavCourts } from "../store/storageSlice";
-import {
-  setUserIdForNav,
-  setCourtIdForNav,
-  setModalTypeForNav,
-} from "../store/navigateSlice";
 import { lightTheme } from "../styles/themes";
 
-const AddRemoveFavourite = ({ courtId, changeModalType }) => {
+const AddRemoveFavourite = ({ courtId }) => {
   const { user = {} } = useSelector((state) => state.storage);
   const dispatch = useDispatch();
   const isFavCourt = user?.favouriteCourts.some((item) => courtId === item._id);
   const [addRemoveFav, result] = useAddRemoveFavMutation();
+  const navigate = useNavigate();
 
   const onAddRemoveFav = async () => {
     if (user !== null) {
@@ -48,7 +26,7 @@ const AddRemoveFavourite = ({ courtId, changeModalType }) => {
       if (!res.error && res.data) {
         dispatch(setFavCourts(res.data));
       }
-    } else changeModalType({ type: "logReg" });
+    } else navigate("/login");
   };
   return (
     <AddFavBtn onClick={onAddRemoveFav} color={lightTheme.popupBg}>
@@ -78,5 +56,4 @@ const AddFavBtn = styled(IconBtnBg)`
 
 AddRemoveFavourite.propTypes = {
   courtId: PropTypes.string,
-  changeModalType: PropTypes.func.isRequired,
 };

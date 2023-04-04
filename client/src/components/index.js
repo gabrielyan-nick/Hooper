@@ -8,7 +8,6 @@ export { default as LoadingScreen } from "./LoadingScreen";
 export { default as UserLoginWidget } from "./UserLoginWidget";
 export { default as ModalWindow } from "./ModalWindow";
 export { default as PhotoWindow } from "./PhotoWindow";
-export { default as LoginRegisterScreen } from "./LoginRegisterScreen";
 export { IconWithTooltip } from "./CourtInfo";
 export { LoginFormWrapper, LoginForm, LoginAfterReg } from "./forms/LoginForm";
 export { default as RegisterForm } from "./forms/RegisterForm";

@@ -30,7 +30,7 @@ import {
   ErrorText,
   FormWrapper,
   SubmitErrorText,
-} from "../LoginRegisterScreen";
+} from "../forms/RegisterForm";
 import { RadioButton } from "../index";
 import { useAddCourtMutation } from "../../api/courtsApi";
 import { BasketballMarker } from "../markers";

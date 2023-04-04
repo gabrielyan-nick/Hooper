@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import useMount from "../hooks/useMount";
@@ -71,7 +72,7 @@ const PhotoWindow = ({ image, alt = "image", opened, closeModal }) => {
     return null;
   }
 
-  return (
+  return createPortal(
     <CSSTransition
       in={animationIn}
       nodeRef={overlayRef}
@@ -89,7 +90,8 @@ const PhotoWindow = ({ image, alt = "image", opened, closeModal }) => {
           </CloseButton>
         </PhotoModalContent>
       </PhotoModal>
-    </CSSTransition>
+    </CSSTransition>,
+    document.body
   );
 };
 
@@ -125,7 +127,7 @@ const PhotoModalContent = styled.div`
 `;
 
 const Img = styled.img`
-  max-height: 92vh;
+  max-height: 95vh;
   border-radius: 7px;
 `;
 

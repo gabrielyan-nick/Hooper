@@ -65,7 +65,7 @@ export const IconBtnBg = styled.button`
   box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
     rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
 
-  &:hover:not(:disabled) {
+  &:hover {
     background: ${(props) =>
       props.color === "green"
         ? lightTheme.green
@@ -102,11 +102,17 @@ export const CloseBtn = styled(IconButton)`
   }
 `;
 
+export const ModalHeader = styled.div`
+  display: flex;
+  justify-content: ${(props) => (props.empty ? "flex-end" : "space-between")};
+  padding: 0 5px;
+`;
+
 export const BackBtn = styled(IconBtnBg)`
   border-radius: 7px;
   background: ${lightTheme.orange};
   &:hover {
-    background: #9e1b04;
+    background: #a83406;
   }
 `;
 

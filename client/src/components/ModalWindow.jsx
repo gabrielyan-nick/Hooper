@@ -1,22 +1,55 @@
 import React, { useRef, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import styled from "styled-components";
-import { CSSTransition } from "react-transition-group";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import useMount from "../hooks/useMount";
+import {
+  MyInfo,
+  PhotoWindow,
+  CourtPopup,
+  UserInfo,
+  LoginFormWrapper,
+  RegisterForm,
+  LoginAfterReg,
+  ForgotPassForm,
+  AddCourtForm,
+} from "./index";
 import { Button, IconButton, CloseBtn } from "./microComponets";
 import { CloseIconFill, CloseIcon } from "./svgIcons";
 
 const ModalWindow = ({
   opened,
   closeModal,
-  children,
-  closeClickOutside = true,
-  isEmptyHeader = true,
+  closeClickOutside = false,
+  action = null,
+  addCourtMarker = null,
 }) => {
+  const location = useLocation();
+  const [history, setHistory] = useState([]);
   const [animationIn, setAnimationIn] = useState(false);
   const contentRef = useRef(null);
   const overlayRef = useRef(null);
   const { mounted } = useMount({ opened });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setHistory([...history, location.pathname]);
+  }, [location]);
+
+  const onGoBack = () => {
+    history.pop();
+    navigate(-1);
+    history.pop();
+  };
 
   useEffect(() => {
     setAnimationIn(opened);
@@ -58,6 +91,8 @@ const ModalWindow = ({
   };
 
   const onCloseModal = () => {
+    navigate("/");
+    history.splice(0);
     closeModal();
   };
 
@@ -67,7 +102,7 @@ const ModalWindow = ({
     return null;
   }
 
-  return (
+  return createPortal(
     <CSSTransition
       in={animationIn}
       nodeRef={overlayRef}
@@ -88,18 +123,88 @@ const ModalWindow = ({
           classNames="modal-content"
         >
           <ModalContent ref={contentRef}>
-            {isEmptyHeader && (
-              <ModalHeader>
-                <CloseBtn onClick={onCloseModal}>
-                  <CloseIcon />
-                </CloseBtn>
-              </ModalHeader>
-            )}
-            {children}
+            <SwitchTransition>
+              <CSSTransition
+                timeout={200}
+                key={location.key}
+                classNames="switch"
+              >
+                <Routes>
+                  <Route
+                    path="/courts/:courtId"
+                    element={
+                      <CourtPopup
+                        closeModal={onCloseModal}
+                        history={history}
+                        goBack={onGoBack}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/users/:userId"
+                    element={
+                      <UserInfo closeModal={onCloseModal} goBack={onGoBack} />
+                    }
+                  />
+                  <Route
+                    path="/my-info"
+                    element={
+                      <MyInfo
+                        closeModal={onCloseModal}
+                        goBack={onGoBack}
+                        setAddCourtMarker={action}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/login"
+                    element={
+                      <LoginFormWrapper
+                        closeModal={onCloseModal}
+                        goBack={onGoBack}
+                        history={history}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/register"
+                    element={
+                      <RegisterForm
+                        closeModal={onCloseModal}
+                        goBack={onGoBack}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/log-reg"
+                    element={<LoginAfterReg closeModal={onCloseModal} />}
+                  />
+                  <Route
+                    path="/forgot-pass"
+                    element={
+                      <ForgotPassForm
+                        closeModal={onCloseModal}
+                        goBack={onGoBack}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/add-court"
+                    element={
+                      <AddCourtForm
+                        closeModal={onCloseModal}
+                        courtLocation={addCourtMarker}
+                      />
+                    }
+                  />
+                </Routes>
+              </CSSTransition>
+            </SwitchTransition>
           </ModalContent>
         </CSSTransition>
       </ModalWrapper>
-    </CSSTransition>
+    </CSSTransition>,
+    document.body
   );
 };
 

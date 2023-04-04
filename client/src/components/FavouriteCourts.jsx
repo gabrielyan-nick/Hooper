@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   Button,
@@ -27,7 +28,7 @@ import {
 import { EnterIcon, ShowHideIcon } from "./svgIcons";
 import { BasketballMarker, FootballMarker } from "./markers";
 
-const FavouriteCourts = ({ courts, changeModalType, modalType, id = null }) => {
+const FavouriteCourts = ({ courts }) => {
   const displayedListLength = 3;
   const [showAll, setShowAll] = useState(false);
   const displayedCourts = showAll
@@ -71,13 +72,7 @@ const FavouriteCourts = ({ courts, changeModalType, modalType, id = null }) => {
               mountOnEnter
               unmountOnExit
             >
-              <FavCourt
-                court={court}
-                ref={itemRef[court._id]}
-                changeModalType={changeModalType}
-                modalType={modalType}
-                id={id}
-              />
+              <FavCourt court={court} ref={itemRef[court._id]} />
             </CSSTransition>
           ))}
         </TransitionGroup>
@@ -103,16 +98,13 @@ export default FavouriteCourts;
 
 const FavCourt = memo(
   forwardRef((props, ref) => {
-    const { court, changeModalType, modalType, id } = props;
-    const dispatch = useDispatch();
+    const { court } = props;
+    const navigate = useNavigate();
+
     const onChangeToCourt = () => {
-      changeModalType({ type: "court", courtid: court._id });
-      dispatch(setCourtIdForNav(court._id));
-      if (modalType === "userInfo") {
-        dispatch(setModalTypeForNav("userInfo"));
-        dispatch(setUserIdForNav(id));
-      } else dispatch(setModalTypeForNav("myInfo"));
+      navigate(`/courts/${court._id}`);
     };
+
     return (
       <LineWrapper ref={ref}>
         {markers[court.sport]}

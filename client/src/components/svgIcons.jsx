@@ -24,6 +24,7 @@ export const AddPhotoIcon = ({ size = 23 }) => {
       width={`${size}px`}
       height={`${size}px`}
       viewBox="0 0 24 24"
+      style={{ cursor: "pointer" }}
     >
       <path fill="none" d="M0 0h24v24H0z" />
       <path

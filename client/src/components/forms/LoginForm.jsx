@@ -1,5 +1,6 @@
 import React, { useState, useRef, forwardRef } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -14,15 +15,18 @@ import {
   IconButton,
   BtnSpinnerWrapper,
   TextButton,
+  ModalHeader,
+  CloseBtn,
+  BackBtn,
 } from "./../microComponets";
-import { ShowPassIcon, HidePassIcon } from "./../svgIcons";
+import { ShowPassIcon, HidePassIcon, CloseIcon, BackIcon } from "./../svgIcons";
 import { useLoginMutation } from "../../api/authApi";
 import {
   PassIconBtn,
   ErrorText,
   FormWrapper,
   SubmitErrorText,
-} from "../LoginRegisterScreen";
+} from "../forms/RegisterForm";
 import { BasketballMarker } from "../markers";
 import { lightTheme } from "../../styles/themes";
 
@@ -46,7 +50,7 @@ const loginErrors = {
 };
 
 export const LoginForm = forwardRef((props, ref) => {
-  const { changeForm, afterReg = false, closeModal } = props;
+  const { closeModal, afterReg = false } = props;
   const [submitError, setSubmitError] = useState(false);
   const [isPassVisible, setIsPassVisible] = useState(false);
   const {
@@ -56,23 +60,25 @@ export const LoginForm = forwardRef((props, ref) => {
   } = useForm({ resolver: yupResolver(loginSchema) });
   const [submit, { isLoading, isError, error }] = useLoginMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = async (formData) => {
     const res = await submit(formData);
     if (!res.error && res.data) {
       dispatch(setLogin(res.data));
       closeModal();
+      navigate("/");
     } else if (res.error.status === 500) {
       setSubmitError(true);
     }
   };
 
-  const changeToReg = () => {
-    changeForm("register");
+  const onChangeToReg = () => {
+    navigate("/register");
   };
 
-  const changeToForgotPass = () => {
-    changeForm("forgotPass");
+  const onChangeToForgotPass = () => {
+    navigate("/forgot-pass");
   };
 
   const togglePassVisible = () => setIsPassVisible(!isPassVisible);
@@ -109,7 +115,7 @@ export const LoginForm = forwardRef((props, ref) => {
                 loginErrors[error.data])}
           </ErrorText>
           <TextButton
-            onClick={changeToForgotPass}
+            onClick={onChangeToForgotPass}
             type="button"
             m="0 5px 15px auto"
           >
@@ -143,7 +149,7 @@ export const LoginForm = forwardRef((props, ref) => {
             Немає акаунта? Зареєструйтесь, щоб мати більше можливостей
           </Text>
           <Button
-            onClick={changeToReg}
+            onClick={onChangeToReg}
             bgColors={lightTheme.btnSecondary}
             disabled={isLoading}
           >
@@ -156,12 +162,25 @@ export const LoginForm = forwardRef((props, ref) => {
 });
 
 export const LoginFormWrapper = forwardRef((props, ref) => {
+  const { closeModal, history, goBack } = props;
+  const isBackBtn = history[history.length - 2]?.startsWith("/courts");
+
   return (
     <div ref={ref}>
+      <ModalHeader empty={!isBackBtn}>
+        {isBackBtn && (
+          <BackBtn onClick={goBack}>
+            <BackIcon />
+          </BackBtn>
+        )}
+        <CloseBtn onClick={closeModal}>
+          <CloseIcon />
+        </CloseBtn>
+      </ModalHeader>
       <Text fS="20px" fW={700} m="15px 0 40px" centred>
         Увійдіть до свого акаунту
       </Text>
-      <LoginForm closeModal={props.closeModal} changeForm={props.changeForm} />
+      <LoginForm closeModal={closeModal} />
     </div>
   );
 });
@@ -169,18 +188,18 @@ export const LoginFormWrapper = forwardRef((props, ref) => {
 export const LoginAfterReg = forwardRef((props, ref) => {
   return (
     <>
+      <ModalHeader empty>
+        <CloseBtn closeModal={props.closeModal}>
+          <CloseIcon />
+        </CloseBtn>
+      </ModalHeader>
       <Text fS="20px" fW={700} m="15px 0 10px" centred>
         Реєстрація пройшла успішно
       </Text>
       <Text fS="17px" fW={700} m="15px 0 40px" centred>
         Увійдіть до свого акаунту
       </Text>
-      <LoginForm
-        ref={ref}
-        closeModal={props.closeModal}
-        changeForm={props.changeForm}
-        afterReg
-      />
+      <LoginForm ref={ref} closeModal={props.closeModal} afterReg />
     </>
   );
 });

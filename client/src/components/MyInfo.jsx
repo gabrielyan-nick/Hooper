@@ -1,5 +1,6 @@
 import React, { useState, useEffect, forwardRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   Button,
@@ -21,31 +22,24 @@ import { setUserIdForNav } from "../store/navigateSlice";
 const MyInfo = forwardRef((props, ref) => {
   const {
     closeModal,
-    openPhoto,
-    changeModalType,
-    setIsModalOpen,
     setAddCourtMarker,
   } = props;
   const { picturePath, username, city, favouriteCourts } = useSelector(
     (state) => state.storage.user
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onLogout = () => {
-    setIsModalOpen(false);
     setAddCourtMarker(null);
     dispatch(setLogout());
-  };
-
-  const closeInfo = () => {
-    closeModal();
-    dispatch(setUserIdForNav(""));
+    navigate("/");
   };
 
   return (
     <div ref={ref}>
       <ModalHeader>
-        <CloseBtn onClick={closeInfo}>
+        <CloseBtn onClick={closeModal}>
           <CloseIcon />
         </CloseBtn>
       </ModalHeader>
@@ -57,12 +51,10 @@ const MyInfo = forwardRef((props, ref) => {
             </TextLineWrapper>
             <UserCityChanged city={city} />
           </TextWrapper>
-          <AvatarChanged photo={picturePath} openPhoto={openPhoto} />
+          <AvatarChanged photo={picturePath} />
         </FirstLineWrapper>
         <FavouriteCourts
           courts={favouriteCourts}
-          changeModalType={changeModalType}
-          modalType={"myInfo"}
         />
         <Button
           onClick={onLogout}

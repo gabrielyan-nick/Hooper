@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Tooltip } from "react-tooltip";
 import {
@@ -20,14 +21,21 @@ import {
 import { AddCourtIcon, CloseIcon } from "./svgIcons";
 import { lightTheme } from "../styles/themes";
 
-const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker, isDisabled }) => {
+const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker }) => {
   const isAuth = useSelector((state) => !!state.storage.user?.token);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const onRemoveMarker = () => setAddCourtMarker(null);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const onOpenModal = () => {
+    setIsModalOpen(true);
+    isAuth ? navigate("/add-court") : navigate("/login");
+  };
+  const onCloseModal = () => {
+    setIsModalOpen(false);
+    navigate(`/`);
+  };
 
   return (
     <>
@@ -39,11 +47,7 @@ const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker, isDisabled }) => {
           unmountOnExit
         >
           <div>
-            <RemoveMarkerBtn
-              onClick={onRemoveMarker}
-              disabled={isDisabled}
-              isHidden={isDisabled}
-            >
+            <RemoveMarkerBtn onClick={onRemoveMarker}>
               <CloseIcon size={20} />
             </RemoveMarkerBtn>
           </div>
@@ -67,9 +71,8 @@ const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker, isDisabled }) => {
         <div data-tooltip-id="add" data-tooltip-place="left">
           <AddCourtBtn
             color="orange"
-            disabled={isDisabled || !addCourtMarker}
-            onClick={openModal}
-            isHidden={isDisabled}
+            disabled={!addCourtMarker}
+            onClick={onOpenModal}
           >
             <AddCourtIcon />
           </AddCourtBtn>
@@ -77,18 +80,9 @@ const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker, isDisabled }) => {
       </Wrapper>
       <ModalWindow
         opened={isModalOpen}
-        closeClickOutside={false}
-        isEmptyHeader={false}
-      >
-        {isAuth ? (
-          <AddCourtForm
-            closeModal={closeModal}
-            courtLocation={addCourtMarker}
-          />
-        ) : (
-          <LoginRegisterScreen closeModal={closeModal} />
-        )}
-      </ModalWindow>
+        closeModal={onCloseModal}
+        addCourtMarker={addCourtMarker}
+      />
     </>
   );
 };
@@ -115,7 +109,7 @@ const AddCourtBtn = styled(UserWidgetBtn)`
     transition: all 0.3s;
   }
   &:disabled {
-    opacity: ${(props) => (props.isHidden ? 0.2 : 0.7)};
+    opacity: 0.7;
   }
 `;
 
@@ -123,6 +117,6 @@ const RemoveMarkerBtn = styled(CloseBtn)`
   padding: 3px;
   border-radius: 50%;
   &:disabled {
-    opacity: 0.15;
+    opacity: 0.7;
   }
 `;

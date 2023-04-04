@@ -1,60 +1,30 @@
 import React, { forwardRef, useState, useRef } from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useSwipeable } from "react-swipeable";
 import { storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "@firebase/storage";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { useGetCourtQuery } from "../api/courtsApi";
-import {
-  FlexBetweenBox,
-  FlexCenterBox,
-  IconButton,
-  Title,
-  CourtImg,
-  CloseBtn,
-  IconBtnBg,
-  BackBtn,
-  Button,
-  BtnSpinnerWrapper,
-  IconSpinnerWrapper,
-} from "./microComponets";
-import {
-  FavouriteIcon,
-  CloseIcon,
-  BasketballCourtIcon,
-  ShowHideIcon,
-  BackIcon,
-  AddPhotoIcon,
-  SaveIcon,
-  PrevNextArrow,
-} from "./svgIcons";
-import {
-  CourtInfo,
-  CourtPlayers,
-  CourtChat,
-  AddRemoveFavourite,
-} from "./index";
+import { CourtImg, IconBtnBg, IconSpinnerWrapper } from "./microComponets";
+import { CloseIcon, AddPhotoIcon, SaveIcon, PrevNextArrow } from "./svgIcons";
+import { AddRemoveFavourite } from "./index";
 import { useUpdateCourtInfoMutation } from "../api/courtsApi";
-import { setFavCourts } from "../store/storageSlice";
-import {
-  setUserIdForNav,
-  setCourtIdForNav,
-  setModalTypeForNav,
-} from "../store/navigateSlice";
-import { BasketballMarker } from "./index";
+import { BasketballMarker, PhotoWindow } from "./index";
 import { lightTheme } from "../styles/themes";
 
-const CourtPhotosSlider = ({ courtId, photos, changeModalType, sport }) => {
+const CourtPhotosSlider = ({ courtId, photos, sport }) => {
   const [slideIndex, setSlideIndex] = useState(0);
   const token = useSelector((state) => state.storage.user?.token);
   const [addedPhoto, setAddedPhoto] = useState(null);
   const [addedPhotoUrl, setAddedPhotoUrl] = useState(null);
   const [addPhoto, result] = useUpdateCourtInfoMutation();
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const addRef = useRef(null);
   const saveCloseRef = useRef(null);
   const nodeRef = addedPhoto ? saveCloseRef : addRef;
+  const navigate = useNavigate();
 
   const handlers = useSwipeable({
     onSwipedLeft: () => handleNext(),
@@ -115,127 +85,139 @@ const CourtPhotosSlider = ({ courtId, photos, changeModalType, sport }) => {
   };
 
   const checkAuth = () => {
-    !token && changeModalType({ type: "logReg" });
+    !token && navigate("/login");
   };
 
+  const openPhotoModal = () => setIsPhotoModalOpen(true);
+  const closePhotoModal = () => setIsPhotoModalOpen(false);
+
   return (
-    <Wrapper>
-      {photos?.length === 1 || addedPhoto ? (
-        <CourtImage src={addedPhotoUrl || photos} />
-      ) : (
-        <div {...handlers}>
-          <SliderWrapper>
-            <SliderTrack slides={photos?.length}>
-              {photos?.map((photo, i) => (
-                <SliderImg key={i} src={photo} slideIndex={slideIndex} />
-              ))}
-            </SliderTrack>
-          </SliderWrapper>
-          <PrevBtn
-            onClick={handlePrev}
-            disabled={slideIndex === 0 || addedPhoto}
+    <>
+      <Wrapper>
+        {photos?.length === 1 || addedPhoto ? (
+          <CourtImage src={addedPhotoUrl || photos} onClick={openPhotoModal} />
+        ) : (
+          <div {...handlers}>
+            <SliderWrapper>
+              <SliderTrack slides={photos?.length}>
+                {photos?.map((photo, i) => (
+                  <SliderImg
+                    key={i}
+                    src={photo}
+                    slideIndex={slideIndex}
+                    onClick={openPhotoModal}
+                  />
+                ))}
+              </SliderTrack>
+            </SliderWrapper>
+            <PrevBtn
+              onClick={handlePrev}
+              disabled={slideIndex === 0 || addedPhoto}
+            >
+              <PrevNextArrow />
+            </PrevBtn>
+            <NextBtn
+              onClick={handleNext}
+              disabled={slideIndex === photos?.length - 1 || addedPhoto}
+            >
+              <PrevNextArrow dir="next" />
+            </NextBtn>
+          </div>
+        )}
+        <FavBtn>
+          <AddRemoveFavourite courtId={courtId} />
+        </FavBtn>
+        <SwitchTransition mode="out-in">
+          <CSSTransition
+            timeout={100}
+            key={addedPhoto}
+            classNames="icons-switch"
+            nodeRef={nodeRef}
           >
-            <PrevNextArrow />
-          </PrevBtn>
-          <NextBtn
-            onClick={handleNext}
-            disabled={slideIndex === photos?.length - 1 || addedPhoto}
-          >
-            <PrevNextArrow dir="next" />
-          </NextBtn>
-        </div>
-      )}
-      <FavBtn>
-        <AddRemoveFavourite
-          courtId={courtId}
-          changeModalType={changeModalType}
-        />
-      </FavBtn>
-      <SwitchTransition mode="out-in">
-        <CSSTransition
-          timeout={100}
-          key={addedPhoto}
-          classNames="icons-switch"
-          nodeRef={nodeRef}
-        >
-          {addedPhoto ? (
-            <div ref={saveCloseRef}>
-              <CancelBtn
-                color="orange"
-                onClick={onCancelAddedphoto}
-                disabled={result.isLoading}
-              >
-                <CloseIcon />
-              </CancelBtn>
-              <SaveBtn
-                color="green"
-                disabled={result.isLoading}
-                onClick={onSavePhoto}
-              >
-                {result.isLoading ? (
-                  <IconSpinnerWrapper>
-                    <BasketballMarker size={23} />
-                  </IconSpinnerWrapper>
-                ) : (
-                  <SaveIcon />
-                )}
-              </SaveBtn>
-            </div>
-          ) : (
-            <AddPhotoBtn color={lightTheme.popupBg} onClick={checkAuth}>
-              <label>
-                <AddPhotoIcon />
-                <input
-                  id="photos"
-                  type="file"
-                  name="photo"
-                  hidden
-                  accept="image/png, image/jpg, image/jpeg"
-                  onChange={onSetPhoto}
-                  disabled={!token}
-                />
-              </label>
-            </AddPhotoBtn>
-          )}
-        </CSSTransition>
-      </SwitchTransition>
-    </Wrapper>
+            {addedPhoto ? (
+              <div ref={saveCloseRef}>
+                <CancelBtn
+                  color="orange"
+                  onClick={onCancelAddedphoto}
+                  disabled={result.isLoading}
+                >
+                  <CloseIcon />
+                </CancelBtn>
+                <SaveBtn
+                  color="green"
+                  disabled={result.isLoading}
+                  onClick={onSavePhoto}
+                >
+                  {result.isLoading ? (
+                    <IconSpinnerWrapper>
+                      <BasketballMarker size={23} />
+                    </IconSpinnerWrapper>
+                  ) : (
+                    <SaveIcon />
+                  )}
+                </SaveBtn>
+              </div>
+            ) : (
+              <AddPhotoBtn color={lightTheme.popupBg} onClick={checkAuth}>
+                <label>
+                  <AddPhotoIcon />
+                  <input
+                    id="photos"
+                    type="file"
+                    name="photo"
+                    hidden
+                    accept="image/png, image/jpg, image/jpeg"
+                    onChange={onSetPhoto}
+                    disabled={!token}
+                  />
+                </label>
+              </AddPhotoBtn>
+            )}
+          </CSSTransition>
+        </SwitchTransition>
+      </Wrapper>
+
+      <PhotoWindow
+        image={photos && photos[slideIndex]}
+        opened={isPhotoModalOpen}
+        closeModal={closePhotoModal}
+      />
+    </>
   );
 };
 
 export default CourtPhotosSlider;
 
-const PrevBtn = styled(IconBtnBg)`
+const PrevNextBtn = styled(IconBtnBg)`
   position: absolute;
-  left: 5px;
-  top: 50%;
-  transform: translateY(-50%);
+  background: transparent;
+  box-shadow: none;
+  top: 45%;
   &:disabled {
     cursor: default;
-    opacity: 0.3;
+    opacity: 0.2;
   }
 `;
 
-const NextBtn = styled(IconBtnBg)`
-  position: absolute;
+const PrevBtn = styled(PrevNextBtn)`
+  left: 5px;
+`;
+
+const NextBtn = styled(PrevNextBtn)`
   right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  &:disabled {
-    cursor: default;
-    opacity: 0.3;
-  }
 `;
 
 const CourtImage = styled(CourtImg)`
   width: 100%;
   object-fit: cover;
+  cursor: pointer;
 `;
 
 const SliderImg = styled(CourtImage)`
   transform: translateX(-${(props) => props.slideIndex * 100}%);
   transition: all 0.3s;
   width: 100%;
+  cursor: pointer;
 `;
 
 const SliderTrack = styled.div`
@@ -260,6 +242,7 @@ const AddPhotoBtn = styled(IconBtn)`
   bottom: 9px;
   right: 5px;
   height: 31px;
+  cursor: pointer;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
     rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 `;

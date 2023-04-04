@@ -8,7 +8,7 @@ import { useUpdateUserInfoMutation } from "../api/userApi";
 import { FlexCenterBox, IconBtnBg, IconSpinnerWrapper } from "./microComponets";
 import { ChangeAvatarIcon, CloseIcon, SaveIcon } from "./svgIcons";
 import { setLogin } from "../store/storageSlice";
-import { BasketballMarker } from "./index";
+import { BasketballMarker, PhotoWindow } from "./index";
 
 const AvatarWrapper = styled(FlexCenterBox)`
   position: relative;
@@ -50,6 +50,7 @@ const Avatar = styled.img`
 
 const AvatarChanged = ({ photo, openPhoto }) => {
   const { token, _id } = useSelector((state) => state.storage.user);
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [changedAvatar, setChangedAvatar] = useState(null);
   const [changedAvatarUrl, setChangedAvatarUrl] = useState(null);
   const changeRef = useRef(null);
@@ -94,63 +95,74 @@ const AvatarChanged = ({ photo, openPhoto }) => {
     setChangedAvatarUrl(null);
   };
 
+  const openPhotoModal = () => setIsPhotoModalOpen(true);
+  const closePhotoModal = () => setIsPhotoModalOpen(false);
+
   return (
-    <FlexCenterBox>
-      <AvatarWrapper>
-        <Avatar
-          onClick={openPhoto}
-          src={`${changedAvatar === null ? photo : changedAvatarUrl} `}
-          alt="avatar"
-          disableClick={changedAvatar !== null}
-        />
-        <SwitchTransition mode="out-in">
-          <CSSTransition
-            timeout={100}
-            key={changedAvatar}
-            classNames="icons-switch"
-            nodeRef={nodeRef}
-          >
-            {changedAvatar === null ? (
-              <ChangeBtn color="green" ref={changeRef}>
-                <label htmlFor="avatar" style={{ height: "23px" }}>
-                  <ChangeAvatarIcon />
-                  <input
-                    id="avatar"
-                    type="file"
-                    hidden
-                    accept="image/png, image/jpg, image/jpeg"
-                    onChange={onChangeAvatar}
-                  />
-                </label>
-              </ChangeBtn>
-            ) : (
-              <>
-                <CancelBtn
-                  color="orange"
-                  ref={saveCloseRef}
-                  onClick={onCancelChangeAvatar}
-                >
-                  <CloseIcon />
-                </CancelBtn>
-                <SaveBtn
-                  color="green"
-                  ref={saveCloseRef}
-                  onClick={onSaveChangedAvatar}
-                >
-                  {result.isLoading ? (
-                    <IconSpinnerWrapper>
-                      <BasketballMarker size={23} />
-                    </IconSpinnerWrapper>
-                  ) : (
-                    <SaveIcon />
-                  )}
-                </SaveBtn>
-              </>
-            )}
-          </CSSTransition>
-        </SwitchTransition>
-      </AvatarWrapper>
-    </FlexCenterBox>
+    <>
+      <FlexCenterBox>
+        <AvatarWrapper>
+          <Avatar
+            onClick={openPhotoModal}
+            src={`${changedAvatar === null ? photo : changedAvatarUrl} `}
+            alt="avatar"
+            disableClick={changedAvatar !== null}
+          />
+          <SwitchTransition mode="out-in">
+            <CSSTransition
+              timeout={100}
+              key={changedAvatar}
+              classNames="icons-switch"
+              nodeRef={nodeRef}
+            >
+              {changedAvatar === null ? (
+                <ChangeBtn color="green" ref={changeRef}>
+                  <label htmlFor="avatar" style={{ height: "23px" }}>
+                    <ChangeAvatarIcon />
+                    <input
+                      id="avatar"
+                      type="file"
+                      hidden
+                      accept="image/png, image/jpg, image/jpeg"
+                      onChange={onChangeAvatar}
+                    />
+                  </label>
+                </ChangeBtn>
+              ) : (
+                <>
+                  <CancelBtn
+                    color="orange"
+                    ref={saveCloseRef}
+                    onClick={onCancelChangeAvatar}
+                  >
+                    <CloseIcon />
+                  </CancelBtn>
+                  <SaveBtn
+                    color="green"
+                    ref={saveCloseRef}
+                    onClick={onSaveChangedAvatar}
+                  >
+                    {result.isLoading ? (
+                      <IconSpinnerWrapper>
+                        <BasketballMarker size={23} />
+                      </IconSpinnerWrapper>
+                    ) : (
+                      <SaveIcon />
+                    )}
+                  </SaveBtn>
+                </>
+              )}
+            </CSSTransition>
+          </SwitchTransition>
+        </AvatarWrapper>
+      </FlexCenterBox>
+
+      <PhotoWindow
+        image={photo}
+        opened={isPhotoModalOpen}
+        closeModal={closePhotoModal}
+      />
+    </>
   );
 };
 

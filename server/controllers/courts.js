@@ -153,3 +153,37 @@ export const getCourtPlayers = async (req, res) => {
     res.status(500).json({ message: "Unknown error" });
   }
 };
+
+export const updateCourtInfo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { ...data } = req.body;
+
+    const court = await Court.findById(id);
+    if (!court) res.status(404).json({ message: "Court not found" });
+
+    let dataObj;
+    if (data.photos) {
+      if (court.photos.length === 1 && court.photos[0].startsWith("/assets")) {
+        court.photos = [data.photos];
+      } else {
+        court.photos.unshift(data.photos);
+      }
+
+      const uniquePhotos = [...new Set(court.photos)];
+
+      dataObj = {
+        photos: uniquePhotos,
+      };
+    } else dataObj = data;
+
+    const updatedCourt = await Court.findByIdAndUpdate(
+      id,
+      { ...dataObj },
+      { new: true }
+    );
+    res.status(200).json({ message: "Successful" });
+  } catch (e) {
+    res.status(500).json({ message: "Unknown error" });
+  }
+};

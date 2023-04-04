@@ -7,6 +7,7 @@ import {
   checkInOnCourt,
   checkOutOnCourt,
   getCourtPlayers,
+  updateCourtInfo
 } from "../controllers/courts.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -15,6 +16,9 @@ const upload = multer();
 
 // ADD COURT
 router.post("/", upload.none(), addCourt);
+
+// UPDATE COURT INFO
+router.patch("/:id", upload.none(), updateCourtInfo);
 
 // GET COURT
 router.get("/:id", getCourt);

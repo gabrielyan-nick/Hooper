@@ -13,6 +13,7 @@ import {
   CSSTransition,
   SwitchTransition,
 } from "react-transition-group";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Tooltip } from "react-tooltip";
@@ -21,11 +22,6 @@ import {
   useGetCourtPlayersQuery,
   useCheckOutMutation,
 } from "../api/courtsApi";
-import {
-  setModalTypeForNav,
-  setCourtIdForNav,
-  setUserIdForNav,
-} from "../store/navigateSlice";
 import {
   Button,
   TextLineWrapper,
@@ -39,11 +35,10 @@ import { ShowHideBtnWrapper } from "./FavouriteCourts";
 import { lightTheme } from "../styles/themes";
 import { BasketballMarker, FootballMarker } from "./markers";
 
-const CourtPlayers = ({ changeModalType, court, courtId }) => {
+const CourtPlayers = ({ court, courtId }) => {
   const { user } = useSelector((state) => state.storage);
   const [checkIn, result] = useCheckInMutation();
   const [checkOut, res] = useCheckOutMutation();
-  const dispatch = useDispatch();
   const {
     data = {},
     isLoading,
@@ -63,6 +58,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
   const checkInRef = useRef(null);
   const checkOutRef = useRef(null);
   const nodeRef = isOnCourt ? checkInRef : checkOutRef;
+  const navigate = useNavigate();
 
   useEffect(() => {
     listRef.current.style.height = `${
@@ -113,7 +109,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
           // refetch();
         })
         .catch((e) => console.log(e));
-    } else changeModalType({ type: "logReg" });
+    } else navigate("/login");
   };
 
   const checkOutOnCourt = () => {
@@ -122,15 +118,10 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
       formData.append("_id", user._id);
       checkOut({ courtId, formData, token: user.token })
         .then((result) => {
-          refetch();
+          // refetch();
         })
         .catch((e) => console.log(e));
-    } else changeModalType({ type: "logReg" });
-  };
-
-  const navigateDispatch = () => {
-    dispatch(setModalTypeForNav("court"));
-    dispatch(setCourtIdForNav(courtId));
+    } else navigate("/login");
   };
 
   return (
@@ -156,9 +147,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
                 <Player
                   key={player.createdAt}
                   user={player}
-                  changeModalType={changeModalType}
                   ref={checkInPlayersRef[player.createdAt]}
-                  navDispatch={navigateDispatch}
                 />
               </CSSTransition>
             ))}
@@ -179,9 +168,7 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
                 <Player
                   key={player.createdAt}
                   user={player}
-                  changeModalType={changeModalType}
                   ref={playersRef[player.createdAt]}
-                  navDispatch={navigateDispatch}
                 />
               </CSSTransition>
             ))}
@@ -265,10 +252,11 @@ const CourtPlayers = ({ changeModalType, court, courtId }) => {
 
 const Player = memo(
   forwardRef((props, ref) => {
-    const { user, changeModalType, navDispatch } = props;
+    const { user } = props;
+    const navigate = useNavigate();
+
     const onChangeToUser = () => {
-      changeModalType({ type: "userInfo", userid: user._id });
-      navDispatch();
+      navigate(`/users/${user._id}`);
     };
     return (
       <LineWrapper ref={ref}>
@@ -394,12 +382,10 @@ const ColumnWrapper = styled.div`
 export default CourtPlayers;
 
 CourtPlayers.propTypes = {
-  changeModalType: PropTypes.func.isRequired,
   court: PropTypes.object.isRequired,
   courtId: PropTypes.string.isRequired,
 };
 
 Player.propTypes = {
-  changeModalType: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 };
