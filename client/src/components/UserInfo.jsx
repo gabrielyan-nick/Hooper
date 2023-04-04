@@ -13,7 +13,6 @@ import {
   CloseBtn,
   BackBtn,
 } from "./microComponets";
-import { setModalTypeForNav, setUserIdForNav } from "../store/navigateSlice";
 import {
   AvatarChanged,
   UserCityChanged,

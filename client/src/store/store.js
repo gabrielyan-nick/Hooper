@@ -11,7 +11,6 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import storageReducer from "./storageSlice";
-import navigateReducer from "./navigateSlice";
 import { courtsApi } from "../api/courtsApi";
 import { authApi } from "../api/authApi";
 import { userApi } from "../api/userApi";
@@ -26,7 +25,6 @@ const persistedStorageReducer = persistReducer(persistConfig, storageReducer);
 
 const rootReducer = combineReducers({
   storage: persistedStorageReducer,
-  navigate: navigateReducer,
   [courtsApi.reducerPath]: courtsApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,

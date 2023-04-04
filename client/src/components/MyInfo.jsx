@@ -17,7 +17,6 @@ import { AvatarChanged, UserCityChanged, FavouriteCourts } from "./index";
 import { ChangeIcon, CloseIcon } from "./svgIcons";
 import { ModalHeader } from "./ModalWindow";
 import { setLogout } from "../store/storageSlice";
-import { setUserIdForNav } from "../store/navigateSlice";
 
 const MyInfo = forwardRef((props, ref) => {
   const {

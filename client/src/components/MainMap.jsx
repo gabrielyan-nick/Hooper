@@ -6,18 +6,7 @@ import styled from "styled-components";
 import Map, { Marker, Popup } from "react-map-gl";
 import { lightTheme, darkTheme } from "../styles/themes";
 import { useGetMarkersQuery } from "../api/courtsApi";
-import {
-  FootballMarker,
-  BasketballMarker,
-  CourtPopup,
-  LoadingScreen,
-  ModalWindow,
-  LoginRegisterScreen,
-  UserInfo,
-  MyInfo,
-  PhotoWindow,
-} from "./index";
-import { setCourtIdForNav } from "../store/navigateSlice";
+import { FootballMarker, BasketballMarker, ModalWindow } from "./index";
 import { MarkerIcon } from "./svgIcons";
 
 const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
@@ -39,7 +28,7 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   } = useGetMarkersQuery();
 
   useEffect(() => {
-    location.pathname !== "/" && setIsModalOpen(true);
+    location.pathname !== "/" ? setIsModalOpen(true) : setIsModalOpen(false);
   }, []);
 
   const onOpenCourtPopup = (id) => {

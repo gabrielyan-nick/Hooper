@@ -20,11 +20,6 @@ import {
   FlexCenterBox,
   IconBtnBg,
 } from "./microComponets";
-import {
-  setCourtIdForNav,
-  setModalTypeForNav,
-  setUserIdForNav,
-} from "../store/navigateSlice";
 import { EnterIcon, ShowHideIcon } from "./svgIcons";
 import { BasketballMarker, FootballMarker } from "./markers";
 

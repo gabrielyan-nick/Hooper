@@ -26,11 +26,6 @@ import {
 import { CourtInfo, CourtPlayers, CourtChat, CourtPhotosSlider } from "./index";
 import { useAddRemoveFavMutation } from "../api/userApi";
 import { setFavCourts } from "../store/storageSlice";
-import {
-  setUserIdForNav,
-  setCourtIdForNav,
-  setModalTypeForNav,
-} from "../store/navigateSlice";
 
 const CourtPopup = forwardRef((props, ref) => {
   const { closeModal, history, goBack } = props;
