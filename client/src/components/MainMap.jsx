@@ -29,7 +29,7 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
 
   useEffect(() => {
     location.pathname !== "/" ? setIsModalOpen(true) : setIsModalOpen(false);
-  }, []);
+  }, [location]);
 
   const onOpenCourtPopup = (id) => {
     setIsModalOpen(true);
