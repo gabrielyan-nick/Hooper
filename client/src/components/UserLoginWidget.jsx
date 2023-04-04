@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { Button, UserWidgetBtn } from "./microComponets";
-import { ModalWindow, LoginRegisterScreen, UserWidget } from "./index";
+import { ModalWindow, UserWidget } from "./index";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -18,13 +18,18 @@ const Wrapper = styled.div`
 
 const UserLoginWidget = ({ setAddCourtMarker }) => {
   const isAuth = useSelector((state) => !!state.storage.user?.token);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const onCloseLoginModal = () => setIsModalOpen(false);
+  useEffect(() => {
+    location.pathname === "/" && setIsLoginModalOpen(false);
+  }, [location]);
+
+  const onCloseLoginModal = () => setIsLoginModalOpen(false);
 
   const onOpenLoginModal = () => {
-    setIsModalOpen(true);
+    setIsLoginModalOpen(true);
     navigate("/login");
   };
 
@@ -39,7 +44,7 @@ const UserLoginWidget = ({ setAddCourtMarker }) => {
           </UserWidgetBtn>
         )}
       </Wrapper>
-      <ModalWindow opened={isModalOpen} closeModal={onCloseLoginModal} />
+      <ModalWindow opened={isLoginModalOpen} closeModal={onCloseLoginModal} />
     </>
   );
 };

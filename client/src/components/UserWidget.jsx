@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { Button, FlexBetweenBox, Text, UserWidgetBtn } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
-import {
-  ModalWindow,
-} from "./index";
+import { ModalWindow } from "./index";
 
 const Avatar = styled.img`
   width: 50px;
@@ -21,11 +19,16 @@ const Username = styled(Text)`
   padding-left: 5px;
 `;
 
-const UserWidget = ({ setAddCourtMarker }) => {
+const UserWidget = ({ setAddCourtMarker}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { picturePath, username } = useSelector((state) => state.storage.user);
   const name = username.slice(0, 15);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    location.pathname === "/" && setIsModalOpen(false);
+  }, [location]);
 
   const onOpenModal = () => {
     setIsModalOpen(true);

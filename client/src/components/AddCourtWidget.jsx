@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { Tooltip } from "react-tooltip";
 import {
@@ -25,6 +25,11 @@ const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker }) => {
   const isAuth = useSelector((state) => !!state.storage.user?.token);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    location.pathname === "/" && setIsModalOpen(false);
+  }, [location]);
 
   const onRemoveMarker = () => setAddCourtMarker(null);
 

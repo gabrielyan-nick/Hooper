@@ -25,9 +25,7 @@ const MainPage = () => {
       ) : (
         <>
           <ChangeThemeBtn onClick={onChangeTheme} />
-          <UserLoginWidget
-            setAddCourtMarker={setAddCourtMarker}
-          />
+          <UserLoginWidget setAddCourtMarker={setAddCourtMarker} />
           <AddCourtWidget
             addCourtMarker={addCourtMarker}
             setAddCourtMarker={setAddCourtMarker}

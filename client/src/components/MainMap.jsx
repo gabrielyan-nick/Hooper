@@ -9,7 +9,11 @@ import { useGetMarkersQuery } from "../api/courtsApi";
 import { FootballMarker, BasketballMarker, ModalWindow } from "./index";
 import { MarkerIcon } from "./svgIcons";
 
-const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
+const MainMap = ({
+  closeLoadingScreen,
+  setAddCourtMarker,
+  addCourtMarker,
+}) => {
   const theme = useSelector((state) => state.storage.theme);
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,7 +32,7 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   } = useGetMarkersQuery();
 
   useEffect(() => {
-    location.pathname !== "/" ? setIsModalOpen(true) : setIsModalOpen(false);
+    location.pathname === "/" && setIsModalOpen(false);
   }, [location]);
 
   const onOpenCourtPopup = (id) => {
