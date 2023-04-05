@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -28,14 +28,19 @@ import { useAddRemoveFavMutation } from "../api/userApi";
 import { setFavCourts } from "../store/storageSlice";
 
 const CourtPopup = forwardRef((props, ref) => {
-  const { closeModal, history, goBack } = props;
+  const { closeModal, history, goBack, setEditedCourt } = props;
   const { courtId } = useParams();
   const {
     data: court = {},
     isLoading,
     isError,
     error,
+    isSuccess,
   } = useGetCourtQuery(courtId);
+
+  useEffect(() => {
+    isSuccess && setEditedCourt(court);
+  }, [court, isSuccess]);
 
   return (
     <PopupWrapper ref={ref}>

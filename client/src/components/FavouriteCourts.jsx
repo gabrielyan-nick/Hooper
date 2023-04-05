@@ -22,6 +22,7 @@ import {
 } from "./microComponets";
 import { EnterIcon, ShowHideIcon } from "./svgIcons";
 import { BasketballMarker, FootballMarker } from "./markers";
+import { setViewState } from "../store/storageSlice";
 
 const FavouriteCourts = ({ courts }) => {
   const displayedListLength = 3;
@@ -94,10 +95,26 @@ export default FavouriteCourts;
 const FavCourt = memo(
   forwardRef((props, ref) => {
     const { court } = props;
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const onChangeToCourt = () => {
       navigate(`/courts/${court._id}`);
+      dispatch(
+        setViewState({
+          longitude: court?.coordinates[1],
+          latitude: court?.coordinates[0],
+          zoom: 14,
+          pitch: 0,
+          bearing: 0,
+          padding: {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+          },
+        })
+      );
     };
 
     return (

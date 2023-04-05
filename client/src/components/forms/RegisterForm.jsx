@@ -145,7 +145,7 @@ const RegisterForm = forwardRef((props, ref) => {
         </CloseBtn>
       </ModalHeader>
       <FormWrapper ref={ref}>
-        <Text fS="20px" fW={700} m="15px 0 40px" centred>
+        <Text fS="20px" fW={700} m="15px 10px 40px" centred>
           Зареєструйтесь, щоб мати більше можливостей
         </Text>
         <form onSubmit={handleSubmit(onSubmit)}>

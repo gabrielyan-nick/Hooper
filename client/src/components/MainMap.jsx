@@ -1,4 +1,12 @@
-import React, { useState, useMemo, Fragment, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useMemo,
+  Fragment,
+  useRef,
+  useEffect,
+  useCallback,
+  createContext,
+} from "react";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -8,25 +16,18 @@ import { lightTheme, darkTheme } from "../styles/themes";
 import { useGetMarkersQuery } from "../api/courtsApi";
 import { FootballMarker, BasketballMarker, ModalWindow } from "./index";
 import { MarkerIcon } from "./svgIcons";
+import { setViewState } from "../store/storageSlice";
 
 const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const theme = useSelector((state) => state.storage.theme);
   const token = useSelector((state) => state.storage.user?.token);
-  const favCourts = useSelector((state) => state.storage.user?.favouriteCourts);
-  // const startViewState =
-  //   token && favCourts?.length
-  //     ? {
-  //         longitude: favCourts[favCourts.length - 1]?.coordinates[1],
-  //         latitude: favCourts[favCourts.length - 1]?.coordinates[0],
-  //         zoom: 14,
-  //       }
-  //     : { longitude: 36.40292260918253, latitude: 49.91435295466242, zoom: 10 };
-  const [viewState, setViewState] = useState({
-    longitude: 36.40292260918253,
-    latitude: 49.91435295466242,
-    zoom: 10,
-  });
+  const user = useSelector((state) => state.storage?.user);
+  const favCourts = useSelector(
+    (state) => state.storage?.user?.favouriteCourts
+  );
+  const mapStyle = useSelector((state) => state.storage.mapStyle);
+  const viewState = useSelector((state) => state.storage.viewState);
   const markerSize =
     viewState.zoom.toFixed(0) < 12
       ? viewState.zoom.toFixed(1) * 1.2
@@ -35,6 +36,7 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
       : viewState.zoom.toFixed(1) * 1.7;
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const {
     data: markers = [],
     isLoading,
@@ -43,8 +45,52 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   } = useGetMarkersQuery();
 
   useEffect(() => {
+    if (
+      token &&
+      user?.city?.coordinates?.length === 2 &&
+      !user?.favouriteCourts?.length
+    ) {
+      dispatch(
+        setViewState({
+          longitude: user?.city?.coordinates[1],
+          latitude: user?.city?.coordinates[0],
+          zoom: 10,
+          pitch: 0,
+          bearing: 0,
+          padding: {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+          },
+        })
+      );
+    } else if (token && !!user.favouriteCourts?.length) {
+      dispatch(
+        setViewState({
+          longitude: favCourts[favCourts?.length - 1]?.coordinates[1],
+          latitude: favCourts[favCourts?.length - 1]?.coordinates[0],
+          zoom: 14,
+          pitch: 0,
+          bearing: 0,
+          padding: {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+          },
+        })
+      );
+    }
+  }, [token, user?.city?.value]);
+
+  useEffect(() => {
     location.pathname === "/" && setIsModalOpen(false);
   }, [location]);
+
+  const onMapMove = useCallback((evt) => {
+    dispatch(setViewState(evt.viewState));
+  }, []);
 
   const onOpenCourtPopup = (id) => {
     setIsModalOpen(true);
@@ -58,7 +104,7 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   const handleMapClick = (e) => {
     const lng = e.lngLat.lng;
     const lat = e.lngLat.lat;
-    setAddCourtMarker({ lat, lng });
+    viewState.zoom > 13 && setAddCourtMarker({ lat, lng });
   };
 
   // const markersMemo = useMemo(
@@ -90,8 +136,8 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
         reuseMaps
         {...viewState}
         style={{ width: "100%", height: "100vh" }}
-        onMove={(evt) => setViewState(evt.viewState)}
-        mapStyle={theme === "light" ? lightTheme.mapStyle : darkTheme.mapStyle}
+        onMove={onMapMove}
+        mapStyle={theme === "light" ? mapStyle : darkTheme.mapStyle}
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         onClick={handleMapClick}
       >

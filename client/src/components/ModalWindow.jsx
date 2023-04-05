@@ -1,11 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import {
-  Routes,
-  Route,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import useOnClickOutside from "../hooks/useOnClickOutside";
@@ -20,6 +15,7 @@ import {
   LoginAfterReg,
   ForgotPassForm,
   AddCourtForm,
+  EditCourtForm,
 } from "./index";
 import { Button, IconButton, CloseBtn } from "./microComponets";
 import { CloseIconFill, CloseIcon } from "./svgIcons";
@@ -31,13 +27,14 @@ const ModalWindow = ({
   action = null,
   addCourtMarker = null,
 }) => {
-  const location = useLocation();
+  const [editedCourt, setEditedCourt] = useState({});
   const [history, setHistory] = useState([]);
   const [animationIn, setAnimationIn] = useState(false);
   const contentRef = useRef(null);
   const overlayRef = useRef(null);
   const { mounted } = useMount({ opened });
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     setHistory([...history, location.pathname]);
@@ -135,6 +132,7 @@ const ModalWindow = ({
                         closeModal={onCloseModal}
                         history={history}
                         goBack={onGoBack}
+                        setEditedCourt={setEditedCourt}
                       />
                     }
                   />
@@ -192,6 +190,17 @@ const ModalWindow = ({
                       <AddCourtForm
                         closeModal={onCloseModal}
                         courtLocation={addCourtMarker}
+                      />
+                    }
+                  />
+
+                  <Route
+                    path="/courts/:courtId/edit"
+                    element={
+                      <EditCourtForm
+                        closeModal={onCloseModal}
+                        courtInfo={editedCourt}
+                        goBack={onGoBack}
                       />
                     }
                   />

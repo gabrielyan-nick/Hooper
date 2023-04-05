@@ -11,7 +11,7 @@ const ResetPassPage = () => {
     <Wrapper style={{ background: lightTheme.greenMain }}>
       <ModalWrapper>
         <ModalContent>
-          <Text fS="20px" fW={700} centred m="20px 0 30px">
+          <Text fS="20px" fW={700} centred m="20px 10px 30px">
             Введіть новий пароль
           </Text>
           <ResetPassForm resetToken={token} />

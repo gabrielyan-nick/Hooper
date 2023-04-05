@@ -8,7 +8,13 @@ import { ref, uploadBytes, getDownloadURL } from "@firebase/storage";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { CourtImg, IconBtnBg, IconSpinnerWrapper } from "./microComponets";
-import { CloseIcon, AddPhotoIcon, SaveIcon, PrevNextArrow } from "./svgIcons";
+import {
+  CloseIcon,
+  AddPhotoIcon,
+  SaveIcon,
+  PrevNextArrow,
+  EditIcon,
+} from "./svgIcons";
 import { AddRemoveFavourite } from "./index";
 import { useUpdateCourtInfoMutation } from "../api/courtsApi";
 import { BasketballMarker, PhotoWindow } from "./index";
@@ -88,6 +94,8 @@ const CourtPhotosSlider = ({ courtId, photos, sport }) => {
     !token && navigate("/login");
   };
 
+  const onGoToEditCourt = () => navigate(`/courts/${courtId}/edit`);
+
   const openPhotoModal = () => setIsPhotoModalOpen(true);
   const closePhotoModal = () => setIsPhotoModalOpen(false);
 
@@ -127,6 +135,9 @@ const CourtPhotosSlider = ({ courtId, photos, sport }) => {
         <FavBtn>
           <AddRemoveFavourite courtId={courtId} />
         </FavBtn>
+        <EditCourtBtn color={lightTheme.popupBg} onClick={onGoToEditCourt}>
+          <EditIcon />
+        </EditCourtBtn>
         <SwitchTransition mode="out-in">
           <CSSTransition
             timeout={100}
@@ -236,25 +247,30 @@ const IconBtn = styled(IconBtnBg)`
   align-items: center;
   padding: 4px;
   border-radius: 7px;
-`;
-
-const AddPhotoBtn = styled(IconBtn)`
-  bottom: 9px;
-  right: 5px;
   height: 31px;
   cursor: pointer;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
     rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 `;
 
+const AddPhotoBtn = styled(IconBtn)`
+  bottom: 5px;
+  left: 41px;
+`;
+
+const EditCourtBtn = styled(IconBtn)`
+  bottom: 5px;
+  left: 5px;
+`;
+
 const CancelBtn = styled(IconBtn)`
-  bottom: 45px;
-  right: 5px;
+  bottom: 41px;
+  left: 5px;
 `;
 
 const SaveBtn = styled(IconBtn)`
-  bottom: 9px;
-  right: 5px;
+  bottom: 5px;
+  left: 41px;
 `;
 
 const Wrapper = styled.div`
@@ -265,6 +281,6 @@ const Wrapper = styled.div`
 
 const FavBtn = styled.div`
   position: absolute;
-  bottom: 9px;
-  left: 5px;
+  bottom: 5px;
+  right: 5px;
 `;

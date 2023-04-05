@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import Message from "../models/Message.js";
+import fetch from "node-fetch";
 
 export const getUserInfo = async (req, res) => {
   try {
@@ -20,7 +21,26 @@ export const updateUserInfo = async (req, res) => {
     let obj;
 
     if (data.city) {
-      obj = { city: JSON.parse(data.city) };
+      const parseCity = JSON.parse(data.city);
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${parseCity.value}.json?proximity=ip&access_token=${process.env.MAPBOX_ACCESS_TOKEN}`
+      );
+      let lat, lng;
+      const geoData = await response.json();
+      if (geoData.query[0] === "kyiv") {
+        lat = geoData.features[1].center[1];
+        lng = geoData.features[1].center[0];
+      } else {
+        lat = geoData.features[0].center[1];
+        lng = geoData.features[0].center[0];
+      }
+      obj = {
+        city: {
+          label: parseCity.label,
+          value: parseCity.value,
+          coordinates: [lat, lng],
+        },
+      };
     } else {
       obj = data;
     }

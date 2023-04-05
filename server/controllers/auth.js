@@ -3,17 +3,11 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
+import fetch from "node-fetch";
 
 export const register = async (req, res) => {
   try {
-    const { password, ...data } = req.body;
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
-
-    const newUser = new User({
-      password: passwordHash,
-      ...data,
-    });
+    const { city, password, ...data } = req.body;
 
     const existingUserName = await User.findOne({ username: data.username });
     if (existingUserName) return res.status(401).json("Username already exist");
@@ -21,10 +15,37 @@ export const register = async (req, res) => {
     const existingUserMail = await User.findOne({ email: data.email });
     if (existingUserMail) return res.status(401).json("Email already exist");
 
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    const response = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${city.value}.json?proximity=ip&access_token=${process.env.MAPBOX_ACCESS_TOKEN}`
+    );
+    const geoData = await response.json();
+    let lat;
+    let lng;
+    if (geoData.query[0] === "kyiv") {
+      lat = geoData.features[1].center[1];
+      lng = geoData.features[1].center[0];
+    } else {
+      lat = geoData.features[0].center[1];
+      lng = geoData.features[0].center[0];
+    }
+
+    const newUser = new User({
+      password: passwordHash,
+      city: {
+        value: city.value,
+        label: city.label,
+        coordinates: [lat, lng],
+      },
+      ...data,
+    });
     await newUser.save();
+
     res.status(201).json(newUser);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 

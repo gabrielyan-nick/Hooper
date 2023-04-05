@@ -61,10 +61,10 @@ const ForgotPassForm = forwardRef((props, ref) => {
         </CloseBtn>
       </ModalHeader>
       <FormWrapper ref={ref}>
-        <Text fS="20px" fW={700} m="15px 0 " centred>
+        <Text fS="20px" fW={700} m="15px 10px " centred>
           Введіть електронну пошту
         </Text>
-        <Text fS="17px" fW={700} m="0 0 30px" centred color="secondary">
+        <Text fS="17px" fW={700} m="0 10px 30px" centred color="secondary">
           І отримаєте лист з посиланням на сторінку відновлення паролю
         </Text>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>

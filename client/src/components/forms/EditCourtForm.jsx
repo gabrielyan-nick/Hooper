@@ -1,5 +1,6 @@
-import React, { useState, forwardRef } from "react";
+import React, { useState, forwardRef, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { storage } from "../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "@firebase/storage";
@@ -19,9 +20,11 @@ import {
   BtnSpinnerWrapper,
   CloseBtn,
   FlexBetweenBox,
+  ModalHeader,
+  BackBtn,
 } from "./../microComponets";
-import { CloseIcon } from "./../svgIcons";
-import { useRegisterMutation } from "../../api/authApi";
+import { CloseIcon, BackIcon } from "./../svgIcons";
+import { useUpdateCourtInfoMutation } from "../../api/courtsApi";
 import { cities } from "../../data";
 import { darkTheme, lightTheme } from "../../styles/themes";
 import {
@@ -34,23 +37,49 @@ import {
 import { RadioButton } from "../index";
 import { useAddCourtMutation } from "../../api/courtsApi";
 import { BasketballMarker } from "../markers";
+import {
+  hoopsCountOptions,
+  footballCovers,
+  basketballCovers,
+  LabelWrapper,
+  LightingRadioWrapper,
+  RadioWrap,
+  Header,
+  GridWrapper,
+} from "./AddCourtForm";
 
-const addCourtSchema = yup.object({
+const editCourtSchema = yup.object({
   name: yup.string().max(23, "Максимум 23 символи"),
   sport: yup.string().required("Виберіть тип майданчика"),
   cover: yup.string().required("Виберіть покриття"),
   hoopsCount: yup.number(),
 });
 
-const AddCourtForm = ({ courtLocation, closeModal }) => {
-  const [typeValue, setTypeValue] = useState("");
-  const [coverValue, setCoverValue] = useState(null);
-  const [hoopsCount, setHoopsCount] = useState(null);
-  const [lighting, setLighting] = useState(null);
-  const [photo, setPhoto] = useState(null);
-  const [photoUrl, setPhotoUrl] = useState(null);
-  const [submitForm, res, isLoading, isError, isSuccess] =
-    useAddCourtMutation();
+const getSelectObj = (value, obj) => {
+  return obj.find((item) => item.value === value);
+};
+
+const convertBool = (str) => {
+  if (str === "true") return true;
+  else if (str === "false") return false;
+};
+
+const EditCourtForm = ({ courtInfo, closeModal, goBack }) => {
+  const token = useSelector((s) => s.storage?.user?.token);
+  const actualCoverObj =
+    courtInfo.sport === "basketball" ? basketballCovers : footballCovers;
+  const [typeValue, setTypeValue] = useState(courtInfo.sport);
+  const [nameValue, setNameValue] = useState(courtInfo.name);
+  const [coverValue, setCoverValue] = useState(
+    getSelectObj(courtInfo.cover, actualCoverObj)
+  );
+  const [hoopsCount, setHoopsCount] = useState(
+    getSelectObj(courtInfo.hoopsCount, hoopsCountOptions)
+  );
+  const [lighting, setLighting] = useState(
+    courtInfo.lighting ? "true" : "false"
+  );
+  const [submit, result] = useUpdateCourtInfoMutation();
   const {
     register,
     setValue,
@@ -59,16 +88,29 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(addCourtSchema) });
+  } = useForm({ resolver: yupResolver(editCourtSchema) });
   const theme = useTheme();
+  const { courtId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isDataEdited =
+    typeValue !== courtInfo?.sport ||
+    coverValue?.value !==
+      getSelectObj(courtInfo?.cover, actualCoverObj)?.value ||
+    hoopsCount !== getSelectObj(courtInfo?.hoopsCount, hoopsCountOptions) ||
+    convertBool(lighting) !== courtInfo?.lighting ||
+    nameValue !== courtInfo.name;
+
+  useEffect(() => {
+    setValue("cover", getSelectObj(courtInfo.cover, actualCoverObj).value);
+  }, []);
 
   const handleTypeChange = (e) => {
     setTypeValue(e.target.value);
     setValue("sport", e.target.value);
     setCoverValue(null);
     setValue("cover", null);
-    setValue(
-      "name",
+    setNameValue(
       e.target.value === "basketball"
         ? "Баскетбольний майданчик"
         : e.target.value === "football"
@@ -94,63 +136,19 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
     setValue("hoopsCount", value);
   };
 
-  const onClosePhoto = () => {
-    setPhotoUrl(null);
-  };
-
-  const onSubmit = (data) => {
-    data.lighting === null && delete data.lighting;
-    if (photo) {
-      const imageRef = ref(storage, `courts/${photo.name}`);
-      uploadBytes(imageRef, photo)
-        .then(() => {
-          getDownloadURL(imageRef)
-            .then((url) => {
-              const formData = {
-                ...data,
-                photos: url,
-                location: {
-                  type: "Point",
-                  coordinates: [courtLocation.lat, courtLocation.lng],
-                },
-              };
-              submitForm(formData).then((res) => {
-                if (res.data) {
-                  reset();
-                  setTimeout(() => closeModal(), 3000);
-                } else reset();
-              });
-            })
-            .catch((e) => console.log(e));
-        })
-        .catch((e) => console.log(e));
-    } else {
-      const formData = {
-        ...data,
-        location: {
-          type: "Point",
-          coordinates: [courtLocation.lat, courtLocation.lng],
-        },
-      };
-      submitForm(formData).then((res) => {
+  const onSubmit = (formData) => {
+    formData.lighting === null && delete formData.lighting;
+    formData = { ...formData, name: nameValue };
+    submit({ courtId, formData, token })
+      .then((res) => {
         if (res.data) {
           reset();
-          setTimeout(() => closeModal(), 3000);
+          setTimeout(() => {
+            navigate(-1);
+          }, 1000);
         } else reset();
-      });
-    }
-  };
-
-  const onSetPhoto = (e) => {
-    const photo = e.target.files[0];
-    if (photo) {
-      const reader = new FileReader();
-      reader.readAsDataURL(photo);
-      reader.onload = () => {
-        setPhoto(photo);
-        setPhotoUrl(reader.result);
-      };
-    }
+      })
+      .catch((e) => console.log());
   };
 
   const selectStyles = {
@@ -210,14 +208,17 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
 
   return (
     <div>
-      <Header>
+      <ModalHeader>
+        <BackBtn onClick={goBack}>
+          <BackIcon />
+        </BackBtn>
         <CloseBtn onClick={closeModal}>
           <CloseIcon />
         </CloseBtn>
-      </Header>
+      </ModalHeader>
       <FormWrapper style={{ padding: "0 5px 5px" }}>
         <Text fS="20px" fW={700} m="10px 10px 15px" centred>
-          Вкажіть інформацію про майданчик
+          Вкажіть актуальну інформацію про майданчик
         </Text>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
           <Label pl="10px">
@@ -229,12 +230,14 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
                 {...register("sport")}
                 onChange={handleTypeChange}
                 color={lightTheme.orange}
+                checked={typeValue === "basketball"}
               />
               <RadioButton
                 label="Футбол"
                 value="football"
                 {...register("sport")}
                 onChange={handleTypeChange}
+                checked={typeValue === "football"}
               />
             </RadioWrap>
             <ErrorText>{errors.sport?.message}</ErrorText>
@@ -242,11 +245,17 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
           <LabelWrapper>
             <Label pl="10px">
               Назва
-              <Input {...register("name")} m="5px 0 0" />
+              <Input
+                value={nameValue}
+                onChange={(e) => setNameValue(e.target.value)}
+                name="name"
+                // {...register("name")}
+                m="5px 0 0"
+              />
               <ErrorText>{errors.name?.message}</ErrorText>
             </Label>
           </LabelWrapper>
-          <GridWrapper>
+          <GridWrap>
             <div>
               <Label pl="10px">
                 Покриття
@@ -302,10 +311,10 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
                 />
               </Label>
             </div>
-            <div style={{ marginLeft: "auto" }}>
-              <Label>
+            <ColumnWrapper>
+              <Label style={{ height: "100%", display: "block" }}>
                 Освітлення
-                <LightingRadioWrapper>
+                <LightingRadioWrap>
                   <RadioButton
                     label="Є"
                     value={true}
@@ -322,36 +331,18 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
                     checked={lighting === "false"}
                     closeIcon
                   />
-                </LightingRadioWrapper>
+                </LightingRadioWrap>
                 <ErrorText>{errors.lighting?.message}</ErrorText>
               </Label>
-              <AddPhotoBtn bgColors={lightTheme.btnSecondary} type="button">
-                <label htmlFor="photos">Додати фото</label>
-                <input
-                  id="photos"
-                  type="file"
-                  name="photos"
-                  hidden
-                  accept="image/png, image/jpg, image/jpeg"
-                  onChange={onSetPhoto}
-                />
-              </AddPhotoBtn>
-            </div>
-          </GridWrapper>
-          {photoUrl && (
-            <PhotoWrapper>
-              <ClosePhotoBtn type="button" onClick={onClosePhoto}>
-                <CloseIcon size={20} />
-              </ClosePhotoBtn>
-              <Photo src={photoUrl} />
-            </PhotoWrapper>
-          )}
-          {res.isError && (
+            </ColumnWrapper>
+          </GridWrap>
+
+          {result.isError && (
             <Text fS="18px" color="#ac2b04" centred>
               Упс...Невідома помилка
             </Text>
           )}
-          {res.isSuccess && (
+          {result.isSuccess && (
             <Text fS="18px" color={lightTheme.green} centred>
               Успішно
             </Text>
@@ -359,13 +350,14 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
           <Button
             type="submit"
             style={{ margin: "20px auto 0", width: "100px" }}
+            disabled={!isDataEdited}
           >
-            {res.isLoading ? (
+            {result.isLoading ? (
               <BtnSpinnerWrapper>
                 <BasketballMarker />
               </BtnSpinnerWrapper>
             ) : (
-              "Додати"
+              "Зберегти"
             )}
           </Button>
         </form>
@@ -374,87 +366,18 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
   );
 };
 
-export default AddCourtForm;
+export default EditCourtForm;
 
-const PhotoWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px 0;
-  position: relative;
+const GridWrap = styled(GridWrapper)`
+  grid-template-columns: 64% 36%;
 `;
 
-const ClosePhotoBtn = styled(CloseBtn)`
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  padding: 2px;
+const ColumnWrapper = styled.div`
+  margin: 0 auto;
 `;
 
-const Photo = styled.img`
-  width: 100%;
-  max-height: 300px;
-  border-radius: 7px;
-  object-fit: contain;
+const LightingRadioWrap = styled(LightingRadioWrapper)`
+  justify-content: space-evenly;
+  height: 74%;
+  margin: 0;
 `;
-
-export const GridWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 60% 40%;
-  margin-top: 25px;
-`;
-
-const AddPhotoBtn = styled(Button)`
-  margin-top: 20px;
-  height: 38px;
-  border-radius: 10px;
-  padding: 10px;
-`;
-
-export const Header = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  padding: 0 5px;
-`;
-
-export const RadioWrap = styled.div`
-  display: flex;
-  justify-content: space-around;
-  margin-top: 10px;
-`;
-
-export const LightingRadioWrapper = styled.div`
-  margin-top: 5px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-export const LabelWrapper = styled.div`
-  display: block;
-  margin-top: 25px;
-`;
-
-
-export const basketballCovers = [
-  { value: "rubber", label: "Резина" },
-  { value: "asphalt", label: "Асфальт" },
-  { value: "beton", label: "Бетон" },
-  { value: "indoor", label: "Зал" },
-];
-
-export const footballCovers = [
-  { value: "natural", label: "Натуральне" },
-  { value: "synthetic", label: "Синтетичне" },
-  { value: "indoor", label: "Зал" },
-];
-
-export const hoopsCountOptions = [
-  { value: 1, label: "1" },
-  { value: 2, label: "2" },
-  { value: 3, label: "3" },
-  { value: 4, label: "4" },
-  { value: 5, label: "5" },
-  { value: 6, label: "6" },
-];
