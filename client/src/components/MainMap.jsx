@@ -14,15 +14,19 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   const theme = useSelector((state) => state.storage.theme);
   const token = useSelector((state) => state.storage.user?.token);
   const favCourts = useSelector((state) => state.storage.user?.favouriteCourts);
-  const startViewState =
-    token && favCourts?.length
-      ? {
-          longitude: favCourts[favCourts.length - 1]?.coordinates[1],
-          latitude: favCourts[favCourts.length - 1]?.coordinates[0],
-          zoom: 14,
-        }
-      : { longitude: 36.40292260918253, latitude: 49.91435295466242, zoom: 10 };
-  const [viewState, setViewState] = useState(startViewState);
+  // const startViewState =
+  //   token && favCourts?.length
+  //     ? {
+  //         longitude: favCourts[favCourts.length - 1]?.coordinates[1],
+  //         latitude: favCourts[favCourts.length - 1]?.coordinates[0],
+  //         zoom: 14,
+  //       }
+  //     : { longitude: 36.40292260918253, latitude: 49.91435295466242, zoom: 10 };
+  const [viewState, setViewState] = useState({
+    longitude: 36.40292260918253,
+    latitude: 49.91435295466242,
+    zoom: 10,
+  });
   const markerSize =
     viewState.zoom.toFixed(0) < 12
       ? viewState.zoom.toFixed(1) * 1.2
