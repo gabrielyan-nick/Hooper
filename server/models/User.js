@@ -27,21 +27,22 @@ const userSchema = new mongoose.Schema(
       require: true,
       default: "/assets/avatar.png",
     },
-    friends: {
-      type: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "User",
-        },
-      ],
-      default: [],
-    },
+    // friends: {
+    //   type: [
+    //     {
+    //       type: Schema.Types.ObjectId,
+    //       ref: "User",
+    //     },
+    //   ],
+    //   default: [],
+    // },
     favouriteCourts: {
       type: [
         {
           _id: { type: Schema.Types.ObjectId, ref: "Court" },
           name: String,
           sport: String,
+          coordinates: [Number],
         },
       ],
       default: [],

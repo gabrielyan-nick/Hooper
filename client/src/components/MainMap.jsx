@@ -9,19 +9,26 @@ import { useGetMarkersQuery } from "../api/courtsApi";
 import { FootballMarker, BasketballMarker, ModalWindow } from "./index";
 import { MarkerIcon } from "./svgIcons";
 
-const MainMap = ({
-  closeLoadingScreen,
-  setAddCourtMarker,
-  addCourtMarker,
-}) => {
-  const theme = useSelector((state) => state.storage.theme);
-  const dispatch = useDispatch();
+const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [viewState, setViewState] = useState({
-    longitude: 36.40292260918253,
-    latitude: 49.91435295466242,
-    zoom: 14,
-  });
+  const theme = useSelector((state) => state.storage.theme);
+  const token = useSelector((state) => state.storage.user?.token);
+  const favCourts = useSelector((state) => state.storage.user?.favouriteCourts);
+  const startViewState =
+    token && favCourts.length
+      ? {
+          longitude: favCourts[favCourts.length - 1].coordinates[1],
+          latitude: favCourts[favCourts.length - 1].coordinates[0],
+          zoom: 14,
+        }
+      : { longitude: 36.40292260918253, latitude: 49.91435295466242, zoom: 10 };
+  const [viewState, setViewState] = useState(startViewState);
+  const markerSize =
+    viewState.zoom.toFixed(0) < 12
+      ? viewState.zoom.toFixed(1) * 1.2
+      : viewState.zoom.toFixed(0) < 13
+      ? viewState.zoom.toFixed(1) * 1.5
+      : viewState.zoom.toFixed(1) * 1.7;
   const navigate = useNavigate();
   const location = useLocation();
   const {
@@ -50,6 +57,28 @@ const MainMap = ({
     setAddCourtMarker({ lat, lng });
   };
 
+  // const markersMemo = useMemo(
+  //   () =>
+  //     markers.map((marker) => (
+  //       <div key={marker._id} onClick={(e) => e.stopPropagation()}>
+  //         <Marker
+  //           latitude={marker.location.coordinates[0]}
+  //           longitude={marker.location.coordinates[1]}
+  //           onClick={() => {
+  //             onOpenCourtPopup(marker.courtId);
+  //           }}
+  //         >
+  //           {marker.sport === "basketball" ? (
+  //             <BasketballMarker size={markerSize} />
+  //           ) : (
+  //             <FootballMarker size={markerSize} />
+  //           )}
+  //         </Marker>
+  //       </div>
+  //     )),
+  //   [markers]
+  // );
+
   return (
     <>
       <Map
@@ -72,9 +101,9 @@ const MainMap = ({
               }}
             >
               {marker.sport === "basketball" ? (
-                <BasketballMarker />
+                <BasketballMarker size={markerSize} />
               ) : (
-                <FootballMarker />
+                <FootballMarker size={markerSize} />
               )}
             </Marker>
           </div>

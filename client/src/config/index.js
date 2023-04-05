@@ -1,5 +1,6 @@
 export const serverUrl = "https://hooper.onrender.com";
 // export const serverUrl = "http://localhost:3001";
+// export const serverUrl = "https://hooper-13.web.app";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAXzZ6diwDABJ77Y_CNqxStwscUplrA6RU",

@@ -66,6 +66,7 @@ export const addRemoveFav = async (req, res) => {
         _id: court._id,
         name: court.name,
         sport: court.sport,
+        coordinates: court.location.coordinates,
       });
     }
 
