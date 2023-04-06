@@ -24,7 +24,7 @@ const ModalWindow = ({
   opened,
   closeModal,
   closeClickOutside = false,
-  action = null,
+  setAddCourtMarker,
   addCourtMarker = null,
 }) => {
   const [editedCourt, setEditedCourt] = useState({});
@@ -142,13 +142,14 @@ const ModalWindow = ({
                       <UserInfo closeModal={onCloseModal} goBack={onGoBack} />
                     }
                   />
+
                   <Route
                     path="/my-info"
                     element={
                       <MyInfo
                         closeModal={onCloseModal}
                         goBack={onGoBack}
-                        setAddCourtMarker={action}
+                        setAddCourtMarker={setAddCourtMarker}
                       />
                     }
                   />
@@ -189,11 +190,11 @@ const ModalWindow = ({
                     element={
                       <AddCourtForm
                         closeModal={onCloseModal}
+                        setAddCourtMarker={setAddCourtMarker}
                         courtLocation={addCourtMarker}
                       />
                     }
                   />
-
                   <Route
                     path="/courts/:courtId/edit"
                     element={
@@ -229,9 +230,9 @@ export const ModalWrapper = styled.div`
   justify-content: center;
   align-items: center;
   &::-webkit-scrollbar {
-        width: 0,
-        height: 0,
-      }
+    width: 0;
+    /* height: 0, */
+  }
   @media (max-height: 650px) {
     align-items: flex-start;
     padding: 40px 0;

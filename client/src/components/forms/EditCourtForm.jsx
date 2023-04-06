@@ -49,7 +49,7 @@ import {
 } from "./AddCourtForm";
 
 const editCourtSchema = yup.object({
-  name: yup.string().max(23, "Максимум 23 символи"),
+  name: yup.string().max(23, "Максимум 23 символи").required("Введіть назву"),
   sport: yup.string().required("Виберіть тип майданчика"),
   cover: yup.string().required("Виберіть покриття"),
   hoopsCount: yup.number(),
@@ -69,7 +69,6 @@ const EditCourtForm = ({ courtInfo, closeModal, goBack }) => {
   const actualCoverObj =
     courtInfo.sport === "basketball" ? basketballCovers : footballCovers;
   const [typeValue, setTypeValue] = useState(courtInfo.sport);
-  const [nameValue, setNameValue] = useState(courtInfo.name);
   const [coverValue, setCoverValue] = useState(
     getSelectObj(courtInfo.cover, actualCoverObj)
   );
@@ -80,37 +79,40 @@ const EditCourtForm = ({ courtInfo, closeModal, goBack }) => {
     courtInfo.lighting ? "true" : "false"
   );
   const [submit, result] = useUpdateCourtInfoMutation();
+
   const {
     register,
     setValue,
-    getValues,
     control,
+    watch,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(editCourtSchema) });
+  } = useForm({
+    resolver: yupResolver(editCourtSchema),
+    defaultValues: {
+      name: courtInfo.name,
+      cover: getSelectObj(courtInfo.cover, actualCoverObj).value,
+    },
+  });
+  const nameWatch = watch("name");
   const theme = useTheme();
   const { courtId } = useParams();
-  const navigate = useNavigate();
-  const location = useLocation();
   const isDataEdited =
     typeValue !== courtInfo?.sport ||
     coverValue?.value !==
       getSelectObj(courtInfo?.cover, actualCoverObj)?.value ||
     hoopsCount !== getSelectObj(courtInfo?.hoopsCount, hoopsCountOptions) ||
     convertBool(lighting) !== courtInfo?.lighting ||
-    nameValue !== courtInfo.name;
-
-  useEffect(() => {
-    setValue("cover", getSelectObj(courtInfo.cover, actualCoverObj).value);
-  }, []);
+    nameWatch !== courtInfo.name;
 
   const handleTypeChange = (e) => {
     setTypeValue(e.target.value);
     setValue("sport", e.target.value);
     setCoverValue(null);
     setValue("cover", null);
-    setNameValue(
+    setValue(
+      "name",
       e.target.value === "basketball"
         ? "Баскетбольний майданчик"
         : e.target.value === "football"
@@ -138,13 +140,11 @@ const EditCourtForm = ({ courtInfo, closeModal, goBack }) => {
 
   const onSubmit = (formData) => {
     formData.lighting === null && delete formData.lighting;
-    formData = { ...formData, name: nameValue };
     submit({ courtId, formData, token })
       .then((res) => {
         if (res.data) {
-          reset();
           setTimeout(() => {
-            navigate(-1);
+            goBack();
           }, 1000);
         } else reset();
       })
@@ -246,10 +246,7 @@ const EditCourtForm = ({ courtInfo, closeModal, goBack }) => {
             <Label pl="10px">
               Назва
               <Input
-                value={nameValue}
-                onChange={(e) => setNameValue(e.target.value)}
-                name="name"
-                // {...register("name")}
+                {...register("name")}
                 m="5px 0 0"
               />
               <ErrorText>{errors.name?.message}</ErrorText>

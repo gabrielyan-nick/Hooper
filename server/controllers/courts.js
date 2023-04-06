@@ -178,6 +178,21 @@ export const updateCourtInfo = async (req, res) => {
       };
     } else dataObj = data;
 
+    if (dataObj.sport && dataObj.sport !== court.sport) {
+      await Marker.findOneAndUpdate(
+        { courtId: court.id },
+        { sport: dataObj.sport },
+        { new: true }
+      );
+      if (court.photos.length === 1 && court.photos[0].startsWith("/assets")) {
+        if (dataObj.sport === "basketball")
+          court.photos.splice(0, 1, "/assets/basketball-court-notprivate.jpg");
+        else if (dataObj.sport === "football")
+          court.photos.splice(0, 1, "/assets/football-court-notprivate.jpg");
+        await court.save();
+      }
+    }
+
     const updatedCourt = await Court.findByIdAndUpdate(
       id,
       { ...dataObj },

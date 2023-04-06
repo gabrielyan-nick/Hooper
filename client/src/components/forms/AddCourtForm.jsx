@@ -42,7 +42,7 @@ const addCourtSchema = yup.object({
   hoopsCount: yup.number(),
 });
 
-const AddCourtForm = ({ courtLocation, closeModal }) => {
+const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
   const [typeValue, setTypeValue] = useState("");
   const [coverValue, setCoverValue] = useState(null);
   const [hoopsCount, setHoopsCount] = useState(null);
@@ -54,7 +54,6 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
   const {
     register,
     setValue,
-    getValues,
     control,
     handleSubmit,
     reset,
@@ -116,8 +115,8 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
               };
               submitForm(formData).then((res) => {
                 if (res.data) {
-                  reset();
-                  setTimeout(() => closeModal(), 3000);
+                  setAddCourtMarker(null);
+                  setTimeout(() => closeModal(), 2000);
                 } else reset();
               });
             })
@@ -134,8 +133,8 @@ const AddCourtForm = ({ courtLocation, closeModal }) => {
       };
       submitForm(formData).then((res) => {
         if (res.data) {
-          reset();
-          setTimeout(() => closeModal(), 3000);
+          setAddCourtMarker(null);
+          setTimeout(() => closeModal(), 2000);
         } else reset();
       });
     }
@@ -435,7 +434,6 @@ export const LabelWrapper = styled.div`
   display: block;
   margin-top: 25px;
 `;
-
 
 export const basketballCovers = [
   { value: "rubber", label: "Резина" },

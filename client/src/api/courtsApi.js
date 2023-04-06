@@ -9,7 +9,7 @@ export const courtsApi = createApi({
   endpoints: (builder) => ({
     getMarkers: builder.query({
       query: () => "/markers",
-      providesTags: ["Markers"],
+      providesTags: (result, error, id) => [{ type: "Markers", id }],
     }),
     addCourt: builder.mutation({
       query: (court) => ({
@@ -37,6 +37,7 @@ export const courtsApi = createApi({
       },
       invalidatesTags: (result, error, { courtId }) => [
         { type: "Courts", courtId },
+        { type: "Markers", courtId },
       ],
     }),
     getCourtPlayers: builder.query({
@@ -85,5 +86,5 @@ export const {
   useCheckInMutation,
   useGetCourtPlayersQuery,
   useCheckOutMutation,
-  useUpdateCourtInfoMutation
+  useUpdateCourtInfoMutation,
 } = courtsApi;

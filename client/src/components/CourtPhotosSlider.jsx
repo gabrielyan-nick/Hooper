@@ -80,7 +80,6 @@ const CourtPhotosSlider = ({ courtId, photos, sport }) => {
                 photos: url,
               };
               addPhoto({ courtId, formData, token }).then((res) => {
-                console.log(res);
                 if (res.data) onCancelAddedphoto();
               });
             })
@@ -94,9 +93,12 @@ const CourtPhotosSlider = ({ courtId, photos, sport }) => {
     !token && navigate("/login");
   };
 
-  const onGoToEditCourt = () => navigate(`/courts/${courtId}/edit`);
+  const onGoToEditCourt = () =>
+    !token ? navigate("/login") : navigate(`/courts/${courtId}/edit`);
 
-  const openPhotoModal = () => setIsPhotoModalOpen(true);
+  const openPhotoModal = () => {
+    addedPhoto === null && setIsPhotoModalOpen(true);
+  };
   const closePhotoModal = () => setIsPhotoModalOpen(false);
 
   return (

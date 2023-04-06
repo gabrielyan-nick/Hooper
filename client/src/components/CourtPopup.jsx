@@ -24,8 +24,7 @@ import {
   BackIcon,
 } from "./svgIcons";
 import { CourtInfo, CourtPlayers, CourtChat, CourtPhotosSlider } from "./index";
-import { useAddRemoveFavMutation } from "../api/userApi";
-import { setFavCourts } from "../store/storageSlice";
+import { setViewState } from "../store/storageSlice";
 
 const CourtPopup = forwardRef((props, ref) => {
   const { closeModal, history, goBack, setEditedCourt } = props;
@@ -37,20 +36,40 @@ const CourtPopup = forwardRef((props, ref) => {
     error,
     isSuccess,
   } = useGetCourtQuery(courtId);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    isSuccess && setEditedCourt(court);
+    if (isSuccess) {
+      setEditedCourt(court);
+      dispatch(
+        setViewState({
+          longitude: court?.location?.coordinates[1],
+          latitude: court?.location?.coordinates[0],
+          zoom: 14,
+          pitch: 0,
+          bearing: 0,
+          padding: {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+          },
+        })
+      );
+    }
   }, [court, isSuccess]);
+
+  const isBackBtn = history.length > 1 && history[history.length - 2] !== "/";
 
   return (
     <PopupWrapper ref={ref}>
       <FlexBetweenBox style={{ padding: "0 5px" }}>
-        {history.length > 1 && history[history.length - 2] !== "/" && (
+        {isBackBtn && (
           <BackBtn onClick={goBack}>
             <BackIcon />
           </BackBtn>
         )}
-        <CourtTitle>{court.name}</CourtTitle>
+        <CourtTitle backBtn={isBackBtn}>{court.name}</CourtTitle>
         <CloseBtn onClick={closeModal}>
           <CloseIcon />
         </CloseBtn>
@@ -78,6 +97,7 @@ const PopupWrapper = styled.div`
 
 const CourtTitle = styled(Title)`
   margin: ${(props) => (props.backBtn ? 0 : "0 auto")};
+  padding-left: ${(props) => (props.backBtn ? 0 : "29px")};
 `;
 
 CourtPopup.propTypes = {

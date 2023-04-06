@@ -76,10 +76,16 @@ export const IconWithTooltip = ({ icon, tooltip, id, place = "top" }) => {
       <IconButton data-tooltip-id={id} data-tooltip-place={place}>
         {icon}
       </IconButton>
-      <Tooltip id={id} openOnClick style={{ borderRadius: "20px" }}>
-        <Text fontSize="14px" color="#fff">
-          {tooltip}
-        </Text>
+      <Tooltip
+        id={id}
+        openOnClick
+        style={{
+          borderRadius: "7px",
+          padding: "5px 7px",
+          backgroundColor: "#2b2a2adc",
+        }}
+      >
+        <Text color="#fff">{tooltip}</Text>
       </Tooltip>
     </>
   );
@@ -103,4 +109,5 @@ const basketballCover = {
 const footballCover = {
   natural: "Натуральне",
   synthetic: "Синтетичне",
+  indoor: "Зал",
 };

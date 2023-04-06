@@ -87,6 +87,7 @@ const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker }) => {
         opened={isModalOpen}
         closeModal={onCloseModal}
         addCourtMarker={addCourtMarker}
+        setAddCourtMarker={onRemoveMarker}
       />
     </>
   );

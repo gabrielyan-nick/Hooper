@@ -19,7 +19,7 @@ const Username = styled(Text)`
   padding-left: 5px;
 `;
 
-const UserWidget = ({ setAddCourtMarker}) => {
+const UserWidget = ({ setAddCourtMarker }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { picturePath, username } = useSelector((state) => state.storage.user);
   const name = username.slice(0, 15);
@@ -50,7 +50,7 @@ const UserWidget = ({ setAddCourtMarker}) => {
       <ModalWindow
         opened={isModalOpen}
         closeModal={onCloseModal}
-        action={setAddCourtMarker}
+        setAddCourtMarker={setAddCourtMarker}
       />
     </>
   );

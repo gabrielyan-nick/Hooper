@@ -104,7 +104,7 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   const handleMapClick = (e) => {
     const lng = e.lngLat.lng;
     const lat = e.lngLat.lat;
-    viewState.zoom > 13 && setAddCourtMarker({ lat, lng });
+    viewState.zoom > 14.5 && setAddCourtMarker({ lat, lng });
   };
 
   // const markersMemo = useMemo(

@@ -32,7 +32,7 @@ const AddRemoveFavourite = ({ courtId }) => {
     <AddFavBtn onClick={onAddRemoveFav} color={lightTheme.popupBg}>
       {result.isLoading ? (
         <BtnSpinnerWrapper style={{ width: "27px", height: "27px" }}>
-          <FavouriteIcon size={27} color="#19665480" />
+          <FavouriteIcon size={27} color="#e4c307" />
         </BtnSpinnerWrapper>
       ) : isFavCourt ? (
         <FavouriteIcon size={27} color="#e4c307" />
