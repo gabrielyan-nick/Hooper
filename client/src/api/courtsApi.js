@@ -76,6 +76,10 @@ export const courtsApi = createApi({
         { type: "Players", courtId },
       ],
     }),
+    getChatMessages: builder.query({
+      query: ({ courtId, chatId }) => `/courts/${courtId}/chat/${chatId}`,
+      keepUnusedDataFor: 2,
+    }),
   }),
 });
 
@@ -87,4 +91,5 @@ export const {
   useGetCourtPlayersQuery,
   useCheckOutMutation,
   useUpdateCourtInfoMutation,
+  useGetChatMessagesQuery
 } = courtsApi;

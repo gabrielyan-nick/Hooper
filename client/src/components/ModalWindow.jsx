@@ -16,6 +16,7 @@ import {
   ForgotPassForm,
   AddCourtForm,
   EditCourtForm,
+  CourtChat,
 } from "./index";
 import { Button, IconButton, CloseBtn } from "./microComponets";
 import { CloseIconFill, CloseIcon } from "./svgIcons";
@@ -137,12 +138,17 @@ const ModalWindow = ({
                     }
                   />
                   <Route
+                    path="/courts/:courtId/chat/:chatId"
+                    element={
+                      <CourtChat closeModal={onCloseModal} goBack={onGoBack} />
+                    }
+                  />
+                  <Route
                     path="/users/:userId"
                     element={
                       <UserInfo closeModal={onCloseModal} goBack={onGoBack} />
                     }
                   />
-
                   <Route
                     path="/my-info"
                     element={

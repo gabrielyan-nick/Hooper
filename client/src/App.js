@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import GlobalStyles from "./styles/global.js";
 import { Helmet } from "react-helmet";
+import io from "socket.io-client";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./styles/themes.js";
 import MainPage from "./pages/MainPage.jsx";
@@ -10,6 +11,8 @@ import ResetPassPage from "./pages/ResetPassPage.jsx";
 import { Map } from "./components";
 import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
 import "../node_modules/react-tooltip/dist/react-tooltip.css";
+
+const socket = io.connect("http://localhost:3001");
 
 function App() {
   const theme = useSelector((state) => state.storage.theme);

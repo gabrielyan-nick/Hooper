@@ -7,7 +7,11 @@ import {
   checkInOnCourt,
   checkOutOnCourt,
   getCourtPlayers,
-  updateCourtInfo
+  updateCourtInfo,
+  getChatMessages,
+  postChatMessage,
+  // updateChatMessage,
+  // deleteChatMessage,
 } from "../controllers/courts.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -34,5 +38,17 @@ router.post("/:courtId/checkout", upload.none(), verifyToken, checkOutOnCourt);
 
 // GET PLAYERS LIST
 router.get("/:courtId/players", getCourtPlayers);
+
+// GET CHAT MESSAGES
+router.get("/:courtId/chat/:chatId", getChatMessages);
+
+// POST CHAT MESSAGE
+router.post("/:courtId/chat/:chatId/messages", postChatMessage);
+
+// // UPDATE CHAT MESSAGE
+// router.put("/:courtId/chat/:chatId/messages/:messageId", updateChatMessage);
+
+// // DELETE CHAT MESSAGE
+// router.delete("/:courtId/chat/:chatId/messages/:messageId", deleteChatMessage);
 
 export default router;

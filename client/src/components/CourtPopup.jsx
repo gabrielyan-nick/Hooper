@@ -23,7 +23,13 @@ import {
   ShowHideIcon,
   BackIcon,
 } from "./svgIcons";
-import { CourtInfo, CourtPlayers, CourtChat, CourtPhotosSlider } from "./index";
+import {
+  CourtInfo,
+  CourtPlayers,
+  CourtChat,
+  CourtPhotosSlider,
+  CourtChatPreview,
+} from "./index";
 import { setViewState } from "../store/storageSlice";
 
 const CourtPopup = forwardRef((props, ref) => {
@@ -37,7 +43,7 @@ const CourtPopup = forwardRef((props, ref) => {
     isSuccess,
   } = useGetCourtQuery(courtId);
   const dispatch = useDispatch();
-
+  console.log(court);
   useEffect(() => {
     if (isSuccess) {
       setEditedCourt(court);
@@ -80,7 +86,11 @@ const CourtPopup = forwardRef((props, ref) => {
         photos={court?.photos}
       />
       <CourtInfo data={court} />
-      {/* <CourtChat /> */}
+      <CourtChatPreview
+        messages={court.messages}
+        courtId={court._id}
+        chatId={court.chatId}
+      />
       <CourtPlayers court={court} courtId={courtId} />
     </PopupWrapper>
   );

@@ -10,44 +10,6 @@ import { ChangeAvatarIcon, CloseIcon, SaveIcon } from "./svgIcons";
 import { setLogin } from "../store/storageSlice";
 import { BasketballMarker, PhotoWindow } from "./index";
 
-const AvatarWrapper = styled(FlexCenterBox)`
-  position: relative;
-  width: 110px;
-  height: 110px;
-  margin-left: 10px;
-`;
-
-const ChangeBtn = styled(IconBtnBg)`
-  position: absolute;
-  bottom: -9px;
-  right: -10px;
-  padding: 7px; ;
-`;
-
-const CancelBtn = styled(IconBtnBg)`
-  position: absolute;
-  top: -9px;
-  right: -10px;
-  padding: 7px; ;
-`;
-
-const SaveBtn = styled(IconBtnBg)`
-  position: absolute;
-  top: -8px;
-  left: -12px;
-  padding: 7px; ;
-`;
-
-const Avatar = styled.img`
-  pointer-events: ${(props) => (props.disableClick ? "none" : "auto")};
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  cursor: pointer;
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
-`;
-
 const AvatarChanged = ({ photo, openPhoto }) => {
   const { token, _id } = useSelector((state) => state.storage.user);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
@@ -167,3 +129,41 @@ const AvatarChanged = ({ photo, openPhoto }) => {
 };
 
 export default AvatarChanged;
+
+const AvatarWrapper = styled(FlexCenterBox)`
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin-left: 10px;
+`;
+
+const ChangeBtn = styled(IconBtnBg)`
+  position: absolute;
+  bottom: -9px;
+  right: -10px;
+  padding: 7px; ;
+`;
+
+const CancelBtn = styled(IconBtnBg)`
+  position: absolute;
+  top: -9px;
+  right: -10px;
+  padding: 7px; ;
+`;
+
+const SaveBtn = styled(IconBtnBg)`
+  position: absolute;
+  top: -8px;
+  left: -12px;
+  padding: 7px; ;
+`;
+
+const Avatar = styled.img`
+  pointer-events: ${(props) => (props.disableClick ? "none" : "auto")};
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
+`;

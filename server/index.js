@@ -6,6 +6,8 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
+import { createServer } from "http";
+import { Server } from "socket.io";
 import { fileURLToPath } from "url";
 import {
   courtsRoutes,
@@ -13,6 +15,7 @@ import {
   markersRoutes,
   usersRoutes,
 } from "./routes/index.js";
+import { on } from "events";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,12 +36,25 @@ app.use("/markers", markersRoutes);
 app.use("/users", usersRoutes);
 
 const PORT = process.env.PORT || 8800;
+const server = createServer(app);
+
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(PORT, () => console.log(`Server run on port ${PORT}`));
+    server.listen(PORT, () => console.log(`Server run on port ${PORT}`));
   })
   .catch((error) => console.log(error));
+
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log(`User connected ${socket.id}`);
+});

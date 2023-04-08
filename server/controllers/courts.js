@@ -1,17 +1,26 @@
 import Court from "../models/Court.js";
 import Marker from "../models/Marker.js";
 import User from "../models/User.js";
+import Chat from "../models/Chat.js";
+import Message from "../models/Message.js";
 
 export const addCourt = async (req, res) => {
   try {
     const newCourt = new Court(req.body);
-    await newCourt.save();
 
     const newMarker = new Marker({
       courtId: newCourt._id,
       ...req.body,
     });
     await newMarker.save();
+
+    const newCourtChat = new Chat({
+      courtId: newCourt._id,
+    });
+    await newCourtChat.save();
+
+    newCourt.chatId = newCourtChat._id;
+    await newCourt.save();
 
     res.status(200).json(newCourt);
   } catch (e) {
@@ -21,7 +30,18 @@ export const addCourt = async (req, res) => {
 
 export const getCourt = async (req, res) => {
   try {
-    const court = await Court.findById(req.params.id);
+    const court = await Court.findById(req.params.id).populate({
+      path: "chatId",
+      populate: {
+        path: "messages",
+        options: { sort: { createdAt: -1 }, limit: 3 },
+        populate: {
+          path: "sender",
+          select: "picturePath",
+        },
+      },
+    });
+
     if (!court) {
       return res.status(404).json({ message: "Court not found" });
     }
@@ -32,7 +52,8 @@ export const getCourt = async (req, res) => {
       isPrivate: court.isPrivate,
       lighting: court.lighting,
       location: court.location,
-      messages: court.messages,
+      messages: court.chatId.messages,
+      chatId: court.chatId._id,
       name: court.name,
       photos: court.photos,
       sport: court.sport,
@@ -199,6 +220,58 @@ export const updateCourtInfo = async (req, res) => {
       { new: true }
     );
     res.status(200).json({ message: "Successful" });
+  } catch (e) {
+    res.status(500).json({ message: "Unknown error" });
+  }
+};
+
+export const getChatMessages = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const offset = parseInt(req.query.offset) || 0;
+    const limit = parseInt(req.query.limit) || 20;
+
+    const messages = await Message.find({ chatId })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .populate("sender", "picturePath _id")
+      .exec();
+
+    if (!messages) return res.status(404).json({ message: "Chat not found" });
+
+    res.status(200).json(messages);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+};
+
+export const postChatMessage = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const { userId, text } = req.body;
+
+    if (!userId || !text)
+      return res
+        .status(404)
+        .json({ message: "Please, provide all fields to send message" });
+
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found" });
+    }
+
+    const newMessage = new Message({
+      sender: userId,
+      chatId,
+      text,
+    });
+    await newMessage.save();
+
+    chat.messages.push(newMessage._id);
+    await chat.save();
+
+    res.status(200).json(newMessage);
   } catch (e) {
     res.status(500).json({ message: "Unknown error" });
   }

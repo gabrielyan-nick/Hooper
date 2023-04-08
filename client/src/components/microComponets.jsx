@@ -15,6 +15,17 @@ export const FlexBetweenBox = styled.div`
   flex-direction: ${(props) => props.direction || "row"};
 `;
 
+export const SectionTitle = styled.h6`
+  font-family: "Play", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0 0 5px 5px;
+  color: ${(props) => props.theme.textSecondary};
+  @media ${(props) => props.theme.media.smallMobile} {
+    font-size: 14px;
+  }
+`;
+
 export const FlexCenterBox = styled.div`
   display: flex;
   justify-content: center;
@@ -104,6 +115,7 @@ export const CloseBtn = styled(IconButton)`
 
 export const ModalHeader = styled.div`
   display: flex;
+  align-items: center;
   justify-content: ${(props) => (props.empty ? "flex-end" : "space-between")};
   padding: 0 5px;
 `;
@@ -128,6 +140,7 @@ export const Text = styled.p`
   text-align: ${(props) => (props.centred ? "center" : "inherit")};
   margin: ${(props) => props.m || 0};
   padding: ${(props) => props.p || 0};
+  word-break: break-all;
 `;
 
 export const Title = styled.h3`
@@ -263,7 +276,7 @@ export const Button = styled.button`
   font-size: ${(props) => props.fS || "16px"};
   font-weight: ${(props) => props.fW || 700};
   justify-content: center;
-  line-height: ${(props) => props.lh || "24px"};
+  line-height: ${(props) => props.lh || "inherit"};
   margin: ${(props) => props.m || 0};
   overflow: visible;
   padding: ${(props) => props.p || "10px 20px"};
@@ -277,7 +290,7 @@ export const Button = styled.button`
   touch-action: manipulation;
   vertical-align: middle;
   width: ${(props) => props.width || "auto"};
-  height: ${(props) => props.height || "44px"};
+  height: ${(props) => props.height || "auto"};
   word-break: keep-all;
   z-index: ${(props) => props.zi || 0};
   border-radius: 80px;
@@ -297,6 +310,21 @@ export const Button = styled.button`
   &:disabled {
     cursor: default;
     opacity: 0.8;
+  }
+`;
+
+export const ChatWrapper = styled(TextLineWrapper)`
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 5px;
+  scrollbar-width: auto;
+  &::-webkit-scrollbar {
+    display: initial;
+    width: 3px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: ${(props) => props.theme.scrollbar};
+    border-radius: 10px;
   }
 `;
 

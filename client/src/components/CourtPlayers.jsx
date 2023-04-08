@@ -29,6 +29,7 @@ import {
   Text,
   IconBtnBg,
   BtnSpinnerWrapper,
+  SectionTitle,
 } from "./microComponets";
 import { EnterIcon, ShowHideIcon, QuestionIcon } from "./svgIcons";
 import { ShowHideBtnWrapper } from "./FavouriteCourts";
@@ -127,10 +128,10 @@ const CourtPlayers = ({ court, courtId }) => {
   return (
     <Wrapper>
       <TitlesWrapper>
-        <Title>Були тут</Title>
-        <Title>
+        <SectionTitle>Були тут</SectionTitle>
+        <SectionTitle>
           Зараз на {court.sport === "basketball" ? "майданчику" : "полі"}
-        </Title>
+        </SectionTitle>
       </TitlesWrapper>
       <PlayersList listLenght={data.checkinPlayers?.length} ref={listRef}>
         <ColumnWrapper>
@@ -271,6 +272,7 @@ const Player = memo(
 
 const Wrapper = styled.div`
   padding: 0 5px;
+  margin-top: 20px;
 `;
 
 const CheckOutWrapper = styled.div`
@@ -357,21 +359,9 @@ const Divider = styled.div`
   background-color: ${(props) => props.theme.textSecondary};
 `;
 
-const Title = styled.h6`
-  font-family: "Play", sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  margin: 0 0 5px 5px;
-  color: ${(props) => props.theme.textSecondary};
-  @media ${(props) => props.theme.media.smallMobile} {
-    font-size: 14px;
-  }
-`;
-
 const TitlesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  margin-top: 10px;
 `;
 
 const ColumnWrapper = styled.div`

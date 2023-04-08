@@ -3,22 +3,20 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 const messageSchema = new mongoose.Schema(
   {
-    user: {
+    sender: {
       type: Schema.Types.ObjectId,
       ref: "User",
       require: true,
     },
-    avatar: {
-      type: String,
+    chatId: {
+      type: Schema.Types.ObjectId,
+      ref: "Chat",
       require: true,
     },
     text: {
       type: String,
       required: true,
-      default: "",
     },
-    picturePath: String,
-    likes: { type: Map, of: Boolean },
   },
   { timestamps: true }
 );

@@ -16,7 +16,7 @@ export default createGlobalStyle`
   .mapboxgl-popup-tip {
   display: none;
 }
-p {
+p, ul, li {
     margin: 0;
     padding: 0;
   }

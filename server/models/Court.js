@@ -5,15 +5,15 @@ const courtSchema = new mongoose.Schema(
   {
     sport: {
       type: String,
-      require: true,
+      required: true,
     },
     cover: {
       type: String,
-      require: true,
+      required: true,
     },
     lighting: {
       type: Boolean,
-      require: true,
+      required: true,
       default: function () {
         if (this.cover === "indoor") return true;
         else return false;
@@ -21,7 +21,7 @@ const courtSchema = new mongoose.Schema(
     },
     hoopsCount: {
       type: Number,
-      require: true,
+      required: true,
       default: 2,
     },
     isPrivate: { type: Boolean, require: true, default: false },
@@ -36,7 +36,7 @@ const courtSchema = new mongoose.Schema(
     },
     photos: {
       type: [String],
-      require: true,
+      required: true,
       default: function () {
         if (this.isPrivate) {
           if (this.sport === "basketball") {
@@ -67,17 +67,12 @@ const courtSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      require: true,
       default: "",
     },
-    messages: {
-      type: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Message",
-        },
-      ],
-      default: [],
+    chatId: {
+      type: Schema.Types.ObjectId,
+      ref: "Chat",
+      required: true,
     },
     players: {
       type: [
