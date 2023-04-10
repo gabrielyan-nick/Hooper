@@ -78,7 +78,20 @@ export const courtsApi = createApi({
     }),
     getChatMessages: builder.query({
       query: ({ courtId, chatId }) => `/courts/${courtId}/chat/${chatId}`,
-      keepUnusedDataFor: 2,
+      keepUnusedDataFor: 1,
+    }),
+    postChatMessage: builder.mutation({
+      query(data) {
+        const { courtId, chatId, formData, token } = data;
+        return {
+          url: `/courts/${courtId}/chat/${chatId}/messages`,
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
     }),
   }),
 });
@@ -91,5 +104,6 @@ export const {
   useGetCourtPlayersQuery,
   useCheckOutMutation,
   useUpdateCourtInfoMutation,
-  useGetChatMessagesQuery
+  useGetChatMessagesQuery,
+  usePostChatMessageMutation,
 } = courtsApi;

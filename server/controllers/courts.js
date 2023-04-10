@@ -229,7 +229,7 @@ export const getChatMessages = async (req, res) => {
   try {
     const { chatId } = req.params;
     const offset = parseInt(req.query.offset) || 0;
-    const limit = parseInt(req.query.limit) || 20;
+    const limit = parseInt(req.query.limit) || 100;
 
     const messages = await Message.find({ chatId })
       .sort({ createdAt: -1 })
@@ -273,6 +273,6 @@ export const postChatMessage = async (req, res) => {
 
     res.status(200).json(newMessage);
   } catch (e) {
-    res.status(500).json({ message: "Unknown error" });
+    res.status(500).json({ message: e.message });
   }
 };

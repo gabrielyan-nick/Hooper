@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import io from "socket.io-client";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
@@ -21,12 +22,16 @@ import {
 import { Button, IconButton, CloseBtn } from "./microComponets";
 import { CloseIconFill, CloseIcon } from "./svgIcons";
 
+const socket = io.connect("http://localhost:3001");
+
 const ModalWindow = ({
   opened,
   closeModal,
   closeClickOutside = false,
   setAddCourtMarker,
   addCourtMarker = null,
+  openedCourt = null,
+  setOpenedCourt = null,
 }) => {
   const [editedCourt, setEditedCourt] = useState({});
   const [history, setHistory] = useState([]);
@@ -134,13 +139,20 @@ const ModalWindow = ({
                         history={history}
                         goBack={onGoBack}
                         setEditedCourt={setEditedCourt}
+                        setOpenedCourt={setOpenedCourt}
+                        socket={socket}
                       />
                     }
                   />
                   <Route
                     path="/courts/:courtId/chat/:chatId"
                     element={
-                      <CourtChat closeModal={onCloseModal} goBack={onGoBack} />
+                      <CourtChat
+                        closeModal={onCloseModal}
+                        goBack={onGoBack}
+                        openedCourt={openedCourt}
+                        socket={socket}
+                      />
                     }
                   />
                   <Route

@@ -43,7 +43,12 @@ router.get("/:courtId/players", getCourtPlayers);
 router.get("/:courtId/chat/:chatId", getChatMessages);
 
 // POST CHAT MESSAGE
-router.post("/:courtId/chat/:chatId/messages", postChatMessage);
+router.post(
+  "/:courtId/chat/:chatId/messages",
+  upload.none(),
+  verifyToken,
+  postChatMessage
+);
 
 // // UPDATE CHAT MESSAGE
 // router.put("/:courtId/chat/:chatId/messages/:messageId", updateChatMessage);

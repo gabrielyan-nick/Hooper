@@ -38,9 +38,9 @@ export const lightTheme = {
        0,
        #a0310c 100%)`,
   scrollbar: `linear-gradient(92.83deg,
-  #D04516
-   0,
-   #a0310c 100%)`,
+    #b4360c
+     0,
+     #862a0b 100%)`,
   placeholderText: "#6e5d56",
   media: {
     wideScreen: "(min-width: 1400px)",

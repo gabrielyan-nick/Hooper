@@ -127,6 +127,7 @@ export const SaveIcon = ({ size = 23 }) => {
       width={`${size}px`}
       height={`${size}px`}
       xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 23 23"
     >
       <g transform="translate(0 -1028.4)">
         <path

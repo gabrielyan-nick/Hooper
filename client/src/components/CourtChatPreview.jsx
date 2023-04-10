@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import io from "socket.io-client";
 import styled from "styled-components";
 import {
   FlexBetweenBox,
@@ -12,11 +13,14 @@ import {
   ChatWrapper,
 } from "./microComponets";
 
-const CourtChatPreview = ({ messages, courtId, chatId }) => {
+
+const CourtChatPreview = ({ messages, courtId, chatId, socket }) => {
+  const username = useSelector((s) => s.storage?.user?.username);
   const wrapperRef = useRef(null);
   const navigate = useNavigate();
 
   const onGoToChat = () => {
+    socket.emit("join_chat", chatId);
     navigate(`/courts/${courtId}/chat/${chatId}`);
   };
 
@@ -35,7 +39,9 @@ const CourtChatPreview = ({ messages, courtId, chatId }) => {
         {messages?.length === 3 && <DotsWrapper>...</DotsWrapper>}
         <MessagesWrapper>
           {!messages?.length ? (
-            <Text color="secondary">Повідомлень немає...Будьте першим</Text>
+            <Text color="secondary" p="0 0 0 2px">
+              Повідомлень немає...Будьте першим
+            </Text>
           ) : (
             messages?.map((message) => (
               <ChatMessage

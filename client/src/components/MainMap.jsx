@@ -20,6 +20,7 @@ import { setViewState } from "../store/storageSlice";
 
 const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [openedCourt, setOpenedCourt] = useState(false);
   const theme = useSelector((state) => state.storage.theme);
   const token = useSelector((state) => state.storage.user?.token);
   const user = useSelector((state) => state.storage?.user);
@@ -165,7 +166,12 @@ const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
         )}
       </Map>
 
-      <ModalWindow opened={isModalOpen} closeModal={onCloseModal} />
+      <ModalWindow
+        opened={isModalOpen}
+        closeModal={onCloseModal}
+        openedCourt={openedCourt}
+        setOpenedCourt={setOpenedCourt}
+      />
     </>
   );
 };

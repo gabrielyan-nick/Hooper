@@ -33,7 +33,14 @@ import {
 import { setViewState } from "../store/storageSlice";
 
 const CourtPopup = forwardRef((props, ref) => {
-  const { closeModal, history, goBack, setEditedCourt } = props;
+  const {
+    closeModal,
+    history,
+    goBack,
+    setEditedCourt,
+    setOpenedCourt,
+    socket,
+  } = props;
   const { courtId } = useParams();
   const {
     data: court = {},
@@ -43,10 +50,11 @@ const CourtPopup = forwardRef((props, ref) => {
     isSuccess,
   } = useGetCourtQuery(courtId);
   const dispatch = useDispatch();
-  console.log(court);
+
   useEffect(() => {
     if (isSuccess) {
       setEditedCourt(court);
+      setOpenedCourt(court.name);
       dispatch(
         setViewState({
           longitude: court?.location?.coordinates[1],
@@ -90,6 +98,7 @@ const CourtPopup = forwardRef((props, ref) => {
         messages={court.messages}
         courtId={court._id}
         chatId={court.chatId}
+        socket={socket}
       />
       <CourtPlayers court={court} courtId={courtId} />
     </PopupWrapper>
