@@ -250,15 +250,14 @@ export const ModalWrapper = styled.div`
   align-items: center;
   &::-webkit-scrollbar {
     width: 0;
-    /* height: 0, */
   }
   @media (max-height: 650px) {
     align-items: flex-start;
-    padding: 40px 0;
+    padding: 50px 0;
   }
   @media ${(props) => props.theme.media.mobile} {
     align-items: flex-start;
-    padding: 40px 0 60px;
+    padding: 50px 0;
   }
 `;
 

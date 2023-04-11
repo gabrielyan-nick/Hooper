@@ -49,7 +49,8 @@ mongoose
   .catch((error) => console.log(error));
 
 const io = new Server(server, {
-  pingTimeout: 60000,
+  pingTimeout: 15000,
+  pingInterval: 5000,
   cors: {
     origin: "*",
   },
@@ -64,7 +65,6 @@ io.on("connection", (socket) => {
 
   socket.on("leave_chat", (chatId) => {
     socket.leave(chatId);
-
   });
 
   socket.on("send_message", (data) => {
