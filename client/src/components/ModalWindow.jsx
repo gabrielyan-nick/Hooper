@@ -21,8 +21,9 @@ import {
 } from "./index";
 import { Button, IconButton, CloseBtn } from "./microComponets";
 import { CloseIconFill, CloseIcon } from "./svgIcons";
+import { serverUrl } from "../config";
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect(serverUrl);
 
 const ModalWindow = ({
   opened,
