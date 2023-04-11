@@ -49,7 +49,7 @@ mongoose
   .catch((error) => console.log(error));
 
 const io = new Server(server, {
-  pingTimeout: 15000,
+  pingTimeout: 60000,
   pingInterval: 5000,
   cors: {
     origin: "*",
