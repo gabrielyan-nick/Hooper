@@ -50,15 +50,19 @@ mongoose
 
 const io = new Server(server, {
   pingTimeout: 60000,
-  pingInterval: 5000,
+  pingInterval: 15000,
   cors: {
     origin: "*",
   },
 });
 
+const activeConnections = new Map();
+
 io.on("connection", (socket) => {
   console.log(`User connected ${socket.id}`);
 
+  activeConnections.set(socket.id, socket);
+  console.log(activeConnections);
   socket.on("join_chat", (chatId) => {
     socket.join(chatId);
   });
@@ -71,5 +75,12 @@ io.on("connection", (socket) => {
     const clients = io.sockets.adapter.rooms.get(data.chatId);
     console.log(clients);
     io.to(data.chatId).emit("receive_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`User disconnected ${socket.id}`);
+
+    activeConnections.delete(socket.id);
+    console.log(activeConnections);
   });
 });

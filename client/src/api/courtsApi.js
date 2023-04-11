@@ -22,6 +22,7 @@ export const courtsApi = createApi({
     getCourt: builder.query({
       query: (id) => `/courts/${id}`,
       providesTags: (result, error, id) => [{ type: "Courts", id }],
+      keepUnusedDataFor: 20,
     }),
     updateCourtInfo: builder.mutation({
       query(data) {
