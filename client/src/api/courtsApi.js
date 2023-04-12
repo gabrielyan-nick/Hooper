@@ -78,7 +78,8 @@ export const courtsApi = createApi({
       ],
     }),
     getChatMessages: builder.query({
-      query: ({ courtId, chatId }) => `/courts/${courtId}/chat/${chatId}`,
+      query: ({ courtId, chatId, offset, limit }) =>
+        `/courts/${courtId}/chat/${chatId}?offset=${offset}&limit=${limit}`,
       keepUnusedDataFor: 1,
     }),
     postChatMessage: builder.mutation({
@@ -87,6 +88,31 @@ export const courtsApi = createApi({
         return {
           url: `/courts/${courtId}/chat/${chatId}/messages`,
           method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
+    deleteChatMessage: builder.mutation({
+      query(data) {
+        const { courtId, chatId, messageId, token } = data;
+        return {
+          url: `/courts/${courtId}/chat/${chatId}/messages/${messageId}`,
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
+    updateChatMessage: builder.mutation({
+      query(data) {
+        const { courtId, chatId, messageId, formData, token } = data;
+        return {
+          url: `/courts/${courtId}/chat/${chatId}/messages/${messageId}`,
+          method: "PUT",
           body: formData,
           headers: {
             Authorization: `Bearer ${token}`,
@@ -107,4 +133,6 @@ export const {
   useUpdateCourtInfoMutation,
   useGetChatMessagesQuery,
   usePostChatMessageMutation,
+  useDeleteChatMessageMutation,
+  useUpdateChatMessageMutation,
 } = courtsApi;

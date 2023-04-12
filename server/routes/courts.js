@@ -10,8 +10,8 @@ import {
   updateCourtInfo,
   getChatMessages,
   postChatMessage,
-  // updateChatMessage,
-  // deleteChatMessage,
+  updateChatMessage,
+  deleteChatMessage,
 } from "../controllers/courts.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -50,10 +50,19 @@ router.post(
   postChatMessage
 );
 
-// // UPDATE CHAT MESSAGE
-// router.put("/:courtId/chat/:chatId/messages/:messageId", updateChatMessage);
+// UPDATE CHAT MESSAGE
+router.put(
+  "/:courtId/chat/:chatId/messages/:messageId",
+  upload.none(),
+  verifyToken,
+  updateChatMessage
+);
 
-// // DELETE CHAT MESSAGE
-// router.delete("/:courtId/chat/:chatId/messages/:messageId", deleteChatMessage);
+// DELETE CHAT MESSAGE
+router.delete(
+  "/:courtId/chat/:chatId/messages/:messageId",
+  verifyToken,
+  deleteChatMessage
+);
 
 export default router;

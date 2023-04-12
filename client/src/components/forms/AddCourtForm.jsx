@@ -215,7 +215,7 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
         </CloseBtn>
       </Header>
       <FormWrapper style={{ padding: "0 5px 5px" }}>
-        <Text fS="20px" fW={700} m="10px 10px 15px" centred>
+        <Text fS="20px" fW={700} m="15px 10px 15px" centred>
           Вкажіть інформацію про майданчик
         </Text>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>

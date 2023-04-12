@@ -229,7 +229,7 @@ export const getChatMessages = async (req, res) => {
   try {
     const { chatId } = req.params;
     const offset = parseInt(req.query.offset) || 0;
-    const limit = parseInt(req.query.limit) || 100;
+    const limit = parseInt(req.query.limit) || 50;
 
     const messages = await Message.find({ chatId })
       .sort({ createdAt: -1 })
@@ -272,6 +272,38 @@ export const postChatMessage = async (req, res) => {
     await chat.save();
 
     res.status(200).json(newMessage);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+};
+
+export const deleteChatMessage = async (req, res) => {
+  try {
+    const { chatId, messageId } = req.params;
+    await Message.findByIdAndDelete(messageId);
+    const chat = await Chat.findById(chatId);
+    chat.messages = chat.messages.filter(
+      (message) => message.toString() !== messageId
+    );
+    await chat.save();
+
+    res.status(200).json("Successful");
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+};
+
+export const updateChatMessage = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const { text } = req.body;
+    const updatedMessage = await Message.findByIdAndUpdate(
+      messageId,
+      { text },
+      { new: true }
+    );
+
+    res.status(200).json(updatedMessage);
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

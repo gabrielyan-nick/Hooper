@@ -19,7 +19,7 @@ import {
   EditCourtForm,
   CourtChat,
 } from "./index";
-import { Button, IconButton, CloseBtn } from "./microComponets";
+import { Button, IconButton, CloseBtn, ModalWrapper } from "./microComponets";
 import { CloseIconFill, CloseIcon } from "./svgIcons";
 import { serverUrl } from "../config";
 
@@ -114,7 +114,7 @@ const ModalWindow = ({
       unmountOnExit
       classNames="modal-overlay"
     >
-      <ModalWrapper ref={overlayRef}>
+      <ModalWrap ref={overlayRef}>
         <CSSTransition
           in={animationIn}
           nodeRef={contentRef}
@@ -229,28 +229,13 @@ const ModalWindow = ({
             </SwitchTransition>
           </ModalContent>
         </CSSTransition>
-      </ModalWrapper>
+      </ModalWrap>
     </CSSTransition>,
     document.body
   );
 };
 
-export const ModalWrapper = styled.div`
-  position: fixed;
-  z-index: 101;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  background-color: #09000cb9;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &::-webkit-scrollbar {
-    width: 0;
-  }
+export const ModalWrap = styled(ModalWrapper)`
   @media (max-height: 650px) {
     align-items: flex-start;
     padding: 50px 0;

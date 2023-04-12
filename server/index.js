@@ -49,20 +49,16 @@ mongoose
   .catch((error) => console.log(error));
 
 const io = new Server(server, {
-  pingTimeout: 60000,
-  pingInterval: 15000,
+  pingTimeout: 180000,
+  pingInterval: 30000,
   cors: {
     origin: "*",
   },
 });
 
-const activeConnections = new Map();
-
 io.on("connection", (socket) => {
   console.log(`User connected ${socket.id}`);
 
-  activeConnections.set(socket.id, socket);
-  console.log(activeConnections);
   socket.on("join_chat", (chatId) => {
     socket.join(chatId);
   });
@@ -77,10 +73,15 @@ io.on("connection", (socket) => {
     io.to(data.chatId).emit("receive_message", data);
   });
 
+  socket.on("delete_message", ({ chatId, messageId }) => {
+    io.to(chatId).emit("delete_message-client", messageId);
+  });
+
+  socket.on("update_message", ({ chatId, messageId, updatedMessage }) => {
+    io.to(chatId).emit("update_message-client", { messageId, updatedMessage });
+  });
+
   socket.on("disconnect", () => {
     console.log(`User disconnected ${socket.id}`);
-
-    activeConnections.delete(socket.id);
-    console.log(activeConnections);
   });
 });

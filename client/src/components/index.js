@@ -26,3 +26,4 @@ export { default as CourtPhotosSlider } from "./CourtPhotosSlider";
 export { default as AddRemoveFavourite } from "./AddRemoveFavourite";
 export { default as EditCourtForm } from "./forms/EditCourtForm";
 export { default as CourtChatPreview } from "./CourtChatPreview";
+export { default as ConfirmModal } from "./ConfirmModal";

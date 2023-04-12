@@ -140,7 +140,7 @@ export const Text = styled.p`
   text-align: ${(props) => (props.centred ? "center" : "inherit")};
   margin: ${(props) => props.m || 0};
   padding: ${(props) => props.p || 0};
-  word-break: break-all;
+  word-break: break-word;
 `;
 
 export const Title = styled.h3`
@@ -338,8 +338,8 @@ const rotateAnim = keyframes`
 
 export const BtnSpinnerWrapper = styled.span`
   display: block;
-  width: 30px;
-  height: 30px;
+  width: ${(props) => props.size || "30px"};
+  height: ${(props) => props.size || "30px"};
   border-radius: 50%;
   position: relative;
   animation: ${rotateAnim} 1s ease-in-out infinite alternate;
@@ -352,4 +352,22 @@ export const IconSpinnerWrapper = styled.span`
   border-radius: 50%;
   position: relative;
   animation: ${rotateAnim} 1s ease-in-out infinite alternate;
+`;
+
+export const ModalWrapper = styled.div`
+  position: fixed;
+  z-index: 101;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: #09000cb9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ResetPassForm } from "../components";
-import { Wrapper, Text } from "../components/microComponets";
-import { ModalContent, ModalWrapper } from "../components/ModalWindow";
+import { Wrapper, Text, ModalWrapper } from "../components/microComponets";
+import { ModalContent } from "../components/ModalWindow";
 import { lightTheme } from "../styles/themes";
 
 const ResetPassPage = () => {
