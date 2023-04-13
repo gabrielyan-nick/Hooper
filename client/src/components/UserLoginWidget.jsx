@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   z-index: 10;
 `;
 
-const UserLoginWidget = ({ setAddCourtMarker }) => {
+const UserLoginWidget = ({ setAddCourtMarker, setOpenedCourt }) => {
   const isAuth = useSelector((state) => !!state.storage.user?.token);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -37,7 +37,10 @@ const UserLoginWidget = ({ setAddCourtMarker }) => {
     <>
       <Wrapper>
         {isAuth ? (
-          <UserWidget setAddCourtMarker={setAddCourtMarker} />
+          <UserWidget
+            setAddCourtMarker={setAddCourtMarker}
+            setOpenedCourt={setOpenedCourt}
+          />
         ) : (
           <UserWidgetBtn p="12px 30px" onClick={onOpenLoginModal}>
             Увійти

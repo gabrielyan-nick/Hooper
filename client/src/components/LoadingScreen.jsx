@@ -1,5 +1,6 @@
 import React, { forwardRef } from "react";
 import styled from "styled-components";
+import BallsAnimation from "./BallsAnimation";
 
 const LoadingScreenWrapper = styled.div`
   width: 100vw;
@@ -8,6 +9,10 @@ const LoadingScreenWrapper = styled.div`
   z-index: 200;
 `;
 
-const LoadingScreen = (props, ref) => <LoadingScreenWrapper />;
+const LoadingScreen = (props, ref) => (
+  <LoadingScreenWrapper>
+    <BallsAnimation height={"100vh"} />
+  </LoadingScreenWrapper>
+);
 
 export default LoadingScreen;

@@ -138,13 +138,13 @@ const RegisterForm = forwardRef((props, ref) => {
   };
 
   return (
-    <>
+    <div>
       <ModalHeader empty>
         <CloseBtn onClick={closeModal}>
           <CloseIcon />
         </CloseBtn>
       </ModalHeader>
-      <FormWrapper ref={ref}>
+      <FormWrapper>
         <Text fS="20px" fW={700} m="15px 10px 40px" centred>
           Зареєструйтесь, щоб мати більше можливостей
         </Text>
@@ -250,7 +250,7 @@ const RegisterForm = forwardRef((props, ref) => {
           Увійти
         </Button>
       </FormWrapper>
-    </>
+    </div>
   );
 });
 
@@ -262,7 +262,7 @@ export const FormWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 0 5px 10px;
+  padding: 0 5px 5px;
 `;
 
 export const ErrorText = styled(Text)`

@@ -13,7 +13,6 @@ import {
   ChatWrapper,
 } from "./microComponets";
 
-
 const CourtChatPreview = ({ messages, courtId, chatId, socket }) => {
   const username = useSelector((s) => s.storage?.user?.username);
   const wrapperRef = useRef(null);
@@ -39,7 +38,12 @@ const CourtChatPreview = ({ messages, courtId, chatId, socket }) => {
         {messages?.length === 3 && <DotsWrapper>...</DotsWrapper>}
         <MessagesWrapper>
           {!messages?.length ? (
-            <Text color="secondary" p="0 0 0 2px">
+            <Text
+              color="secondary"
+              p="0 0 0 2px"
+              fS="15px"
+              style={{ lineHeight: "19px" }}
+            >
               Повідомлень немає...Будьте першим
             </Text>
           ) : (
@@ -108,6 +112,7 @@ const DotsWrapper = styled.div`
 `;
 
 const OpenBtn = styled(Button)`
+  height: auto;
   padding: 2px 10px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;

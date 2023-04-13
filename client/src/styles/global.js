@@ -42,42 +42,43 @@ p, ul, li {
 
 .modal-content-appear {
   opacity: 0;
-  transform: scale(0.9);
+  transform: scale(0.95);
 }
 .modal-content-appear-done {
   opacity: 1;
-  transform: translateX(0);
+  transform: scale(1);
   transition: opacity 300ms, transform 300ms;
 }
 .modal-content-exit {
   opacity: 1;
+  transform: scale(1);
 }
 .modal-content-exit-active {
   opacity: 0;
-  transform: scale(0.9);
+  transform: scale(0.95);
   transition: opacity 300ms, transform 300ms;
 }
 
 
 .switch-enter{
    opacity: 0;
-   transform: scale(0.95);
-   /* transition: opacity 300ms, transform 400ms; */
+   transform: scale(0.97);
+   transition: opacity 300ms, transform 300ms;
 }
 .switch-enter-active{
    opacity: 1;
    transform: scale(1);
-     transition: opacity 300ms, transform 400ms;
+     transition: opacity 300ms, transform 300ms;
 }
 .switch-exit{
    opacity: 1;
    transform: scale(1);
-  /* transition: opacity 300ms, transform 400ms; */
+  transition: opacity 300ms, transform 300ms;
 }
 .switch-exit-active{
    opacity: 0;
-   transform: scale(0.95);
-  transition: opacity 300ms, transform 400ms;
+   transform: scale(0.97);
+  transition: opacity 300ms, transform 300ms;
 }
 
 .icons-switch-enter{

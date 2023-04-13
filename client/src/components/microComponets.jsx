@@ -290,7 +290,7 @@ export const Button = styled.button`
   touch-action: manipulation;
   vertical-align: middle;
   width: ${(props) => props.width || "auto"};
-  height: ${(props) => props.height || "auto"};
+  height: ${(props) => props.height || "38px"};
   word-break: keep-all;
   z-index: ${(props) => props.zi || 0};
   border-radius: 80px;
@@ -333,7 +333,9 @@ const rollAnim = keyframes`
 `;
 
 const rotateAnim = keyframes`
-   0% { transform: rotate(0deg) } 100% { transform: rotate(360deg)};
+   0% { transform: rotate(0deg); transform-origin: center center; } 
+   100% { transform: rotate(360deg); transform-origin: center center;};
+   
 `;
 
 export const BtnSpinnerWrapper = styled.span`
@@ -342,7 +344,7 @@ export const BtnSpinnerWrapper = styled.span`
   height: ${(props) => props.size || "30px"};
   border-radius: 50%;
   position: relative;
-  animation: ${rotateAnim} 1s ease-in-out infinite alternate;
+  animation: ${rotateAnim} 1s linear infinite;
 `;
 
 export const IconSpinnerWrapper = styled.span`
@@ -351,7 +353,7 @@ export const IconSpinnerWrapper = styled.span`
   height: 23px;
   border-radius: 50%;
   position: relative;
-  animation: ${rotateAnim} 1s ease-in-out infinite alternate;
+  animation: ${rotateAnim} 1s linear infinite;
 `;
 
 export const ModalWrapper = styled.div`

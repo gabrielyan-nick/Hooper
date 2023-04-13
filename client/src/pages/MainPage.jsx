@@ -13,9 +13,10 @@ import { Wrapper } from "../components/microComponets";
 const MainPage = () => {
   const [isLoadingScreen, setIsLoadingScreen] = useState(true);
   const [addCourtMarker, setAddCourtMarker] = useState(null);
+  const [openedCourt, setOpenedCourt] = useState(false);
   const dispatch = useDispatch();
 
-  const onChangeTheme = () => dispatch(setTheme());
+  // const onChangeTheme = () => dispatch(setTheme());
   const closeLoadingScreen = () => setIsLoadingScreen(false);
 
   return (
@@ -24,8 +25,11 @@ const MainPage = () => {
         <LoadingScreen />
       ) : (
         <>
-          <ChangeThemeBtn onClick={onChangeTheme} />
-          <UserLoginWidget setAddCourtMarker={setAddCourtMarker} />
+          <SettingsWidget />
+          <UserLoginWidget
+            setAddCourtMarker={setAddCourtMarker}
+            setOpenedCourt={setOpenedCourt}
+          />
           <AddCourtWidget
             addCourtMarker={addCourtMarker}
             setAddCourtMarker={setAddCourtMarker}
@@ -36,6 +40,8 @@ const MainPage = () => {
         closeLoadingScreen={closeLoadingScreen}
         setAddCourtMarker={setAddCourtMarker}
         addCourtMarker={addCourtMarker}
+        setOpenedCourt={setOpenedCourt}
+        openedCourt={openedCourt}
       />
     </Wrapper>
   );
@@ -43,12 +49,12 @@ const MainPage = () => {
 
 export default MainPage;
 
-const ChangeThemeBtn = styled.button`
+const SettingsWidget = styled.div`
   position: absolute;
   top: 30px;
   left: 30px;
-  width: 20px;
-  height: 20px;
+  /* width: 20px;
+  height: 20px; */
   z-index: 10;
-  background-color: ${(props) => props.theme.color};
+  /* background-color: ${(props) => props.theme.color}; */
 `;

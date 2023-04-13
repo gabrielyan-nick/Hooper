@@ -60,7 +60,7 @@ const ForgotPassForm = forwardRef((props, ref) => {
           <CloseIcon />
         </CloseBtn>
       </ModalHeader>
-      <FormWrapper ref={ref}>
+      <FormWrapper ref={ref} style={{ padding: "0 5px" }}>
         <Text fS="20px" fW={700} m="15px 10px " centred>
           Введіть електронну пошту
         </Text>

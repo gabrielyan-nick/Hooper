@@ -4,6 +4,7 @@ import React, {
   useState,
   useRef,
   useCallback,
+  memo,
 } from "react";
 import PropTypes from "prop-types";
 import io from "socket.io-client";
@@ -44,7 +45,7 @@ import {
   DeleteIcon,
   EnterIcon,
 } from "./svgIcons";
-import { ConfirmModal } from "./index";
+import { BallsAnimation, ConfirmModal } from "./index";
 import { formatDate } from "../utils";
 import { BasketballMarker, FootballMarker } from "./index";
 import useOnIntersection from "../hooks/useOnIntersection";
@@ -76,27 +77,30 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
     if (!isFetching && !isEndOfMessages) {
       setOffset((offset) => offset + limit);
     }
-  }, [isFetching]);
+  }, [isFetching, isEndOfMessages]);
   const topOfChatRef = useOnIntersection(incrementOffset);
   const prevMessagesRef = useRef([]);
+  const messagesWrapperRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (prevMessagesRef.current !== messages) {
       setMessagesReceived((state) => [...state, ...messages]);
       prevMessagesRef.current = messages;
     }
-  }, [isSuccess]);
+  }, [isSuccess, isFetching]);
 
   useEffect(() => {
-    console.log(messages.length < limit);
-    setIsEndOfMessages(messages.length < limit);
-
-    
-  }, [ isSuccess, messages.length]);
+    messages.length < limit
+      ? setIsEndOfMessages(true)
+      : setIsEndOfMessages(false);
+  }, [messages]);
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
       setMessagesReceived((state) => [data, ...state]);
+      messagesWrapperRef.current.scrollTop =
+        messagesWrapperRef.current.scrollHeight;
     });
 
     socket.on("delete_message-client", (messageId) => {
@@ -124,23 +128,25 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
 
   const onSendMessage = (e) => {
     e.preventDefault();
-    if (message !== "") {
-      const formData = new FormData();
-      formData.append("userId", _id);
-      formData.append("text", message);
-      postMessage({ courtId, chatId, formData, token })
-        .then((result) => {
-          console.log(result);
-          socket.emit("send_message", {
-            sender: { _id, picturePath },
-            text: message,
-            createdAt: new Date(),
-            chatId,
-          });
-          setMessage("");
-        })
-        .catch((e) => console.log(e));
-    }
+    if (_id !== undefined) {
+      if (message !== "") {
+        const formData = new FormData();
+        formData.append("userId", _id);
+        formData.append("text", message);
+        postMessage({ courtId, chatId, formData, token })
+          .then((result) => {
+            socket.emit("send_message", {
+              _id: result.data._id,
+              sender: { _id, picturePath },
+              text: message,
+              createdAt: new Date(),
+              chatId,
+            });
+            setMessage("");
+          })
+          .catch((e) => console.log(e));
+      }
+    } else navigate("/login");
   };
 
   const leaveChat = () => {
@@ -176,22 +182,34 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
         </CloseBtn>
       </ModalHeader>
 
-      <MessagesWrapper>
-        {messagesRecieved?.map((message, i) => (
-          <ChatMessage
-            key={i}
-            message={message}
-            openedCourt={openedCourt}
-            courtId={courtId}
-            chatId={chatId}
-            token={token}
-            socket={socket}
-          />
-        ))}
-        {isLoading && <BtnSpinnerWrapper>{spinner}</BtnSpinnerWrapper>}
+      <MessagesWrapper ref={messagesWrapperRef}>
+        {isLoading ? (
+          <BallsAnimation height={430} />
+        ) : !messagesRecieved.length ? (
+          <FlexCenterBox style={{ height: "100%" }}>
+            <Text centred>Залишайте повідомлення, домовляйтесь про ігри</Text>
+          </FlexCenterBox>
+        ) : (
+          messagesRecieved?.map((message, i) => (
+            <ChatMessage
+              key={i}
+              message={message}
+              openedCourt={openedCourt}
+              courtId={courtId}
+              chatId={chatId}
+              token={token}
+              socket={socket}
+            />
+          ))
+        )}
+        {isFetching && !isLoading && (
+          <FlexCenterBox>
+            <BtnSpinnerWrapper>{spinner}</BtnSpinnerWrapper>
+          </FlexCenterBox>
+        )}
         <div
           style={{
-            display: isLoading ? "none" : "block",
+            display: isFetching || isLoading ? "none" : "block",
           }}
           ref={topOfChatRef}
         ></div>
@@ -217,156 +235,159 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
 
 export default CourtChat;
 
-const ChatMessage = ({
-  message,
-  openedCourt,
-  courtId,
-  chatId,
-  token,
-  socket,
-}) => {
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [isEdited, setIsEdited] = useState(false);
-  const [editedText, setEditedText] = useState(message.text);
-  const id = useSelector((s) => s.storage?.user?._id);
-  const isMyMessage = id === message?.sender?._id;
-  const date = formatDate(message?.createdAt);
-  const inputRef = useRef(null);
-  const editDelRef = useRef(null);
-  const saveCloseRef = useRef(null);
-  const nodeRef = isEdited ? saveCloseRef : editDelRef;
-  const [updateMessage, updateResult] = useUpdateChatMessageMutation();
-  const [deleteMessage, delResult] = useDeleteChatMessageMutation();
-  const spinner =
-    openedCourt === "Баскетбольний майданчик" ? (
-      <BasketballMarker size={13} />
-    ) : (
-      <FootballMarker size={13} />
-    );
+const ChatMessage = memo(
+  ({ message, openedCourt, courtId, chatId, token, socket }) => {
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [isEdited, setIsEdited] = useState(false);
+    const [editedText, setEditedText] = useState(message.text);
+    const id = useSelector((s) => s.storage?.user?._id);
+    const isMyMessage = id === message?.sender?._id;
+    const date = formatDate(message?.createdAt);
+    const inputRef = useRef(null);
+    const editDelRef = useRef(null);
+    const saveCloseRef = useRef(null);
+    const nodeRef = isEdited ? saveCloseRef : editDelRef;
+    const [updateMessage, updateResult] = useUpdateChatMessageMutation();
+    const [deleteMessage, delResult] = useDeleteChatMessageMutation();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.setSelectionRange(
-        inputRef.current.value.length,
-        inputRef.current.value.length
+    useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+        inputRef.current.setSelectionRange(
+          inputRef.current.value.length,
+          inputRef.current.value.length
+        );
+      }
+    }, [isEdited]);
+
+    useEffect(() => {
+      setEditedText(message.text);
+    }, [message]);
+
+    const onDeleteMessage = (messageId) => {
+      messageId &&
+        deleteMessage({ courtId, chatId, messageId, token })
+          .then((res) => {
+            socket.emit("delete_message", { messageId, chatId });
+          })
+          .catch((e) => console.log(e));
+    };
+
+    const onUpdateMessage = (messageId) => {
+      if (editedText !== message.text) {
+        const formData = new FormData();
+        formData.append("text", editedText);
+        updateMessage({ courtId, chatId, messageId, token, formData })
+          .then((res) => {
+            socket.emit("update_message", {
+              messageId,
+              chatId,
+              updatedMessage: editedText,
+            });
+            setIsEdited(false);
+          })
+          .catch((e) => console.log(e));
+      } else onCancelEditMessage();
+    };
+
+    const onEditMessage = () => setIsEdited(true);
+    const onCancelEditMessage = () => {
+      setIsEdited(false);
+      setEditedText(message.text);
+    };
+
+    const onGoToUserInfo = () => {
+      navigate(`/users/${message.sender._id}`);
+    };
+
+    const openDelModal = () => setIsConfirmModalOpen(true);
+    const closeDelModal = () => setIsConfirmModalOpen(false);
+
+    const spinner =
+      openedCourt === "Баскетбольний майданчик" ? (
+        <BasketballMarker size={13} />
+      ) : (
+        <FootballMarker size={13} />
       );
-    }
-  }, [isEdited]);
 
-  useEffect(() => {
-    setEditedText(message.text);
-  }, [message]);
-
-  const onDeleteMessage = (messageId) => {
-    messageId &&
-      deleteMessage({ courtId, chatId, messageId, token })
-        .then((res) => {
-          socket.emit("delete_message", { messageId, chatId });
-        })
-        .catch((e) => console.log(e));
-  };
-
-  const onUpdateMessage = (messageId) => {
-    if (editedText !== message.text) {
-      const formData = new FormData();
-      formData.append("text", editedText);
-      updateMessage({ courtId, chatId, messageId, token, formData })
-        .then((res) => {
-          console.log(res);
-          socket.emit("update_message", {
-            messageId,
-            chatId,
-            updatedMessage: editedText,
-          });
-          setIsEdited(false);
-        })
-        .catch((e) => console.log(e));
-    } else onCancelEditMessage();
-  };
-
-  const onEditMessage = () => setIsEdited(true);
-  const onCancelEditMessage = () => {
-    setIsEdited(false);
-    setEditedText(message.text);
-  };
-
-  const openDelModal = () => setIsConfirmModalOpen(true);
-  const closeDelModal = () => setIsConfirmModalOpen(false);
-
-  return (
-    <>
-      <li>
-        <MainLine>
-          <Avatar src={message.sender?.picturePath} />
-          {!isEdited ? (
-            <Text style={{ width: "100%" }}>{message.text}</Text>
-          ) : (
-            <EditedInput
-              value={editedText}
-              onChange={(e) => setEditedText(e.target.value)}
-              fW={600}
-              ref={inputRef}
+    return (
+      <>
+        <li>
+          <MainLine>
+            <Avatar
+              src={message.sender?.picturePath}
+              onClick={onGoToUserInfo}
             />
-          )}
-        </MainLine>
-        <BottomLine isMyMessage={isMyMessage}>
-          {isMyMessage && (
-            <SwitchTransition mode="out-in">
-              <CSSTransition
-                timeout={100}
-                key={isEdited}
-                classNames="icons-switch"
-                nodeRef={nodeRef}
-              >
-                {!isEdited ? (
-                  <BtnsWrapper ref={editDelRef}>
-                    <Btn color="green" onClick={onEditMessage}>
-                      <EditIcon size={14} color="#f1e8e4" />
-                    </Btn>
-                    <Btn color="orange" onClick={openDelModal}>
-                      <DeleteIcon size={14} color="#f1e8e4" />
-                    </Btn>
-                  </BtnsWrapper>
-                ) : (
-                  <BtnsWrapper ref={saveCloseRef}>
-                    <Btn
-                      color="green"
-                      onClick={() => onUpdateMessage(message._id)}
-                    >
-                      {updateResult.isLoading ? (
-                        <BtnSpinnerWrapper size={16}>
-                          {spinner}
-                        </BtnSpinnerWrapper>
-                      ) : (
-                        <SaveIcon size={14} />
-                      )}
-                    </Btn>
-                    <Btn color="#e02504" onClick={onCancelEditMessage}>
-                      <CloseIcon size={14} />
-                    </Btn>
-                  </BtnsWrapper>
-                )}
-              </CSSTransition>
-            </SwitchTransition>
-          )}
-          <DateText color="secondary" fS="14px">
-            {date}
-          </DateText>
-        </BottomLine>
-      </li>
+            {!isEdited ? (
+              <Text style={{ width: "100%" }}>{message.text}</Text>
+            ) : (
+              <EditedInput
+                value={editedText}
+                onChange={(e) => setEditedText(e.target.value)}
+                fW={600}
+                ref={inputRef}
+              />
+            )}
+          </MainLine>
+          <BottomLine isMyMessage={isMyMessage}>
+            {isMyMessage && (
+              <SwitchTransition mode="out-in">
+                <CSSTransition
+                  timeout={100}
+                  key={isEdited}
+                  classNames="icons-switch"
+                  nodeRef={nodeRef}
+                >
+                  {!isEdited ? (
+                    <BtnsWrapper ref={editDelRef}>
+                      <Btn color="green" onClick={onEditMessage}>
+                        <EditIcon size={14} color="#f1e8e4" />
+                      </Btn>
+                      <Btn color="orange" onClick={openDelModal}>
+                        <DeleteIcon size={14} color="#f1e8e4" />
+                      </Btn>
+                    </BtnsWrapper>
+                  ) : (
+                    <BtnsWrapper ref={saveCloseRef}>
+                      <Btn
+                        color="green"
+                        onClick={() => onUpdateMessage(message._id)}
+                      >
+                        {updateResult.isLoading ? (
+                          <BtnSpinnerWrapper size={16}>
+                            {spinner}
+                          </BtnSpinnerWrapper>
+                        ) : (
+                          <SaveIcon size={14} />
+                        )}
+                      </Btn>
+                      <Btn color="#e02504" onClick={onCancelEditMessage}>
+                        <CloseIcon size={14} />
+                      </Btn>
+                    </BtnsWrapper>
+                  )}
+                </CSSTransition>
+              </SwitchTransition>
+            )}
+            <DateText color="secondary" fS="14px">
+              {date}
+            </DateText>
+          </BottomLine>
+        </li>
 
-      <ConfirmModal
-        opened={isConfirmModalOpen}
-        closeModal={closeDelModal}
-        question="Видалити повідомлення?"
-        action={() => onDeleteMessage(message._id)}
-        actionResult={delResult}
-        openedCourt={openedCourt}
-      />
-    </>
-  );
-};
+        <ConfirmModal
+          opened={isConfirmModalOpen}
+          closeModal={closeDelModal}
+          question="Видалити повідомлення?"
+          action={() => onDeleteMessage(message._id)}
+          actionResult={delResult}
+          openedCourt={openedCourt}
+        />
+      </>
+    );
+  }
+);
 
 const EditedInput = styled(Input)`
   background: transparent;
@@ -429,6 +450,7 @@ const Avatar = styled.img`
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 
 const MessagesWrapper = styled.ul`

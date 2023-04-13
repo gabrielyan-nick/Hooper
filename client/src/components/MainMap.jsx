@@ -1,11 +1,9 @@
 import React, {
   useState,
   useMemo,
-  Fragment,
   useRef,
   useEffect,
   useCallback,
-  createContext,
 } from "react";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,9 +16,14 @@ import { FootballMarker, BasketballMarker, ModalWindow } from "./index";
 import { MarkerIcon } from "./svgIcons";
 import { setViewState } from "../store/storageSlice";
 
-const MainMap = ({ closeLoadingScreen, setAddCourtMarker, addCourtMarker }) => {
+const MainMap = ({
+  closeLoadingScreen,
+  setAddCourtMarker,
+  addCourtMarker,
+  setOpenedCourt,
+  openedCourt,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [openedCourt, setOpenedCourt] = useState(false);
   const theme = useSelector((state) => state.storage.theme);
   const token = useSelector((state) => state.storage.user?.token);
   const user = useSelector((state) => state.storage?.user);

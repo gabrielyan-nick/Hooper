@@ -204,7 +204,7 @@ const CourtPlayers = ({ court, courtId }) => {
               }}
               disabled={result.isLoading || isFetching}
             >
-              {result.isLoading || isFetching ? (
+              {result.isLoading ? (
                 <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
               ) : (
                 `Я на ${court.sport === "basketball" ? "майданчику" : "полі"}`
@@ -218,7 +218,7 @@ const CourtPlayers = ({ court, courtId }) => {
                 style={{ width: "101px" }}
                 disabled={res.isLoading || isFetching}
               >
-                {res.isLoading || isFetching ? (
+                {res.isLoading  ? (
                   <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
                 ) : (
                   "Пішов"

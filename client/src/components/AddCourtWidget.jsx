@@ -104,10 +104,10 @@ const Wrapper = styled(FlexCenterBox)`
 `;
 
 const AddCourtBtn = styled(UserWidgetBtn)`
-  padding: 10px 20px 10px 15px;
+  padding: 5px 15px 5px 10px;
   background-color: ${lightTheme.orange};
   &:hover:not(:disabled) {
-    background-color: #ff4800;
+    background-color: #ff4800d1;
     box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
       rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
       rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px,

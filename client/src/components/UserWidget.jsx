@@ -7,19 +7,7 @@ import { Button, FlexBetweenBox, Text, UserWidgetBtn } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
 import { ModalWindow } from "./index";
 
-const Avatar = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
-const Username = styled(Text)`
-  color: ${lightTheme.username};
-  padding-left: 5px;
-`;
-
-const UserWidget = ({ setAddCourtMarker }) => {
+const UserWidget = ({ setAddCourtMarker, setOpenedCourt }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { picturePath, username } = useSelector((state) => state.storage.user);
   const name = username.slice(0, 15);
@@ -51,9 +39,22 @@ const UserWidget = ({ setAddCourtMarker }) => {
         opened={isModalOpen}
         closeModal={onCloseModal}
         setAddCourtMarker={setAddCourtMarker}
+        setOpenedCourt={setOpenedCourt}
       />
     </>
   );
 };
 
 export default UserWidget;
+
+const Avatar = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const Username = styled(Text)`
+  color: ${lightTheme.username};
+  padding-left: 5px;
+`;

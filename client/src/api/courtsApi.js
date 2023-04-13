@@ -94,6 +94,9 @@ export const courtsApi = createApi({
           },
         };
       },
+      invalidatesTags: (result, error, { courtId }) => [
+        { type: "Courts", courtId },
+      ],
     }),
     deleteChatMessage: builder.mutation({
       query(data) {
@@ -106,6 +109,9 @@ export const courtsApi = createApi({
           },
         };
       },
+      invalidatesTags: (result, error, { courtId }) => [
+        { type: "Courts", courtId },
+      ],
     }),
     updateChatMessage: builder.mutation({
       query(data) {
@@ -119,6 +125,9 @@ export const courtsApi = createApi({
           },
         };
       },
+      invalidatesTags: (result, error, { courtId }) => [
+        { type: "Courts", courtId },
+      ],
     }),
   }),
 });

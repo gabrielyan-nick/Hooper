@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useGetCourtQuery } from "../api/courtsApi";
 import {
   FlexBetweenBox,
@@ -29,6 +29,7 @@ import {
   CourtChat,
   CourtPhotosSlider,
   CourtChatPreview,
+  BallsAnimation,
 } from "./index";
 import { setViewState } from "../store/storageSlice";
 
@@ -54,7 +55,7 @@ const CourtPopup = forwardRef((props, ref) => {
   useEffect(() => {
     if (isSuccess) {
       setEditedCourt(court);
-      setOpenedCourt(court.name);
+      setOpenedCourt(court?.name);
       dispatch(
         setViewState({
           longitude: court?.location?.coordinates[1],
@@ -77,30 +78,36 @@ const CourtPopup = forwardRef((props, ref) => {
 
   return (
     <PopupWrapper ref={ref}>
-      <FlexBetweenBox style={{ padding: "0 5px" }}>
-        {isBackBtn && (
-          <BackBtn onClick={goBack}>
-            <BackIcon />
-          </BackBtn>
-        )}
-        <CourtTitle backBtn={isBackBtn}>{court.name}</CourtTitle>
-        <CloseBtn onClick={closeModal}>
-          <CloseIcon />
-        </CloseBtn>
-      </FlexBetweenBox>
-      <CourtPhotosSlider
-        courtId={courtId}
-        sport={court?.sport}
-        photos={court?.photos}
-      />
-      <CourtInfo data={court} />
-      <CourtChatPreview
-        messages={court.messages}
-        courtId={court._id}
-        chatId={court.chatId}
-        socket={socket}
-      />
-      <CourtPlayers court={court} courtId={courtId} />
+      {isLoading ? (
+        <BallsAnimation />
+      ) : (
+        <>
+          <FlexBetweenBox style={{ padding: "0 5px" }}>
+            {isBackBtn && (
+              <BackBtn onClick={goBack}>
+                <BackIcon />
+              </BackBtn>
+            )}
+            <CourtTitle backBtn={isBackBtn}>{court?.name}</CourtTitle>
+            <CloseBtn onClick={closeModal}>
+              <CloseIcon />
+            </CloseBtn>
+          </FlexBetweenBox>
+          <CourtPhotosSlider
+            courtId={courtId}
+            sport={court?.sport}
+            photos={court?.photos}
+          />
+          <CourtInfo data={court} />
+          <CourtChatPreview
+            messages={court?.messages}
+            courtId={court?._id}
+            chatId={court?.chatId}
+            socket={socket}
+          />
+          <CourtPlayers court={court} courtId={courtId} />
+        </>
+      )}
     </PopupWrapper>
   );
 });

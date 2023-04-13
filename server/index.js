@@ -68,8 +68,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => {
-    const clients = io.sockets.adapter.rooms.get(data.chatId);
-    console.log(clients);
     io.to(data.chatId).emit("receive_message", data);
   });
 
