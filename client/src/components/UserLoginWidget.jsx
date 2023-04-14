@@ -5,17 +5,6 @@ import styled from "styled-components";
 import { Button, UserWidgetBtn } from "./microComponets";
 import { ModalWindow, UserWidget } from "./index";
 
-const Wrapper = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 20px;
-  z-index: 10;
-`;
-
 const UserLoginWidget = ({ setAddCourtMarker, setOpenedCourt }) => {
   const isAuth = useSelector((state) => !!state.storage.user?.token);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -53,3 +42,14 @@ const UserLoginWidget = ({ setAddCourtMarker, setOpenedCourt }) => {
 };
 
 export default UserLoginWidget;
+
+const Wrapper = styled.div`
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  z-index: 10;
+`;

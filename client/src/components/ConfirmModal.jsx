@@ -107,7 +107,7 @@ const ConfirmModal = ({
         >
           <ModalContent ref={contentRef}>
             <ModalHeader empty style={{ padding: 0 }}>
-              <CloseBtn onClick={closeModal}>
+              <CloseBtn onClick={closeModal} disabled={actionResult.isLoading}>
                 <CloseIcon />
               </CloseBtn>
             </ModalHeader>
@@ -127,6 +127,7 @@ const ConfirmModal = ({
                 height="40px"
                 bgColors={lightTheme.btnSecondary}
                 onClick={closeModal}
+                disabled={actionResult.isLoading}
               >
                 Ні
               </Button>

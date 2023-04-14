@@ -80,7 +80,7 @@ const UserCityChanged = ({ city }) => {
       fontFamily: "Golos Text, sans-serif",
       fontWeight: 700,
       background: state.isFocused ? theme.selectBg : "transparent",
-      color: state.isFocused ? "#fff" : "#333",
+      color: state.isFocused ? "#f3efec" : "#110f0f",
     }),
     menuList: (baseStyles, state) => ({
       ...baseStyles,
@@ -112,6 +112,10 @@ const UserCityChanged = ({ city }) => {
       ...baseStyles,
       color: theme.placeholderText,
       fontSize: "16px",
+    }),
+    singleValue: (baseStyles, state) => ({
+      ...baseStyles,
+      color: "#110f0f",
     }),
   };
 

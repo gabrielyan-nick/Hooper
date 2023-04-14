@@ -28,3 +28,5 @@ export { default as EditCourtForm } from "./forms/EditCourtForm";
 export { default as CourtChatPreview } from "./CourtChatPreview";
 export { default as ConfirmModal } from "./ConfirmModal";
 export { default as BallsAnimation } from "./BallsAnimation";
+export { default as SettingsWidget } from "./SettingsWidget";
+export { default as SettingsForm } from "./forms/SettingsForm";

@@ -160,7 +160,7 @@ export const Input = styled.input`
   font-family: "Golos Text", sans-serif;
   font-weight: ${(props) => props.fW || 700};
   font-size: ${(props) => props.fS || "inherit"};
-  color: ${(props) => props.color || "#2c2522"};
+  color: ${(props) => props.color || "#110f0f"};
   background: ${(props) => props.bg || props.theme.inputBg};
   width: 100%;
   padding: ${(props) => props.p || "9px 15px"};

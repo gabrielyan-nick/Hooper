@@ -46,13 +46,13 @@ const CourtInfo = ({ data }) => {
     <CourtInfoWrapper>
       <CourtInfoDataWrapper>
         <IconWithTooltip icon={coverIcon} tooltip="Покриття" id="cover" />
-        <Text fontSize="17px" fontWeight={700}>
+        <Text fS="14px" fW={700}>
           {coverData}
         </Text>
       </CourtInfoDataWrapper>
       <CourtInfoDataWrapper>
         <IconWithTooltip icon={countIcon} tooltip={countTooltip} id="count" />
-        <Text fontSize="20px" fontWeight={700}>
+        <Text fS="18px" fW={700}>
           {data.hoopsCount}
         </Text>
       </CourtInfoDataWrapper>
@@ -92,7 +92,7 @@ export const IconWithTooltip = ({ icon, tooltip, id, place = "top" }) => {
 };
 
 const CourtInfoWrapper = styled(FlexBetweenBox)`
-  padding: 5px 10px;
+  padding: 5px;
 `;
 const CourtInfoDataWrapper = styled(FlexCenterBox)`
   flex-basis: 33%;

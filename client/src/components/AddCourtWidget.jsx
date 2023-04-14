@@ -97,8 +97,8 @@ export default AddCourtWidget;
 
 const Wrapper = styled(FlexCenterBox)`
   position: absolute;
-  bottom: 70px;
-  right: 20px;
+  bottom: 65px;
+  right: 13px;
   gap: 15px;
   z-index: 10;
 `;

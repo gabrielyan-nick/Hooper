@@ -166,14 +166,14 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
         ? "0 0 2px 0 black inset"
         : " rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px",
       border: "none",
-      color: "FFF",
+      color: "#000000",
     }),
     option: (baseStyles, state) => ({
       ...baseStyles,
       fontFamily: "Golos Text, sans-serif",
       fontWeight: 700,
       background: state.isFocused ? theme.selectBg : "transparent",
-      color: state.isFocused ? "#fff" : "#333",
+      color: state.isFocused ? "#f3efec" : "#110f0f",
     }),
     menuList: (baseStyles, state) => ({
       ...baseStyles,
@@ -204,6 +204,10 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
     placeholder: (baseStyles, state) => ({
       ...baseStyles,
       color: theme.placeholderText,
+    }),
+    singleValue: (baseStyles, state) => ({
+      ...baseStyles,
+      color: "#110f0f",
     }),
   };
 

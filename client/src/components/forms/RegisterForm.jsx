@@ -103,7 +103,7 @@ const RegisterForm = forwardRef((props, ref) => {
       fontFamily: "Golos Text, sans-serif",
       fontWeight: 700,
       background: state.isFocused ? theme.selectBg : "transparent",
-      color: state.isFocused ? "#fff" : "#333",
+      color: state.isFocused ? "#f3efec" : "#110f0f",
     }),
     menuList: (baseStyles, state) => ({
       ...baseStyles,
@@ -134,6 +134,10 @@ const RegisterForm = forwardRef((props, ref) => {
     placeholder: (baseStyles, state) => ({
       ...baseStyles,
       color: theme.placeholderText,
+    }),
+    singleValue: (baseStyles, state) => ({
+      ...baseStyles,
+      color: "#110f0f",
     }),
   };
 

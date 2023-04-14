@@ -6,6 +6,7 @@ import {
   UserLoginWidget,
   LoadingScreen,
   AddCourtWidget,
+  SettingsWidget,
 } from "../components";
 import { setTheme, setLogout } from "../store/storageSlice";
 import { Wrapper } from "../components/microComponets";
@@ -26,6 +27,7 @@ const MainPage = () => {
       ) : (
         <>
           <SettingsWidget />
+
           <UserLoginWidget
             setAddCourtMarker={setAddCourtMarker}
             setOpenedCourt={setOpenedCourt}
@@ -48,13 +50,3 @@ const MainPage = () => {
 };
 
 export default MainPage;
-
-const SettingsWidget = styled.div`
-  position: absolute;
-  top: 30px;
-  left: 30px;
-  /* width: 20px;
-  height: 20px; */
-  z-index: 10;
-  /* background-color: ${(props) => props.theme.color}; */
-`;

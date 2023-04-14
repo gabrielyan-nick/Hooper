@@ -37,7 +37,7 @@ const RadioInput = styled.input`
 
 const RadioLabel = styled.label`
   position: relative;
-  background-color: #fff;
+  background-color: ${props => props.theme.radioBg};
   border: 1px solid #ccc;
   border-radius: 50%;
   cursor: pointer;

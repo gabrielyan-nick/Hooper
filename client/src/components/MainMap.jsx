@@ -141,7 +141,7 @@ const MainMap = ({
         {...viewState}
         style={{ width: "100%", height: "100vh" }}
         onMove={onMapMove}
-        mapStyle={theme === "light" ? mapStyle : darkTheme.mapStyle}
+        mapStyle={mapStyle}
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         onClick={handleMapClick}
       >

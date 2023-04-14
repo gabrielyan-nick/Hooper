@@ -18,6 +18,7 @@ import {
   AddCourtForm,
   EditCourtForm,
   CourtChat,
+  SettingsForm
 } from "./index";
 import { Button, IconButton, CloseBtn, ModalWrapper } from "./microComponets";
 import { CloseIconFill, CloseIcon } from "./svgIcons";
@@ -154,6 +155,12 @@ const ModalWindow = ({
                         openedCourt={openedCourt}
                         socket={socket}
                       />
+                    }
+                  />
+                  <Route
+                    path="/settings"
+                    element={
+                      <SettingsForm closeModal={onCloseModal} goBack={onGoBack} />
                     }
                   />
                   <Route

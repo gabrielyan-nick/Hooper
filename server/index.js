@@ -66,7 +66,7 @@ io.on("connection", (socket) => {
   socket.on("leave_chat", (chatId) => {
     socket.leave(chatId);
   });
-
+ 
   socket.on("send_message", (data) => {
     io.to(data.chatId).emit("receive_message", data);
   });

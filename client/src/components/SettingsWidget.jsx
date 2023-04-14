@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { Button, FlexBetweenBox, Text, UserWidgetBtn } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
 import { ModalWindow } from "./index";
+import { SettingsIcon } from "./svgIcons";
 
 const SettingsWidget = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,7 +15,7 @@ const SettingsWidget = () => {
 
   const onOpenModal = () => {
     setIsModalOpen(true);
-    navigate("/my-info");
+    navigate("/settings");
   };
 
   const onCloseModal = () => {
@@ -23,7 +24,11 @@ const SettingsWidget = () => {
   };
   return (
     <>
-      <SettingsBtn onClick={onOpenModal}></SettingsBtn>
+      <Wrapper>
+        <SettingsBtn onClick={onOpenModal}>
+          <SettingsIcon />
+        </SettingsBtn>
+      </Wrapper>
 
       <ModalWindow opened={isModalOpen} closeModal={onCloseModal} />
     </>
@@ -32,6 +37,17 @@ const SettingsWidget = () => {
 
 export default SettingsWidget;
 
+const Wrapper = styled.div`
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  z-index: 10;
+`;
+
 const SettingsBtn = styled(UserWidgetBtn)`
-  background-color: ${lightTheme.greenUserWidget};
+  height: 45px;
+  width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
