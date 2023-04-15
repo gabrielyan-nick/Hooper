@@ -13,6 +13,10 @@ const SettingsWidget = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    location.pathname === "/" && setIsModalOpen(false);
+  }, [location]);
+
   const onOpenModal = () => {
     setIsModalOpen(true);
     navigate("/settings");

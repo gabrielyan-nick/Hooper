@@ -9,6 +9,7 @@ export const courtsApi = createApi({
   endpoints: (builder) => ({
     getMarkers: builder.query({
       query: () => "/markers",
+      refetchOnFocus: true,
       providesTags: (result, error, id) => [{ type: "Markers", id }],
     }),
     addCourt: builder.mutation({

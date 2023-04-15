@@ -22,7 +22,7 @@ import {
 } from "./microComponets";
 import { EnterIcon, ShowHideIcon } from "./svgIcons";
 import { BasketballMarker, FootballMarker } from "./markers";
-import { setViewState } from "../store/storageSlice";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 const FavouriteCourts = ({ courts }) => {
   const displayedListLength = 3;
@@ -96,6 +96,7 @@ const FavCourt = memo(
   forwardRef((props, ref) => {
     const { court } = props;
     const navigate = useNavigate();
+    const isSmallScreen = useMediaQuery("(max-width: 380px)");
 
     const onChangeToCourt = () => {
       navigate(`/courts/${court._id}`);
@@ -104,7 +105,7 @@ const FavCourt = memo(
     return (
       <LineWrapper ref={ref}>
         {markers[court.sport]}
-        <Text fS="18px">
+        <Text fS={`${isSmallScreen ? "17px" : "18px"}`}>
           <span>{court.name}</span>
         </Text>
         <GoToBtn color="green" onClick={onChangeToCourt}>

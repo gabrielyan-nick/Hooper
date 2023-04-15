@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { Tooltip } from "react-tooltip";
 import {
   BasketballCourtIcon,
@@ -9,6 +9,7 @@ import {
   LightingIcon,
   OkIcon,
   CloseIcon,
+  CourtIcon,
 } from "./svgIcons";
 import {
   FlexBetweenBox,
@@ -16,13 +17,16 @@ import {
   Text,
   IconButton,
 } from "./microComponets";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 const CourtInfo = ({ data }) => {
+  const isSmallScreen = useMediaQuery("(max-width: 380px)");
+  const theme = useTheme();
   const coverIcon =
     data.sport === "basketball" ? (
-      <BasketballCourtIcon />
+      <CourtIcon color="#bb3407e8" />
     ) : (
-      <FootballFieldIcon />
+      <CourtIcon color="#016837" />
     );
 
   const coverData =
@@ -31,7 +35,21 @@ const CourtInfo = ({ data }) => {
       : footballCover[data.cover];
 
   const countIcon =
-    data.sport === "basketball" ? <BasketballHoopIcon /> : <FootballGoalIcon />;
+    data.sport === "basketball" ? (
+      <BasketballHoopIcon
+        main={theme.hoopIcon.main}
+        secondary={theme.hoopIcon.secondary}
+        net={theme.hoopIcon.net}
+        border={theme.hoopIcon.border}
+        bottom={theme.hoopIcon.bottom}
+      />
+    ) : (
+      <FootballGoalIcon
+        main={theme.goal.main}
+        secondary={theme.goal.secondary}
+        net={theme.goal.net}
+      />
+    );
 
   const isLighting = data.lighting ? (
     <OkIcon />
@@ -44,7 +62,9 @@ const CourtInfo = ({ data }) => {
 
   return (
     <CourtInfoWrapper>
-      <CourtInfoDataWrapper>
+      <CourtInfoDataWrapper
+        style={{ flexBasis: isSmallScreen ? "43%" : "33%" }}
+      >
         <IconWithTooltip icon={coverIcon} tooltip="Покриття" id="cover" />
         <Text fS="14px" fW={700}>
           {coverData}
@@ -82,7 +102,7 @@ export const IconWithTooltip = ({ icon, tooltip, id, place = "top" }) => {
         style={{
           borderRadius: "7px",
           padding: "5px 7px",
-          backgroundColor: "#2b2a2adc",
+          backgroundColor: "#1a1818dc",
         }}
       >
         <Text color="#fff">{tooltip}</Text>

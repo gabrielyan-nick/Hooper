@@ -40,6 +40,7 @@ import {
   setMapSatellite,
   setMapDark,
   setMapLight,
+  setCourtsType,
 } from "../../store/storageSlice";
 import dark from "../../assets/dark.png";
 import light from "../../assets/light.png";
@@ -49,6 +50,7 @@ const SettingsForm = ({ closeModal, goBack }) => {
   const dispatch = useDispatch();
   const theme = useSelector((s) => s.storage.theme);
   const mapStyle = useSelector((s) => s.storage.mapStyle);
+  const courtsType = useSelector((s) => s.storage.courtsType);
 
   const onChangeTheme = () => {
     dispatch(setTheme());
@@ -60,7 +62,7 @@ const SettingsForm = ({ closeModal, goBack }) => {
           <CloseIcon />
         </CloseBtn>
       </ModalHeader>
-      <div style={{ padding: "5px 5px 20px 5px" }}>
+      <div style={{ padding: "5px 5px 40px 5px" }}>
         <FirstLine>
           <LabelWrapper pl="10px">
             Тема
@@ -75,7 +77,7 @@ const SettingsForm = ({ closeModal, goBack }) => {
           </LabelWrapper>
           <Label style={{ flexBasis: "70%", paddingRight: "10px" }}>
             Карта
-            <MapWrapper>
+            <RadioWrapper>
               <BtnWrapper>
                 <label>
                   <RadioBtnMap
@@ -112,9 +114,49 @@ const SettingsForm = ({ closeModal, goBack }) => {
                   <img src={satelite} alt="satelite" />
                 </label>
               </BtnWrapper>
-            </MapWrapper>
+            </RadioWrapper>
           </Label>
         </FirstLine>
+        <div>
+          <Label pl="10px" m="20px 0 0 0" style={{ display: "block" }}>
+            Майданчики
+            <RadioWrapper style={{ justifyContent: "space-around" }}>
+              <RadioCentredBox style={{ flexBasis: "26%" }}>
+                <LabelHidden>
+                  <RadioBtnCourts
+                    name="court"
+                    type="radio"
+                    checked={courtsType === "all"}
+                    onChange={() => dispatch(setCourtsType("all"))}
+                  />
+                  <RadioText fS="17px">Всі</RadioText>
+                </LabelHidden>
+              </RadioCentredBox>
+              <RadioCentredBox>
+                <LabelHidden>
+                  <RadioBtnCourts
+                    name="court"
+                    type="radio"
+                    checked={courtsType === "basketball"}
+                    onChange={() => dispatch(setCourtsType("basketball"))}
+                  />
+                  <RadioText fS="17px">Баскетбол</RadioText>
+                </LabelHidden>
+              </RadioCentredBox>
+              <RadioCentredBox>
+                <LabelHidden>
+                  <RadioBtnCourts
+                    name="court"
+                    type="radio"
+                    checked={courtsType === "football"}
+                    onChange={() => dispatch(setCourtsType("football"))}
+                  />
+                  <RadioText fS="17px">Футбол</RadioText>
+                </LabelHidden>
+              </RadioCentredBox>
+            </RadioWrapper>
+          </Label>
+        </div>
       </div>
     </div>
   );
@@ -126,6 +168,22 @@ const BtnWrapper = styled.div`
   position: relative;
   width: 40px;
   height: 40px;
+`;
+
+const LabelHidden = styled.label`
+  display: contents;
+`;
+
+const RadioCentredBox = styled(FlexCenterBox)`
+  flex-basis: 37%;
+  align-items: normal;
+`;
+
+const RadioText = styled(Text)`
+  font-family: "Golos Text", sans-serif;
+  padding: 0 5px 2px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
 `;
 
 const RadioBtnMap = styled.input`
@@ -147,14 +205,29 @@ const RadioBtnMap = styled.input`
   }
 `;
 
-const MapWrapper = styled.div`
+const RadioBtnCourts = styled.input`
+  position: absolute;
+
+  opacity: 0;
+  & + p {
+    cursor: pointer;
+    position: absolute;
+    display: block;
+    border-radius: 10px;
+  }
+  &:checked + p {
+    outline: 4px solid #039751;
+  }
+`;
+
+const RadioWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
 `;
 
 const FirstLine = styled.div`
-  margin-top: 15px;
+  margin-top: 20px;
   display: flex;
 `;
 

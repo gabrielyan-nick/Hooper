@@ -19,12 +19,12 @@ import { ModalHeader } from "./ModalWindow";
 import { setLogout } from "../store/storageSlice";
 
 const MyInfo = forwardRef((props, ref) => {
-  const {
-    closeModal,
-    setAddCourtMarker,
-  } = props;
-  const { picturePath, username, city, favouriteCourts } = useSelector(
-    (state) => state.storage.user
+  const { closeModal, setAddCourtMarker } = props;
+  const picturePath = useSelector((state) => state.storage?.user?.picturePath);
+  const username = useSelector((state) => state.storage?.user?.username);
+  const city = useSelector((state) => state.storage?.user?.city);
+  const favouriteCourts = useSelector(
+    (state) => state.storage?.user?.favouriteCourts
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -52,9 +52,7 @@ const MyInfo = forwardRef((props, ref) => {
           </TextWrapper>
           <AvatarChanged photo={picturePath} />
         </FirstLineWrapper>
-        <FavouriteCourts
-          courts={favouriteCourts}
-        />
+        <FavouriteCourts courts={favouriteCourts} />
         <Button
           onClick={onLogout}
           bgColors={lightTheme.btnSecondary}

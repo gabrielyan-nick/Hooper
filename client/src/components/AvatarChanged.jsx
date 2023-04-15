@@ -11,7 +11,8 @@ import { setLogin } from "../store/storageSlice";
 import { BasketballMarker, PhotoWindow } from "./index";
 
 const AvatarChanged = ({ photo, openPhoto }) => {
-  const { token, _id } = useSelector((state) => state.storage.user);
+  const token = useSelector((state) => state.storage?.user?.token);
+  const _id = useSelector((state) => state.storage?.user?._id);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [changedAvatar, setChangedAvatar] = useState(null);
   const [changedAvatarUrl, setChangedAvatarUrl] = useState(null);

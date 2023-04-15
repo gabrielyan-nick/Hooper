@@ -9,6 +9,7 @@ const initialState = {
     zoom: 9.802041876073677,
   },
   mapStyle: "mapbox://styles/mapbox/outdoors-v12",
+  courtsType: "all",
 };
 
 const storageSlice = createSlice({
@@ -44,6 +45,9 @@ const storageSlice = createSlice({
     setMapLight: (state) => {
       state.mapStyle = "mapbox://styles/mapbox/outdoors-v12";
     },
+    setCourtsType: (state, action) => {
+      state.courtsType = action.payload;
+    },
   },
 });
 
@@ -57,5 +61,6 @@ export const {
   setMapSatellite,
   setMapDark,
   setMapLight,
+  setCourtsType
 } = storageSlice.actions;
 export default storageSlice.reducer;

@@ -24,14 +24,15 @@ const MainMap = ({
   openedCourt,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const theme = useSelector((state) => state.storage.theme);
-  const token = useSelector((state) => state.storage.user?.token);
-  const user = useSelector((state) => state.storage?.user);
+  const theme = useSelector((s) => s.storage.theme);
+  const token = useSelector((s) => s.storage.user?.token);
+  const user = useSelector((s) => s.storage?.user);
   const favCourts = useSelector(
     (state) => state.storage?.user?.favouriteCourts
   );
-  const mapStyle = useSelector((state) => state.storage.mapStyle);
-  const viewState = useSelector((state) => state.storage.viewState);
+  const mapStyle = useSelector((s) => s.storage.mapStyle);
+  const viewState = useSelector((s) => s.storage.viewState);
+  const courtsType = useSelector((s) => s.storage.courtsType);
   const markerSize =
     viewState.zoom.toFixed(0) < 12
       ? viewState.zoom.toFixed(1) * 1.2
@@ -145,23 +146,43 @@ const MainMap = ({
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         onClick={handleMapClick}
       >
-        {markers.map((marker) => (
-          <div key={marker._id} onClick={(e) => e.stopPropagation()}>
-            <Marker
-              latitude={marker.location.coordinates[0]}
-              longitude={marker.location.coordinates[1]}
-              onClick={() => {
-                onOpenCourtPopup(marker.courtId);
-              }}
-            >
-              {marker.sport === "basketball" ? (
-                <BasketballMarker size={markerSize} />
-              ) : (
-                <FootballMarker size={markerSize} />
-              )}
-            </Marker>
-          </div>
-        ))}
+        {courtsType === "all"
+          ? markers.map((marker) => (
+              <div key={marker._id} onClick={(e) => e.stopPropagation()}>
+                <Marker
+                  latitude={marker.location.coordinates[0]}
+                  longitude={marker.location.coordinates[1]}
+                  onClick={() => {
+                    onOpenCourtPopup(marker.courtId);
+                  }}
+                >
+                  {marker.sport === "basketball" ? (
+                    <BasketballMarker size={markerSize} />
+                  ) : (
+                    <FootballMarker size={markerSize} />
+                  )}
+                </Marker>
+              </div>
+            ))
+          : markers
+              .filter((marker) => marker.sport === courtsType)
+              .map((marker) => (
+                <div key={marker._id} onClick={(e) => e.stopPropagation()}>
+                  <Marker
+                    latitude={marker.location.coordinates[0]}
+                    longitude={marker.location.coordinates[1]}
+                    onClick={() => {
+                      onOpenCourtPopup(marker.courtId);
+                    }}
+                  >
+                    {marker.sport === "basketball" ? (
+                      <BasketballMarker size={markerSize} />
+                    ) : (
+                      <FootballMarker size={markerSize} />
+                    )}
+                  </Marker>
+                </div>
+              ))}
         {addCourtMarker && (
           <Marker latitude={addCourtMarker.lat} longitude={addCourtMarker.lng}>
             <MarkerIcon />

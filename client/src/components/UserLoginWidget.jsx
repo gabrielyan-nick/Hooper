@@ -31,7 +31,7 @@ const UserLoginWidget = ({ setAddCourtMarker, setOpenedCourt }) => {
             setOpenedCourt={setOpenedCourt}
           />
         ) : (
-          <UserWidgetBtn p="12px 30px" onClick={onOpenLoginModal}>
+          <UserWidgetBtn p="13px 30px" onClick={onOpenLoginModal}>
             Увійти
           </UserWidgetBtn>
         )}

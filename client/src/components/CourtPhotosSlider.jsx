@@ -6,7 +6,7 @@ import { useSwipeable } from "react-swipeable";
 import { storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "@firebase/storage";
 import { useSelector, useDispatch } from "react-redux";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { CourtImg, IconBtnBg, IconSpinnerWrapper } from "./microComponets";
 import {
   CloseIcon,
@@ -31,6 +31,7 @@ const CourtPhotosSlider = ({ courtId, photos, sport }) => {
   const saveCloseRef = useRef(null);
   const nodeRef = addedPhoto ? saveCloseRef : addRef;
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handlers = useSwipeable({
     onSwipedLeft: () => handleNext(),
@@ -134,11 +135,11 @@ const CourtPhotosSlider = ({ courtId, photos, sport }) => {
             </NextBtn>
           </div>
         )}
-        <FavBtn>
+        <FavBtnWrapper>
           <AddRemoveFavourite courtId={courtId} />
-        </FavBtn>
-        <EditCourtBtn color={lightTheme.popupBg} onClick={onGoToEditCourt}>
-          <EditIcon />
+        </FavBtnWrapper>
+        <EditCourtBtn onClick={onGoToEditCourt}>
+          <EditIcon color={theme.text} />
         </EditCourtBtn>
         <SwitchTransition mode="out-in">
           <CSSTransition
@@ -173,7 +174,7 @@ const CourtPhotosSlider = ({ courtId, photos, sport }) => {
             ) : (
               <AddPhotoBtn color={lightTheme.popupBg} onClick={checkAuth}>
                 <label>
-                  <AddPhotoIcon />
+                  <AddPhotoIcon color={theme.text} />
                   <input
                     id="photos"
                     type="file"
@@ -251,8 +252,10 @@ const IconBtn = styled(IconBtnBg)`
   border-radius: 7px;
   height: 31px;
   cursor: pointer;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+  background: ${(props) => props.theme.iconBtn};
+  &:hover {
+    background: ${(props) => props.theme.iconBtnHover};
+  }
 `;
 
 const AddPhotoBtn = styled(IconBtn)`
@@ -281,7 +284,7 @@ const Wrapper = styled.div`
   margin-top: 5px;
 `;
 
-const FavBtn = styled.div`
+const FavBtnWrapper = styled.div`
   position: absolute;
   bottom: 5px;
   right: 5px;

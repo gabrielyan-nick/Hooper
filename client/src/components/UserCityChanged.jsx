@@ -49,7 +49,8 @@ const SaveBtn = styled(IconBtnBg)`
 
 const UserCityChanged = ({ city }) => {
   const [selectValue, setSelectValue] = useState(null);
-  const { token, _id } = useSelector((state) => state.storage.user);
+  const token = useSelector((state) => state.storage?.user?.token);
+  const _id = useSelector((state) => state.storage?.user?._id);
   const [isChanged, setIsChanged] = useState(false);
   const theme = useTheme();
   const changeRef = useRef(null);
@@ -178,7 +179,7 @@ const UserCityChanged = ({ city }) => {
               <TextLineWrapper p="9px 33px 9px 15px" ref={changeRef}>
                 <Text fS="20px">
                   <span style={{ paddingRight: "35px" }}>
-                    {city.label || null}
+                    {city?.label || null}
                   </span>
                 </Text>
               </TextLineWrapper>

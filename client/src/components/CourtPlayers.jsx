@@ -235,7 +235,7 @@ const CourtPlayers = ({ court, courtId }) => {
                   openOnClick
                   style={{
                     borderRadius: "7px",
-                    maxWidth: "90vw",
+                    maxWidth: "98vw",
                     padding: "5px 7px",
                     backgroundColor: "#2b2a2adc",
                   }}
