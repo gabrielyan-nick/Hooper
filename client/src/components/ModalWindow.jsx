@@ -18,7 +18,7 @@ import {
   AddCourtForm,
   EditCourtForm,
   CourtChat,
-  SettingsForm
+  SettingsForm,
 } from "./index";
 import { Button, IconButton, CloseBtn, ModalWrapper } from "./microComponets";
 import { CloseIconFill, CloseIcon } from "./svgIcons";
@@ -160,7 +160,10 @@ const ModalWindow = ({
                   <Route
                     path="/settings"
                     element={
-                      <SettingsForm closeModal={onCloseModal} goBack={onGoBack} />
+                      <SettingsForm
+                        closeModal={onCloseModal}
+                        goBack={onGoBack}
+                      />
                     }
                   />
                   <Route
@@ -254,10 +257,10 @@ export const ModalWrap = styled(ModalWrapper)`
 `;
 
 export const ModalContent = styled.div`
+  overflow: hidden;
   background: ${(props) => props.bg || props.theme.popupBg};
   border-radius: 10px;
   min-height: 100px;
-  padding: 5px 0;
   max-width: 420px;
   @media ${(props) => props.theme.media.wideScreen} {
     width: 27%;

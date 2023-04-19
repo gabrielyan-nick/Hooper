@@ -1,8 +1,16 @@
 import { createGlobalStyle } from "styled-components";
 import normalize from "../../node_modules/modern-normalize/modern-normalize.css";
+import Berlinfont from "../assets/fonts/berlinsansfb_reg.ttf";
 
 export default createGlobalStyle`
  ${normalize}
+@font-face {
+  font-family: 'Berlin';
+  src: url(${Berlinfont}) format('truetype');
+  font-weight: normal;
+    font-style: normal;
+}
+
   body, #root, .App, main {
     height: 100%;
     width: 100%;
@@ -24,30 +32,31 @@ p, ul, li {
 .photo-modal-overlay-appear,
 .modal-overlay-appear {
   opacity: 0;
+  /* transition: opacity 200ms; */
 }
 .photo-modal-overlay-appear-done,
 .modal-overlay-appear-done {
   opacity: 1;
-  transition: opacity 300ms;
+  transition: opacity 200ms;
 }
 .photo-modal-overlay-exit,
 .modal-overlay-exit {
   opacity: 1;
+  transition: opacity 200ms;
 }
 .photo-modal-overlay-exit-active,
 .modal-overlay-exit-active {
   opacity: 0;
-  transition: opacity 300ms;
 }
 
 .modal-content-appear {
   opacity: 0;
-  transform: scale(0.95);
+  transform: scale(0.99);
+  transition: opacity 200ms, transform 200ms;
 }
 .modal-content-appear-done {
   opacity: 1;
   transform: scale(1);
-  transition: opacity 300ms, transform 300ms;
 }
 .modal-content-exit {
   opacity: 1;
@@ -55,30 +64,25 @@ p, ul, li {
 }
 .modal-content-exit-active {
   opacity: 0;
-  transform: scale(0.95);
-  transition: opacity 300ms, transform 300ms;
-}
+  transform: scale(0.99);
 
+}
 
 .switch-enter{
    opacity: 0;
-   transform: scale(0.97);
-   transition: opacity 300ms, transform 300ms;
+   transform: scale(0.99);
+   transition: opacity 200ms, transform 300ms;
 }
 .switch-enter-active{
    opacity: 1;
    transform: scale(1);
-     transition: opacity 300ms, transform 300ms;
+  transition: opacity 200ms, transform 300ms;
 }
 .switch-exit{
    opacity: 1;
-   transform: scale(1);
-  transition: opacity 300ms, transform 300ms;
 }
 .switch-exit-active{
    opacity: 0;
-   transform: scale(0.97);
-  transition: opacity 300ms, transform 300ms;
 }
 
 .icons-switch-enter{
@@ -158,5 +162,15 @@ p, ul, li {
   opacity: 0;
   transform: translateX(100%) rotate(100deg);
   transition: all 500ms;
+}
+
+
+.loading-hide-exit {
+  transform: translateX(0);
+  transition: transform 1700ms;
+}
+.loading-hide-exit-active {
+  transform: translateX(-150%);
+  transition: transform 1700ms;
 }
 `;

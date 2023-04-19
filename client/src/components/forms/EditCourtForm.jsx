@@ -216,8 +216,8 @@ const EditCourtForm = ({ courtInfo, closeModal, goBack }) => {
           <CloseIcon />
         </CloseBtn>
       </ModalHeader>
-      <FormWrapper style={{ padding: "0 5px 5px" }}>
-        <Text fS="20px" fW={700} m="10px 10px 15px" centred>
+      <FormWrapper style={{ padding: "0 5px 10px 5px" }}>
+        <Text fS="20px" fW={700} m="15px 10px 15px" centred>
           Вкажіть актуальну інформацію про майданчик
         </Text>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>

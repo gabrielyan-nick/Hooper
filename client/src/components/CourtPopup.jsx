@@ -1,5 +1,6 @@
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import { CSSTransition } from "react-transition-group";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
@@ -15,6 +16,7 @@ import {
   BackBtn,
   Button,
   BtnSpinnerWrapper,
+  LoadingScreenWrapper,
 } from "./microComponets";
 import {
   FavouriteIcon,
@@ -30,6 +32,8 @@ import {
   CourtPhotosSlider,
   CourtChatPreview,
   BallsAnimation,
+  LoadingScreen,
+  BallSpinner,
 } from "./index";
 import { setViewState } from "../store/storageSlice";
 
@@ -51,6 +55,7 @@ const CourtPopup = forwardRef((props, ref) => {
     isSuccess,
   } = useGetCourtQuery(courtId);
   const dispatch = useDispatch();
+  const loadingRef = useRef(null);
 
   useEffect(() => {
     if (isSuccess) {
@@ -78,36 +83,43 @@ const CourtPopup = forwardRef((props, ref) => {
 
   return (
     <PopupWrapper ref={ref}>
-      {isLoading ? (
-        <BallsAnimation />
-      ) : (
-        <>
-          <FlexBetweenBox style={{ padding: "0 5px" }}>
-            {isBackBtn && (
-              <BackBtn onClick={goBack}>
-                <BackIcon />
-              </BackBtn>
-            )}
-            <CourtTitle backBtn={isBackBtn}>{court?.name}</CourtTitle>
-            <CloseBtn onClick={closeModal}>
-              <CloseIcon />
-            </CloseBtn>
-          </FlexBetweenBox>
-          <CourtPhotosSlider
-            courtId={courtId}
-            sport={court?.sport}
-            photos={court?.photos}
-          />
-          <CourtInfo data={court} />
-          <CourtChatPreview
-            messages={court?.messages}
-            courtId={court?._id}
-            chatId={court?.chatId}
-            socket={socket}
-          />
-          <CourtPlayers court={court} courtId={courtId} />
-        </>
-      )}
+      <CSSTransition
+        nodeRef={loadingRef}
+        in={isLoading}
+        timeout={1700}
+        classNames="loading-hide"
+        unmountOnExit
+      >
+        <LoadingScreenWrapper ref={loadingRef}>
+          <BallSpinner />
+        </LoadingScreenWrapper>
+      </CSSTransition>
+      <div style={{ width: "100%", paddingBottom: "10px" }}>
+        <FlexBetweenBox style={{ padding: "5px 5px 0 5px" }}>
+          {isBackBtn && (
+            <BackBtn onClick={goBack}>
+              <BackIcon />
+            </BackBtn>
+          )}
+          <CourtTitle backBtn={isBackBtn}>{court?.name}</CourtTitle>
+          <CloseBtn onClick={closeModal}>
+            <CloseIcon />
+          </CloseBtn>
+        </FlexBetweenBox>
+        <CourtPhotosSlider
+          courtId={courtId}
+          sport={court?.sport}
+          photos={court?.photos}
+        />
+        <CourtInfo data={court} />
+        <CourtChatPreview
+          messages={court?.messages}
+          courtId={court?._id}
+          chatId={court?.chatId}
+          socket={socket}
+        />
+        <CourtPlayers court={court} courtId={courtId} />
+      </div>
     </PopupWrapper>
   );
 });
@@ -116,9 +128,12 @@ export default CourtPopup;
 
 const PopupWrapper = styled.div`
   width: 100%;
-  min-height: 300px;
+  min-height: 465px;
   background: ${(props) => props.theme.popupBg};
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CourtTitle = styled(Title)`

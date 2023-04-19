@@ -290,7 +290,7 @@ const QuestionIconWrapper = styled.div`
 const CheckInBtn = styled(Button)`
   position: relative;
   padding: 5px 15px;
-  margin: 20px auto 5px;
+  margin: 20px auto 0;
   height: 34px;
   transition: box-shadow 200ms, transform 200ms;
 `;

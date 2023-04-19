@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
+import { CSSTransition } from "react-transition-group";
 import {
   MainMap,
   UserLoginWidget,
@@ -8,26 +8,30 @@ import {
   AddCourtWidget,
   SettingsWidget,
 } from "../components";
-import { setTheme, setLogout } from "../store/storageSlice";
 import { Wrapper } from "../components/microComponets";
 
 const MainPage = () => {
   const [isLoadingScreen, setIsLoadingScreen] = useState(true);
   const [addCourtMarker, setAddCourtMarker] = useState(null);
   const [openedCourt, setOpenedCourt] = useState(false);
-  const dispatch = useDispatch();
+  const loadingRef = useRef(null);
 
-  // const onChangeTheme = () => dispatch(setTheme());
   const closeLoadingScreen = () => setIsLoadingScreen(false);
 
   return (
     <Wrapper>
-      {isLoadingScreen ? (
-        <LoadingScreen />
-      ) : (
+      <CSSTransition
+        nodeRef={loadingRef}
+        in={isLoadingScreen}
+        timeout={1700}
+        classNames="loading-hide"
+        unmountOnExit
+      >
+        <LoadingScreen ref={loadingRef} />
+      </CSSTransition>
+      {!isLoadingScreen && (
         <>
           <SettingsWidget />
-
           <UserLoginWidget
             setAddCourtMarker={setAddCourtMarker}
             setOpenedCourt={setOpenedCourt}

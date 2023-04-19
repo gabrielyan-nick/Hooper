@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   position: relative;
+  overflow: hidden;
 `;
 
 export const FlexBetweenBox = styled.div`
@@ -117,7 +118,7 @@ export const ModalHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: ${(props) => (props.empty ? "flex-end" : "space-between")};
-  padding: 0 5px;
+  padding: 5px 5px 0 5px;
 `;
 
 export const BackBtn = styled(IconBtnBg)`
@@ -372,4 +373,15 @@ export const ModalWrapper = styled.div`
   &::-webkit-scrollbar {
     width: 0;
   }
+`;
+
+export const LoadingScreenWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  background: ${(props) => props.theme.loadingScreen};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  position: fixed;
 `;

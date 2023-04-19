@@ -282,6 +282,7 @@ const Wrapper = styled.div`
   position: relative;
   width: 100%;
   margin-top: 5px;
+  height: 180px;
 `;
 
 const FavBtnWrapper = styled.div`

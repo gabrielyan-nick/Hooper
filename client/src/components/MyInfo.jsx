@@ -11,11 +11,12 @@ import {
   FlexCenterBox,
   IconBtnBg,
   CloseBtn,
+  ModalHeader,
 } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
 import { AvatarChanged, UserCityChanged, FavouriteCourts } from "./index";
 import { ChangeIcon, CloseIcon } from "./svgIcons";
-import { ModalHeader } from "./ModalWindow";
+
 import { setLogout } from "../store/storageSlice";
 
 const MyInfo = forwardRef((props, ref) => {
@@ -37,7 +38,7 @@ const MyInfo = forwardRef((props, ref) => {
 
   return (
     <div ref={ref}>
-      <ModalHeader>
+      <ModalHeader empty>
         <CloseBtn onClick={closeModal}>
           <CloseIcon />
         </CloseBtn>
@@ -68,7 +69,7 @@ const MyInfo = forwardRef((props, ref) => {
 export default MyInfo;
 
 export const Wrapper = styled.div`
-  padding: 30px 5px 5px;
+  padding: 30px 5px 10px;
 `;
 
 export const FirstLineWrapper = styled.div`

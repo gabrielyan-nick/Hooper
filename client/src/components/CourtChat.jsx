@@ -33,6 +33,7 @@ import {
   ChatWrapper,
   Input,
   Text,
+  LoadingScreenWrapper,
 } from "./microComponets";
 import {
   FavouriteIcon,
@@ -45,7 +46,12 @@ import {
   DeleteIcon,
   EnterIcon,
 } from "./svgIcons";
-import { BallsAnimation, ConfirmModal } from "./index";
+import {
+  BallsAnimation,
+  ConfirmModal,
+  LoadingScreen,
+  BallSpinner,
+} from "./index";
 import { formatDate } from "../utils";
 import { BasketballMarker, FootballMarker } from "./index";
 import useOnIntersection from "../hooks/useOnIntersection";
@@ -72,6 +78,7 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
   const [postMessage, postResult] = usePostChatMessageMutation();
   const [messagesRecieved, setMessagesReceived] = useState([]);
   const [isEndOfMessages, setIsEndOfMessages] = useState(false);
+  const loadingRef = useRef(null);
 
   const incrementOffset = useCallback(() => {
     if (!isFetching && !isEndOfMessages) {
@@ -172,6 +179,17 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
 
   return (
     <div>
+      <CSSTransition
+        nodeRef={loadingRef}
+        in={isLoading}
+        timeout={1700}
+        classNames="loading-hide"
+        unmountOnExit
+      >
+        <LoadingScreenWrapper ref={loadingRef}>
+          <BallSpinner />
+        </LoadingScreenWrapper>
+      </CSSTransition>
       <ModalHeader>
         <BackBtn onClick={onGoBack}>
           <BackIcon />
@@ -183,9 +201,7 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
       </ModalHeader>
 
       <MessagesWrapper ref={messagesWrapperRef}>
-        {isLoading ? (
-          <BallsAnimation height={430} />
-        ) : !messagesRecieved.length ? (
+        {!messagesRecieved.length ? (
           <FlexCenterBox style={{ height: "100%" }}>
             <Text centred>Залишайте повідомлення, домовляйтесь про ігри</Text>
           </FlexCenterBox>
@@ -215,7 +231,7 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
         ></div>
       </MessagesWrapper>
 
-      <Form onSubmit={onSendMessage}>
+      <Form onSubmit={onSendMessage} style={{ marginBottom: "5px" }}>
         <label htmlFor="message">
           <Input
             name="message"
@@ -320,7 +336,9 @@ const ChatMessage = memo(
               onClick={onGoToUserInfo}
             />
             {!isEdited ? (
-              <Text style={{ width: "100%" }}>{message.text}</Text>
+              <Text color="primary" style={{ width: "100%" }}>
+                {message.text}
+              </Text>
             ) : (
               <EditedInput
                 value={editedText}
@@ -398,6 +416,7 @@ const EditedInput = styled(Input)`
     box-shadow: none;
     outline: none;
   }
+  color: ${(props) => props.theme.text};
 `;
 
 const Form = styled.form`

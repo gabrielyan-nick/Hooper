@@ -1,6 +1,7 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect, forwardRef, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
 import styled from "styled-components";
 import {
   Button,
@@ -12,12 +13,16 @@ import {
   IconBtnBg,
   CloseBtn,
   BackBtn,
+  ModalHeader,
+  LoadingScreenWrapper,
 } from "./microComponets";
 import {
   AvatarChanged,
   UserCityChanged,
   FavouriteCourts,
   PhotoWindow,
+  LoadingScreen,
+  BallSpinner,
 } from "./index";
 import { CloseIcon, BackIcon } from "./svgIcons";
 import { useGetUserInfoQuery } from "../api/userApi";
@@ -29,6 +34,7 @@ const UserInfo = forwardRef((props, ref) => {
   const { userId } = useParams();
   const { data = {}, isLoading } = useGetUserInfoQuery(userId);
   const navigate = useNavigate();
+  const loadingRef = useRef(null);
 
   const openPhotoModal = () => setIsPhotoModalOpen(true);
   const closePhotoModal = () => setIsPhotoModalOpen(false);
@@ -36,14 +42,25 @@ const UserInfo = forwardRef((props, ref) => {
   return (
     <>
       <div ref={ref}>
-        <FlexBetweenBox style={{ padding: "0 5px" }}>
+        <CSSTransition
+          nodeRef={loadingRef}
+          in={isLoading}
+          timeout={1700}
+          classNames="loading-hide"
+          unmountOnExit
+        >
+          <LoadingScreenWrapper ref={loadingRef}>
+            <BallSpinner />
+          </LoadingScreenWrapper>
+        </CSSTransition>
+        <ModalHeader>
           <BackBtn onClick={goBack}>
             <BackIcon />
           </BackBtn>
           <CloseBtn onClick={closeModal}>
             <CloseIcon />
           </CloseBtn>
-        </FlexBetweenBox>
+        </ModalHeader>
         <Wrapper>
           <FirstLineWrapper>
             <TextWrapper>

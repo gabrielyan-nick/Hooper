@@ -1,15 +1,16 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import GlobalStyles from "./styles/global.js";
 import { Helmet } from "react-helmet";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./styles/themes.js";
-import MainPage from "./pages/MainPage.jsx";
-import ResetPassPage from "./pages/ResetPassPage.jsx";
-import { Map } from "./components";
+import { LoadingScreen, Map } from "./components";
 import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
 import "../node_modules/react-tooltip/dist/react-tooltip.css";
+
+const MainPage = lazy(() => import("./pages/MainPage.jsx"));
+const ResetPassPage = lazy(() => import("./pages/ResetPassPage.jsx"));
 
 function App() {
   const theme = useSelector((state) => state.storage.theme);
@@ -35,13 +36,15 @@ function App() {
         <div className="App">
           <BrowserRouter>
             <main>
-              <Routes>
-                <Route path="/*" element={<MainPage />} />
-                <Route
-                  path="/reset-password/:token"
-                  element={<ResetPassPage />}
-                />
-              </Routes>
+              <Suspense fallback={<LoadingScreen />}>
+                <Routes>
+                  <Route path="/*" element={<MainPage />} />
+                  <Route
+                    path="/reset-password/:token"
+                    element={<ResetPassPage />}
+                  />
+                </Routes>
+              </Suspense>
             </main>
           </BrowserRouter>
         </div>

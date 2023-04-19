@@ -348,23 +348,6 @@ export const CloseIcon = ({ size = 23, color = "#f8d4c5" }) => {
   );
 };
 
-// export const SettingsIcon = ({ size = 25 }) => {
-//   return (
-//     <svg
-//       xmlns="http://www.w3.org/2000/svg"
-//       viewBox="0 0 512 512"
-//       xmlSpace="preserve"
-//       width={`${size}px`}
-//       height={`${size}px`}
-//     >
-//       <path
-//         fill="#ffd6c8"
-//         d="M502.325 307.303l-39.006-30.805c-6.215-4.908-9.665-12.429-9.668-20.348v-.252c-.014-7.936 3.44-15.478 9.667-20.396l39.007-30.806a25.44 25.44 0 007.737-29.701l-17.134-41.366a25.441 25.441 0 00-26.472-15.532l-49.366 5.8c-7.881.926-15.656-1.966-21.258-7.586l-.177-.178c-5.597-5.602-8.476-13.36-7.552-21.225l5.799-49.363a25.44 25.44 0 00-15.531-26.472L337.004 1.939a25.442 25.442 0 00-29.701 7.736L276.498 48.68c-4.908 6.215-12.43 9.665-20.349 9.668h-.252c-7.935.014-15.477-3.44-20.395-9.667L204.697 9.675a25.442 25.442 0 00-29.702-7.736L133.63 19.072a25.442 25.442 0 00-15.532 26.473l5.799 49.366c.926 7.881-1.964 15.656-7.585 21.257l-.178.178c-5.602 5.598-13.36 8.477-21.226 7.552l-49.363-5.799a25.44 25.44 0 00-26.472 15.531L1.939 174.996a25.442 25.442 0 007.736 29.701l39.006 30.805c6.215 4.908 9.665 12.429 9.668 20.348v.251c.014 7.935-3.44 15.477-9.667 20.395L9.675 307.303a25.44 25.44 0 00-7.736 29.701l17.134 41.365a25.442 25.442 0 0026.472 15.532l49.366-5.799c7.882-.926 15.656 1.965 21.258 7.586l.178.178c5.597 5.603 8.476 13.36 7.552 21.226l-5.799 49.364a25.44 25.44 0 0015.532 26.472l41.366 17.134a25.442 25.442 0 0029.701-7.736l30.804-39.005c4.908-6.215 12.43-9.665 20.348-9.669h.251c7.936-.014 15.478 3.44 20.396 9.667l30.806 39.007a25.44 25.44 0 0029.701 7.736l41.366-17.134a25.442 25.442 0 0015.532-26.472l-5.8-49.366c-.926-7.881 1.965-15.656 7.586-21.257l.178-.178c5.602-5.597 13.36-8.476 21.225-7.552l49.364 5.799a25.44 25.44 0 0026.472-15.531l17.134-41.365a25.443 25.443 0 00-7.737-29.703zm-221.033 22.395c-39.68 16.436-85.172-2.407-101.607-42.087-16.436-39.68 2.407-85.171 42.087-101.608 39.68-16.436 85.172 2.407 101.608 42.088 16.435 39.68-2.408 85.171-42.088 101.607z"
-//       />
-//     </svg>
-//   );
-// };
-
 export const SettingsIcon = ({ size = 30 }) => {
   return (
     <svg
@@ -718,54 +701,196 @@ export const BasketballHoopIcon = ({
   );
 };
 
-export const LightingIcon = ({ size = 28 }) => {
+export const LightingIcon = ({ size = 28, main }) => {
   return (
     <svg
       width={`${size}px`}
       height={`${size}px`}
-      data-name="Layer 1"
-      id="Layer_1"
-      viewBox="0 0 500 500"
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill={main}
+        d="M262.5 33l-10 30h87l-10-30zM160 39c-26 0-45.2 9.12-56.9 23.24C91.32 76.35 87 94.5 87 112v263h18V112c0-14.5 3.7-28.35 11.9-38.24C125.2 63.88 138 57 160 57h75.5l6-18zM72.55 393l-5.08 100h57.03l-5.1-100z"
+        fillOpacity={1}
+        strokeWidth={0.99968}
+        strokeDasharray="none"
+      />
+      <path
+        d="M240.407 87.695l-38.26 41.895 41.9-19.1-34.5 86.9 62.6-58.3-1.1 91.7 31.8-101.2 66.874 120.623-27.673-133.922 61.5 36.1-47.5-65.3z"
+        fill="#ff7606"
+        fillOpacity={1}
+        strokeWidth={0.99968}
+        strokeDasharray="none"
+      />
+    </svg>
+  );
+};
+
+export const HooperLogoIcon = ({ width = 187, net, main }) => {
+  return (
+    <svg
+      width={width}
+      height={55}
+      viewBox="0 0 27.182098 7.9947346"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
-        <style>
-          {
-            ".cls-3{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:20px}"
-          }
-        </style>
+        <linearGradient id="a">
+          <stop offset={0} stopColor="#00914c" stopOpacity={1} />
+          <stop offset={0.5} stopColor="#147c3f" stopOpacity={1} />
+          <stop offset={0.75} stopColor="#ff5235" stopOpacity={1} />
+          <stop offset={1} stopColor="#d04516" stopOpacity={1} />
+        </linearGradient>
+        <linearGradient
+          xlinkHref="#a"
+          id="b"
+          x1={3.1964653}
+          y1={0.22348779}
+          x2={26.429989}
+          y2={0.22348779}
+          gradientUnits="userSpaceOnUse"
+        />
       </defs>
+      <text
+        xmlSpace="preserve"
+        style={{
+          whiteSpace: "pre",
+          inlineSize: 29.2427,
+        }}
+        x={2.4294252}
+        y={2.5836747}
+        transform="translate(-2.1 3.44)"
+        fontSize="1.74431px"
+        letterSpacing="-.101751px"
+        wordSpacing={0}
+        fill="url(#b)"
+        fillOpacity={1}
+        stroke="#00914c"
+        strokeWidth={0.183495}
+        strokeDasharray="none"
+        strokeOpacity={0}
+      >
+        <tspan x={2.4294252} y={2.5836747}>
+          <tspan
+            style={{
+              InkscapeFontSpecification: "'Arial, Normal'",
+            }}
+            fontSize="7.75247px"
+            fontFamily="Arial"
+            letterSpacing="-.290718px"
+          >
+            {"H"}
+          </tspan>
+          <tspan
+            dx={-0.18896708}
+            style={{
+              InkscapeFontSpecification: "'Berlin'",
+            }}
+            fontSize="7.75247px"
+            fontFamily="Berlin, Arial"
+          >
+            {"ooper"}
+          </tspan>
+        </tspan>
+      </text>
       <path
-        d="M370.44 222.29a120.44 120.44 0 10-229.76 50.59l58.4 127.88h101.84l58.4-127.88a120 120 0 0011.12-50.59z"
-        fill="#ffc43d"
+        d="M2.859 2.303l.036.22v0"
+        opacity={0.973837}
+        fill="#ff3e1a"
+        stroke="#00914c"
+        strokeWidth={0.183495}
+        strokeOpacity={0}
       />
       <path
-        d="M250 101.85a120.44 120.44 0 00-16.1 1.2 120.37 120.37 0 0193.22 169.83l-58.4 127.88h32.2l58.4-127.88A120.48 120.48 0 00250 101.85z"
-        fill="#faae17"
-      />
-      <path className="cls-3" d="M250 10.88L250 50.42" />
-      <path className="cls-3" d="M398.45 73.67L370.72 101.85" />
-      <path className="cls-3" d="M456.14 223.18L416.61 223.18" />
-      <path className="cls-3" d="M101.55 73.67L129.28 101.85" />
-      <path className="cls-3" d="M43.86 223.18L83.39 223.18" />
-      <path
-        className="cls-3"
-        d="M370.44 222.29a120.44 120.44 0 10-229.76 50.59l58.4 127.88h101.84l58.4-127.88a120 120 0 0011.12-50.59z"
+        d="M2.851 2.296l.037.226"
+        opacity={0.973837}
+        fill="none"
+        stroke="none"
+        strokeWidth={0.183495}
+        strokeOpacity={1}
       />
       <path
-        d="M199 400.76h102v37.39a51 51 0 01-51 51 51 51 0 01-51-51v-37.39z"
-        fill="#727373"
+        opacity={0.973837}
+        fillOpacity={0}
+        stroke={main}
+        strokeWidth={0.122381}
+        strokeDasharray="none"
+        d="M1.7393782 0.88280219H4.508589499999999V2.70306119H1.7393782z"
       />
       <path
-        d="M268.77 400.76v37.39a51 51 0 01-34.87 48.33 50.78 50.78 0 0016.1 2.64 51 51 0 0051-51v-37.36z"
-        fill="#606161"
+        opacity={0.973837}
+        fillOpacity={0}
+        stroke={main}
+        strokeWidth={0.0824081}
+        strokeDasharray="none"
+        d="M2.6789002 1.7383457H3.66984125V2.36818113H2.6789002z"
+      />
+      <rect
+        width={1.1253058}
+        height={0.016795523}
+        x={2.6033199}
+        y={2.4689548}
+        ry={0.0083977617}
+        opacity={0.973837}
+        fillOpacity={0}
+        stroke={net}
+        strokeWidth={0.0824081}
+        strokeLinecap="round"
+        strokeDasharray="none"
       />
       <path
-        className="cls-3"
-        d="M199 400.76h102v37.39a51 51 0 01-51 51 51 51 0 01-51-51v-37.39z"
+        d="M2.662 2.545h1.025l-.06.167h-.88z"
+        opacity={0.973837}
+        fill={net}
+        fillOpacity={0.67628205}
+        strokeWidth={0.0824081}
+        strokeLinecap="round"
+        strokeDasharray="none"
+        strokeOpacity={0}
       />
-      <path className="cls-3" d="M186.39 436.13L313.61 436.13" />
-      <path className="cls-3" d="M186.39 400.76L313.61 400.76" />
+      <path
+        opacity={0.973837}
+        fillOpacity={0}
+        stroke={main}
+        strokeWidth={0.122411}
+        strokeLinecap="round"
+        strokeDasharray="none"
+        strokeOpacity={1}
+        d="M1.7458985 3.4629092H4.5144389V3.482302996H1.7458985z"
+      />
+      <path
+        opacity={0.973837}
+        fillOpacity={0}
+        stroke={main}
+        strokeWidth={0.121567}
+        strokeLinecap="round"
+        strokeDasharray="none"
+        strokeOpacity={1}
+        d="M1.7454761 3.4721329H1.7657148390000001V5.3733667H1.7454761z"
+      />
+      <path
+        opacity={0.973837}
+        fillOpacity={0}
+        stroke={main}
+        strokeWidth={0.121567}
+        strokeLinecap="round"
+        strokeDasharray="none"
+        strokeOpacity={1}
+        d="M4.4946227 3.4817791H4.514861439V5.3830129H4.4946227z"
+      />
+      <path
+        opacity={0.973837}
+        fill={net}
+        fillOpacity={0.330128}
+        stroke="#000"
+        strokeWidth={0.123294}
+        strokeLinecap="round"
+        strokeDasharray="none"
+        strokeOpacity={0}
+        d="M1.8910316 3.6040442H4.3693062000000005V5.3435647H1.8910316z"
+      />
     </svg>
   );
 };

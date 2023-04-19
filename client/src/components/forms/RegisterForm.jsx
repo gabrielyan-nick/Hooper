@@ -266,7 +266,7 @@ export const FormWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 0 5px 5px;
+  padding: 0 5px 10px 5px;
 `;
 
 export const ErrorText = styled(Text)`

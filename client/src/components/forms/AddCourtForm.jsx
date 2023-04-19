@@ -19,6 +19,7 @@ import {
   BtnSpinnerWrapper,
   CloseBtn,
   FlexBetweenBox,
+  ModalHeader,
 } from "./../microComponets";
 import { CloseIcon } from "./../svgIcons";
 import { useRegisterMutation } from "../../api/authApi";
@@ -213,12 +214,12 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
 
   return (
     <div>
-      <Header>
+      <ModalHeader empty>
         <CloseBtn onClick={closeModal}>
           <CloseIcon />
         </CloseBtn>
-      </Header>
-      <FormWrapper style={{ padding: "0 5px 5px" }}>
+      </ModalHeader>
+      <FormWrapper style={{ padding: "0 5px 10px 5px" }}>
         <Text fS="20px" fW={700} m="15px 10px 15px" centred>
           Вкажіть інформацію про майданчик
         </Text>

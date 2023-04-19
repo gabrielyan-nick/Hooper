@@ -12,7 +12,12 @@ import styled from "styled-components";
 import Map, { Marker, Popup } from "react-map-gl";
 import { lightTheme, darkTheme } from "../styles/themes";
 import { useGetMarkersQuery } from "../api/courtsApi";
-import { FootballMarker, BasketballMarker, ModalWindow } from "./index";
+import {
+  FootballMarker,
+  BasketballMarker,
+  ModalWindow,
+  BallsAnimation,
+} from "./index";
 import { MarkerIcon } from "./svgIcons";
 import { setViewState } from "../store/storageSlice";
 
@@ -46,6 +51,7 @@ const MainMap = ({
     data: markers = [],
     isLoading,
     isError,
+    isSuccess,
     error,
   } = useGetMarkersQuery();
 
@@ -92,6 +98,10 @@ const MainMap = ({
   useEffect(() => {
     location.pathname === "/" && setIsModalOpen(false);
   }, [location]);
+
+  useEffect(() => {
+    location.pathname !== "/" && navigate("/");
+  }, []);
 
   const onMapMove = useCallback((evt) => {
     dispatch(setViewState(evt.viewState));
@@ -146,6 +156,11 @@ const MainMap = ({
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         onClick={handleMapClick}
       >
+        {isLoading && (
+          <LoadingWrapper>
+            <BallsAnimation />
+          </LoadingWrapper>
+        )}
         {courtsType === "all"
           ? markers.map((marker) => (
               <div key={marker._id} onClick={(e) => e.stopPropagation()}>
@@ -201,3 +216,10 @@ const MainMap = ({
 };
 
 export default MainMap;
+
+const LoadingWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
