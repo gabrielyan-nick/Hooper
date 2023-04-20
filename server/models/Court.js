@@ -24,7 +24,6 @@ const courtSchema = new mongoose.Schema(
       required: true,
       default: 2,
     },
-    isPrivate: { type: Boolean, require: true, default: false },
     name: {
       type: String,
       max: 23,
@@ -38,18 +37,10 @@ const courtSchema = new mongoose.Schema(
       type: [String],
       required: true,
       default: function () {
-        if (this.isPrivate) {
-          if (this.sport === "basketball") {
-            return ["/assets/basketball-court-private.jpg"];
-          } else if (this.sport === "football") {
-            return ["/assets/football-court-private.jpg"];
-          }
-        } else {
-          if (this.sport === "basketball") {
-            return ["/assets/basketball-court-notprivate.jpg"];
-          } else if (this.sport === "football") {
-            return ["/assets/football-court-notprivate.jpg"];
-          }
+        if (this.sport === "basketball") {
+          return ["/assets/basketball-court-notprivate.jpg"];
+        } else if (this.sport === "football") {
+          return ["/assets/football-court-notprivate.jpg"];
         }
         return [];
       },
@@ -84,16 +75,6 @@ const courtSchema = new mongoose.Schema(
       ],
       default: [],
     },
-    comingSoonPlayers: {
-      type: [
-        {
-          _id: { type: Schema.Types.ObjectId, ref: "User" },
-          username: String,
-          createdAt: { type: Date, default: Date.now },
-        },
-      ],
-      default: [],
-    },
     checkinPlayers: {
       type: [
         {
@@ -104,7 +85,6 @@ const courtSchema = new mongoose.Schema(
       ],
       default: [],
     },
-    organizerContact: String,
   },
 
   { timestamps: true }

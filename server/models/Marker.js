@@ -8,7 +8,7 @@ const markerSchema = new mongoose.Schema(
       ref: "Court",
       require: true,
     },
-    location: {
+    geometry: {
       type: {
         type: String,
         enum: ["Point"],
@@ -23,14 +23,11 @@ const markerSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    isPrivate: {
-      type: Boolean,
-      require: true,
-      default: false,
-    },
   },
   { timestamps: true }
 );
+
+markerSchema.index({ geometry: "2dsphere" });
 
 const Marker = mongoose.model("Marker", markerSchema);
 

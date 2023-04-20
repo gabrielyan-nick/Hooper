@@ -49,7 +49,6 @@ export const getCourt = async (req, res) => {
     res.status(200).json({
       cover: court.cover,
       hoopsCount: court.hoopsCount,
-      isPrivate: court.isPrivate,
       lighting: court.lighting,
       location: court.location,
       messages: court.chatId.messages,

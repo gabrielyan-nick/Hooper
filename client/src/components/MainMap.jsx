@@ -4,12 +4,14 @@ import React, {
   useRef,
   useEffect,
   useCallback,
+  Fragment,
 } from "react";
-import { CSSTransition, SwitchTransition } from "react-transition-group";
+import { randomPoint } from "@turf/random";
+import MapGL, { Marker } from "@urbica/react-map-gl";
+import Cluster from "@urbica/react-map-gl-cluster";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import Map, { Marker, Popup } from "react-map-gl";
 import { lightTheme, darkTheme } from "../styles/themes";
 import { useGetMarkersQuery } from "../api/courtsApi";
 import {
@@ -38,12 +40,12 @@ const MainMap = ({
   const mapStyle = useSelector((s) => s.storage.mapStyle);
   const viewState = useSelector((s) => s.storage.viewState);
   const courtsType = useSelector((s) => s.storage.courtsType);
-  const markerSize =
-    viewState.zoom.toFixed(0) < 12
-      ? viewState.zoom.toFixed(1) * 1.2
-      : viewState.zoom.toFixed(0) < 13
-      ? viewState.zoom.toFixed(1) * 1.5
-      : viewState.zoom.toFixed(1) * 1.7;
+  // const markerSize =
+  //   viewState.zoom.toFixed(0) < 12
+  //     ? viewState.zoom.toFixed(1) * 1.2
+  //     : viewState.zoom.toFixed(0) < 13
+  //     ? viewState.zoom.toFixed(1) * 1.5
+  //     : viewState.zoom.toFixed(1) * 1.7;
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -68,12 +70,6 @@ const MainMap = ({
           zoom: 10,
           pitch: 0,
           bearing: 0,
-          padding: {
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-          },
         })
       );
     } else if (token && !!user.favouriteCourts?.length) {
@@ -84,12 +80,6 @@ const MainMap = ({
           zoom: 14,
           pitch: 0,
           bearing: 0,
-          padding: {
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-          },
         })
       );
     }
@@ -104,7 +94,7 @@ const MainMap = ({
   }, []);
 
   const onMapMove = useCallback((evt) => {
-    dispatch(setViewState(evt.viewState));
+    dispatch(setViewState(evt));
   }, []);
 
   const onOpenCourtPopup = (id) => {
@@ -122,38 +112,57 @@ const MainMap = ({
     viewState.zoom > 14.5 && setAddCourtMarker({ lat, lng });
   };
 
-  // const markersMemo = useMemo(
-  //   () =>
-  //     markers.map((marker) => (
-  //       <div key={marker._id} onClick={(e) => e.stopPropagation()}>
-  //         <Marker
-  //           latitude={marker.location.coordinates[0]}
-  //           longitude={marker.location.coordinates[1]}
-  //           onClick={() => {
-  //             onOpenCourtPopup(marker.courtId);
-  //           }}
-  //         >
-  //           {marker.sport === "basketball" ? (
-  //             <BasketballMarker size={markerSize} />
-  //           ) : (
-  //             <FootballMarker size={markerSize} />
-  //           )}
-  //         </Marker>
-  //       </div>
-  //     )),
-  //   [markers]
-  // );
+  const renderMarker = (marker) => (
+    <div key={marker.id} onClick={(e) => e.stopPropagation()}>
+      <Marker
+        key={marker.id}
+        latitude={marker.geometry.coordinates[0]}
+        longitude={marker.geometry.coordinates[1]}
+        onClick={() => {
+          onOpenCourtPopup(marker.courtId);
+        }}
+      >
+        {marker.sport === "basketball" ? (
+          <BasketballMarker size={25} />
+        ) : (
+          <FootballMarker size={25} />
+        )}
+      </Marker>
+    </div>
+  );
+
+  const filteredMarkers =
+    courtsType === "all"
+      ? markers
+      : markers.filter((marker) => marker.sport === courtsType);
+
+  const markersMemo = useMemo(
+    () => filteredMarkers?.map(renderMarker),
+    [filteredMarkers, markers]
+  );
+
+  const ClusterMarker = ({ longitude, latitude, pointCount }) => (
+    <Marker longitude={longitude} latitude={latitude}>
+      <div style={{ background: "#f28a25" }}>{pointCount}</div>
+    </Marker>
+  );
+
+  console.log(filteredMarkers);
+
+  const bbox = [-160, -70, 160, 70];
+  const points = randomPoint(50, { bbox }).features;
+  points.forEach((point, index) => (point.id = index));
 
   return (
     <>
-      <Map
+      <MapGL
         onLoad={closeLoadingScreen}
-        reuseMaps
+        // reuseMaps
         {...viewState}
         style={{ width: "100%", height: "100vh" }}
-        onMove={onMapMove}
+        onViewportChange={onMapMove}
         mapStyle={mapStyle}
-        mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+        accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         onClick={handleMapClick}
       >
         {isLoading && (
@@ -161,49 +170,30 @@ const MainMap = ({
             <BallsAnimation />
           </LoadingWrapper>
         )}
-        {courtsType === "all"
-          ? markers.map((marker) => (
-              <div key={marker._id} onClick={(e) => e.stopPropagation()}>
-                <Marker
-                  latitude={marker.location.coordinates[0]}
-                  longitude={marker.location.coordinates[1]}
-                  onClick={() => {
-                    onOpenCourtPopup(marker.courtId);
-                  }}
-                >
-                  {marker.sport === "basketball" ? (
-                    <BasketballMarker size={markerSize} />
-                  ) : (
-                    <FootballMarker size={markerSize} />
-                  )}
-                </Marker>
-              </div>
-            ))
-          : markers
-              .filter((marker) => marker.sport === courtsType)
-              .map((marker) => (
-                <div key={marker._id} onClick={(e) => e.stopPropagation()}>
-                  <Marker
-                    latitude={marker.location.coordinates[0]}
-                    longitude={marker.location.coordinates[1]}
-                    onClick={() => {
-                      onOpenCourtPopup(marker.courtId);
-                    }}
-                  >
-                    {marker.sport === "basketball" ? (
-                      <BasketballMarker size={markerSize} />
-                    ) : (
-                      <FootballMarker size={markerSize} />
-                    )}
-                  </Marker>
-                </div>
-              ))}
+        <Cluster
+          radius={100}
+          extent={512}
+          nodeSize={64}
+          component={ClusterMarker}
+        >
+          {/* {filteredMarkers.map(renderMarker)} */}
+          {filteredMarkers.map((point) => (
+            <Marker
+              key={point.id}
+              longitude={point.geometry.coordinates[1]}
+              latitude={point.geometry.coordinates[0]}
+            >
+              <BasketballMarker size={25} />
+            </Marker>
+          ))}
+        </Cluster>
+
         {addCourtMarker && (
           <Marker latitude={addCourtMarker.lat} longitude={addCourtMarker.lng}>
             <MarkerIcon />
           </Marker>
         )}
-      </Map>
+      </MapGL>
 
       <ModalWindow
         opened={isModalOpen}

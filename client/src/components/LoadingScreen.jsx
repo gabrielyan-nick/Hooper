@@ -13,7 +13,9 @@ const LoadingScreen = memo(
     const logoRef = useRef(null);
 
     useEffect(() => {
-      setTimeout(() => (logoRef.current.style.opacity = 1), 200);
+      setTimeout(() => {
+        logoRef.current && (logoRef.current.style.opacity = 1);
+      }, 200);
     }, []);
 
     return (

@@ -61,6 +61,6 @@ export const {
   setMapSatellite,
   setMapDark,
   setMapLight,
-  setCourtsType
+  setCourtsType,
 } = storageSlice.actions;
 export default storageSlice.reducer;
