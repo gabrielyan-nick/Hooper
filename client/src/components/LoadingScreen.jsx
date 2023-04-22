@@ -7,39 +7,36 @@ import { BtnSpinnerWrapper, LoadingScreenWrapper } from "./microComponets";
 
 const balls = [<BasketballMarker />, <FootballMarker />];
 
-const LoadingScreen = memo(
-  forwardRef((props, ref) => {
-    const theme = useTheme();
-    const logoRef = useRef(null);
+const LoadingScreen = forwardRef((props, ref) => {
+  const theme = useTheme();
+  const logoRef = useRef(null);
 
-    useEffect(() => {
-      setTimeout(() => {
-        logoRef.current && (logoRef.current.style.opacity = 1);
-      }, 200);
-    }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      logoRef.current && (logoRef.current.style.opacity = 1);
+    }, 200);
+  }, []);
 
-    return (
-      <LoadingScreenWrapper ref={ref}>
-        <LoadingScreenInner>
-          <div
-            style={{
-              marginLeft: "25px",
-              opacity: 0,
-              transition: "opacity .7s",
-            }}
-            ref={logoRef}
-          >
-            <HooperLogoIcon main={theme.logo.main} net={theme.logo.net} />
-          </div>
-          <BtnSpinnerWrapper style={{ animationDuration: "1.5s" }}>
-            {balls[Math.floor(Math.random() * 2)]}
-          </BtnSpinnerWrapper>
-        </LoadingScreenInner>
-      </LoadingScreenWrapper>
-    );
-  })
-);
-
+  return (
+    <LoadingScreenWrapper ref={ref}>
+      <LoadingScreenInner>
+        <div
+          style={{
+            marginLeft: "25px",
+            opacity: 0,
+            transition: "opacity .7s",
+          }}
+          ref={logoRef}
+        >
+          <HooperLogoIcon main={theme.logo.main} net={theme.logo.net} />
+        </div>
+        <BtnSpinnerWrapper style={{ animationDuration: "1.5s" }}>
+          {balls[Math.floor(Math.random() * 2)]}
+        </BtnSpinnerWrapper>
+      </LoadingScreenInner>
+    </LoadingScreenWrapper>
+  );
+});
 export default LoadingScreen;
 
 const LoadingScreenInner = styled.div`

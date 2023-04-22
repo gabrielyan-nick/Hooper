@@ -6,11 +6,12 @@ import Message from "../models/Message.js";
 
 export const addCourt = async (req, res) => {
   try {
+    const { geometry, sport } = req.body;
     const newCourt = new Court(req.body);
 
     const newMarker = new Marker({
-      courtId: newCourt._id,
-      ...req.body,
+      properties: { courtId: newCourt._id, sport },
+      geometry,
     });
     await newMarker.save();
 
@@ -50,7 +51,7 @@ export const getCourt = async (req, res) => {
       cover: court.cover,
       hoopsCount: court.hoopsCount,
       lighting: court.lighting,
-      location: court.location,
+      geometry: court.geometry,
       messages: court.chatId.messages,
       chatId: court.chatId._id,
       name: court.name,
@@ -86,7 +87,7 @@ export const addRemoveFav = async (req, res) => {
         _id: court._id,
         name: court.name,
         sport: court.sport,
-        coordinates: court.location.coordinates,
+        coordinates: court.geometry.coordinates,
       });
     }
 
@@ -200,8 +201,12 @@ export const updateCourtInfo = async (req, res) => {
 
     if (dataObj.sport && dataObj.sport !== court.sport) {
       await Marker.findOneAndUpdate(
-        { courtId: court.id },
-        { sport: dataObj.sport },
+        {
+          "properties.courtId": court.id,
+        },
+        {
+          "properties.sport": dataObj.sport,
+        },
         { new: true }
       );
       if (court.photos.length === 1 && court.photos[0].startsWith("/assets")) {

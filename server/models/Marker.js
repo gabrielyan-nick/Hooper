@@ -3,10 +3,20 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 const markerSchema = new mongoose.Schema(
   {
-    courtId: {
-      type: Schema.Types.ObjectId,
-      ref: "Court",
-      require: true,
+    type: {
+      type: String,
+      default: "Feature",
+    },
+    properties: {
+      courtId: {
+        type: Schema.Types.ObjectId,
+        ref: "Court",
+        require: true,
+      },
+      sport: {
+        type: String,
+        require: true,
+      },
     },
     geometry: {
       type: {
@@ -18,10 +28,6 @@ const markerSchema = new mongoose.Schema(
         type: [Number],
         required: true,
       },
-    },
-    sport: {
-      type: String,
-      require: true,
     },
   },
   { timestamps: true }

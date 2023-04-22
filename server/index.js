@@ -16,6 +16,8 @@ import {
   usersRoutes,
 } from "./routes/index.js";
 import { on } from "events";
+import Court from "./models/Court.js";
+import Marker from "./models/Marker.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,8 +45,10 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => {
+  .then(async () => {
     server.listen(PORT, () => console.log(`Server run on port ${PORT}`));
+    // await Court.deleteMany();
+    // await Marker.deleteMany();
   })
   .catch((error) => console.log(error));
 
@@ -66,7 +70,7 @@ io.on("connection", (socket) => {
   socket.on("leave_chat", (chatId) => {
     socket.leave(chatId);
   });
- 
+
   socket.on("send_message", (data) => {
     io.to(data.chatId).emit("receive_message", data);
   });

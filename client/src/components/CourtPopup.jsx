@@ -1,5 +1,6 @@
 import React, { forwardRef, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import { useMap } from "react-map-gl";
 import { CSSTransition } from "react-transition-group";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -54,26 +55,27 @@ const CourtPopup = forwardRef((props, ref) => {
     error,
     isSuccess,
   } = useGetCourtQuery(courtId);
+  const { map } = useMap();
   const dispatch = useDispatch();
   const loadingRef = useRef(null);
-
+  console.log(court);
   useEffect(() => {
     if (isSuccess) {
       setEditedCourt(court);
       setOpenedCourt(court?.name);
+      map?.flyTo({
+        center: [
+          court?.geometry?.coordinates[1],
+          court?.geometry?.coordinates[0],
+        ],
+      });
       dispatch(
         setViewState({
-          longitude: court?.location?.coordinates[1],
-          latitude: court?.location?.coordinates[0],
+          longitude: court?.geometry?.coordinates[1],
+          latitude: court?.geometry?.coordinates[0],
           zoom: 14,
           pitch: 0,
           bearing: 0,
-          padding: {
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-          },
         })
       );
     }
@@ -94,7 +96,7 @@ const CourtPopup = forwardRef((props, ref) => {
           <BallSpinner />
         </LoadingScreenWrapper>
       </CSSTransition>
-      <div style={{ width: "100%", paddingBottom: "10px" }}>
+      <div style={{ width: "100%" }}>
         <FlexBetweenBox style={{ padding: "5px 5px 0 5px" }}>
           {isBackBtn && (
             <BackBtn onClick={goBack}>

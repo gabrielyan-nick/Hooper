@@ -109,7 +109,7 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
               const formData = {
                 ...data,
                 photos: url,
-                location: {
+                geometry: {
                   type: "Point",
                   coordinates: [courtLocation.lat, courtLocation.lng],
                 },
@@ -127,7 +127,7 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
     } else {
       const formData = {
         ...data,
-        location: {
+        geometry: {
           type: "Point",
           coordinates: [courtLocation.lat, courtLocation.lng],
         },

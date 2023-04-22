@@ -45,7 +45,7 @@ const courtSchema = new mongoose.Schema(
         return [];
       },
     },
-    location: {
+    geometry: {
       type: {
         type: String,
         enum: ["Point"],
@@ -90,7 +90,7 @@ const courtSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-courtSchema.index({ location: "2dsphere" });
+courtSchema.index({ geometry: "2dsphere" });
 
 const Court = mongoose.model("Court", courtSchema);
 

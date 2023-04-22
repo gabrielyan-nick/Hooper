@@ -125,7 +125,7 @@ const ModalWindow = ({
           unmountOnExit
           classNames="modal-content"
         >
-          <ModalContent ref={contentRef}>
+          <ModalContent ref={contentRef} location={location}>
             <SwitchTransition>
               <CSSTransition
                 timeout={200}
@@ -257,7 +257,11 @@ export const ModalWrap = styled(ModalWrapper)`
 `;
 
 export const ModalContent = styled.div`
-  overflow: hidden;
+  overflow: ${(props) =>
+    props.location.pathname.endsWith("edit") ||
+    props.location.pathname.endsWith("add-court")
+      ? "visible"
+      : "hidden"};
   background: ${(props) => props.bg || props.theme.popupBg};
   border-radius: 10px;
   min-height: 100px;

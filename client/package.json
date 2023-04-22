@@ -8,9 +8,6 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@turf/random": "^6.5.0",
-    "@urbica/react-map-gl": "^1.16.2",
-    "@urbica/react-map-gl-cluster": "^0.2.0",
     "dotenv": "^16.0.3",
     "firebase": "^9.18.0",
     "mapbox-gl": "^2.14.1",
@@ -34,6 +31,7 @@
     "socket.io-client": "^4.6.1",
     "styled-components": "^5.3.9",
     "supercluster": "^7.1.5",
+    "use-supercluster": "^0.4.0",
     "uuidv4": "^6.2.13",
     "web-vitals": "^2.1.4",
     "yup": "^1.0.2"
