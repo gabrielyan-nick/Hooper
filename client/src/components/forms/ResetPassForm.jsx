@@ -79,6 +79,7 @@ const ResetPassForm = ({ resetToken }) => {
             type={isPassVisible ? "text" : "password"}
             m="5px 0 25px"
             p="9px 40px 9px 15px"
+            disabled={isSuccess}
           />
           <PassIconBtn onClick={togglePassVisible} type="button">
             {isPassVisible ? <ShowPassIcon /> : <HidePassIcon />}
@@ -92,6 +93,7 @@ const ResetPassForm = ({ resetToken }) => {
             type="password"
             m="5px 0 25px"
             p="9px 40px 9px 15px"
+            disabled={isSuccess}
           />
           <ErrorText>
             {errors.confirm?.message ||
@@ -99,7 +101,7 @@ const ResetPassForm = ({ resetToken }) => {
           </ErrorText>
         </Label>
         {submitSuccess && (
-          <Text fS="17px" fW={700} centred>
+          <Text fS="17px" fW={700} centred color={lightTheme.green}>
             Пароль успішно змінено
           </Text>
         )}

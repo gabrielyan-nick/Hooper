@@ -18,6 +18,7 @@ import {
 import { on } from "events";
 import Court from "./models/Court.js";
 import Marker from "./models/Marker.js";
+import Chat from "./models/Chat.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,8 +48,11 @@ mongoose
   })
   .then(async () => {
     server.listen(PORT, () => console.log(`Server run on port ${PORT}`));
-    // await Court.deleteMany();
-    // await Marker.deleteMany();
+
+    const markers = await Chat.find().sort({ createdAt: -1 }).limit(11);
+    const ids = markers.map((m) => m._id);
+    await Chat.deleteMany({ _id: { $in: ids } });
+
   })
   .catch((error) => console.log(error));
 

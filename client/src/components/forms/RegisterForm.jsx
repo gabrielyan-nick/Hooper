@@ -188,12 +188,15 @@ const RegisterForm = forwardRef((props, ref) => {
                 id={"email"}
                 openOnClick
                 style={{
-                  borderRadius: "15px",
+                  borderRadius: "7px",
+                  padding: "5px 7px",
                   maxWidth: "95vw",
-                  backgroundColor: "#443630",
+                  backgroundColor: "#1a1818dc",
                 }}
               >
-                email використовується лише для відновлення паролю
+                <Text color="#fff" fW='500'>
+                  email використовується лише для відновлення паролю
+                </Text>
               </Tooltip>
             </QuestionIconWrapper>
             <Input {...register("email")} m="5px 0 25px" />

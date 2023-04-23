@@ -62,7 +62,7 @@ export const IconBtnBg = styled.button`
   position: relative;
   border: none;
   margin: 0;
-  padding: 0;
+  padding: ${(props) => props.p || 0};
   user-select: none;
   background: ${(props) =>
     props.color === "green"
@@ -127,6 +127,14 @@ export const BackBtn = styled(IconBtnBg)`
   &:hover {
     background: #a83406;
   }
+`;
+
+export const ListTitle = styled.h6`
+  font-family: "Play", sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  margin: 20px 0 5px 17px;
+  color: ${(props) => props.theme.textSecondary};
 `;
 
 export const Text = styled.p`

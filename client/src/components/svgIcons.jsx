@@ -779,6 +779,29 @@ export const ErrorIcon = ({ size = 100 }) => {
   );
 };
 
+export const AddIcon = ({ size = 23 }) => {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        fill="none"
+        stroke="#f5ccbc"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={3}
+        data-name="add"
+      >
+        <path d="M12 19L12 5" />
+        <path d="M5 12L19 12" />
+      </g>
+    </svg>
+  );
+};
+
 export const HooperLogoIcon = ({ width = 187, net, main }) => {
   return (
     <svg

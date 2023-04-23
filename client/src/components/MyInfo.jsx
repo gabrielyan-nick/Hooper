@@ -19,6 +19,7 @@ import {
   UserCityChanged,
   FavouriteCourts,
   ConfirmModal,
+  SocialLinksEdited,
 } from "./index";
 import { ChangeIcon, CloseIcon } from "./svgIcons";
 
@@ -67,6 +68,7 @@ const MyInfo = forwardRef((props, ref) => {
             <AvatarChanged photo={picturePath} />
           </FirstLineWrapper>
           <FavouriteCourts courts={favouriteCourts} />
+          <SocialLinksEdited />
           <Button
             onClick={onOpenLogoutModal}
             bgColors={lightTheme.btnSecondary}

@@ -43,15 +43,19 @@ const addCourtSchema = yup.object({
   hoopsCount: yup.number(),
 });
 
-const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker, setIsModalOverflow }) => {
+const AddCourtForm = ({
+  courtLocation,
+  closeModal,
+  setAddCourtMarker,
+  setIsModalOverflow,
+}) => {
   const [typeValue, setTypeValue] = useState("");
   const [coverValue, setCoverValue] = useState(null);
   const [hoopsCount, setHoopsCount] = useState(null);
   const [lighting, setLighting] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [photoUrl, setPhotoUrl] = useState(null);
-  const [submitForm, res, isLoading, isError, isSuccess] =
-    useAddCourtMutation();
+  const [submitForm, res] = useAddCourtMutation();
   const {
     register,
     setValue,
@@ -204,8 +208,7 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker, setIsModal
     }),
     placeholder: (baseStyles, state) => ({
       ...baseStyles,
-      color: state.isDisabled ? '#3d343188' : theme.placeholderText,
-
+      color: state.isDisabled ? "#3d343188" : theme.placeholderText,
     }),
     singleValue: (baseStyles, state) => ({
       ...baseStyles,
@@ -368,6 +371,7 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker, setIsModal
           <Button
             type="submit"
             style={{ margin: "20px auto 0", width: "100px" }}
+            disabled={res.isLoading || res.isSuccess}
           >
             {res.isLoading ? (
               <BtnSpinnerWrapper>

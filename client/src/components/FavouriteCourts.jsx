@@ -19,6 +19,7 @@ import {
   TextLineWrapper,
   FlexCenterBox,
   IconBtnBg,
+  ListTitle
 } from "./microComponets";
 import { EnterIcon, ShowHideIcon } from "./svgIcons";
 import { BasketballMarker, FootballMarker } from "./markers";
@@ -56,7 +57,7 @@ const FavouriteCourts = ({ courts }) => {
 
   return (
     <>
-      <Title>Улюблені майданчики</Title>
+      <ListTitle>Улюблені майданчики</ListTitle>
       <ListWrapper ref={listRef}>
         <TransitionGroup component={null}>
           {displayedCourts?.map((court) => (
@@ -116,16 +117,10 @@ const FavCourt = memo(
   })
 );
 
-const Title = styled.h6`
-  font-family: "Play", sans-serif;
-  font-weight: 600;
-  font-size: 17px;
-  margin: 25px 0 5px 17px;
-  color: ${(props) => props.theme.textSecondary};
-`;
+
 
 const ListWrapper = styled(TextLineWrapper)`
-  padding: 9px 10px;
+  padding: 8px;
   position: relative;
   margin-bottom: 10px;
   overflow-x: visible;
@@ -142,7 +137,7 @@ const EmptyText = styled(Text)`
 const ShowHideBtn = styled(IconBtnBg)`
   position: absolute;
   bottom: -17px;
-  left: 15%;
+  left: 46%;
   border-radius: 7px;
 `;
 

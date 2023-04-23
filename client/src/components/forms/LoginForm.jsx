@@ -196,7 +196,7 @@ export const LoginAfterReg = forwardRef((props, ref) => {
       <Text fS="20px" fW={700} m="15px 10px 10px" centred>
         Реєстрація пройшла успішно
       </Text>
-      <Text fS="17px" fW={700} m="15px 10px 40px" centred>
+      <Text fS="17px" fW={700} m="15px 10px 30px" centred>
         Увійдіть до свого акаунту
       </Text>
       <LoginForm ref={ref} closeModal={props.closeModal} afterReg />

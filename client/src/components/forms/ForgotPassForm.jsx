@@ -74,21 +74,21 @@ const ForgotPassForm = forwardRef((props, ref) => {
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
           <Label pl="10px">
             Email
-            <Input {...register("email")} m="5px 0" />
+            <Input {...register("email")} m="5px 0" disabled={submitSuccess} />
             <ErrorText>
               {errors.email?.message ||
                 (isError && forgotPassErrors[error.data])}
             </ErrorText>
           </Label>
           {submitSuccess && (
-            <Text fS="17px" fW={700} centred>
+            <Text fS="17px" fW={700} centred color={lightTheme.green}>
               Успішно. Перевірте вашу пошту
             </Text>
           )}
 
           <Button
             type="submit"
-            disabled={isLoading || isSuccess}
+            disabled={isLoading || isSuccess || submitSuccess}
             width="40%"
             m="30px auto 10px auto"
           >
