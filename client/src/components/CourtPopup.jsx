@@ -58,7 +58,7 @@ const CourtPopup = forwardRef((props, ref) => {
   const { map } = useMap();
   const dispatch = useDispatch();
   const loadingRef = useRef(null);
-  console.log(court);
+
   useEffect(() => {
     if (isSuccess) {
       setEditedCourt(court);
@@ -68,16 +68,8 @@ const CourtPopup = forwardRef((props, ref) => {
           court?.geometry?.coordinates[1],
           court?.geometry?.coordinates[0],
         ],
+        zoom: 15,
       });
-      dispatch(
-        setViewState({
-          longitude: court?.geometry?.coordinates[1],
-          latitude: court?.geometry?.coordinates[0],
-          zoom: 14,
-          pitch: 0,
-          bearing: 0,
-        })
-      );
     }
   }, [court, isSuccess]);
 

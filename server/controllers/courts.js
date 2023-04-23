@@ -231,9 +231,12 @@ export const updateCourtInfo = async (req, res) => {
 
 export const getChatMessages = async (req, res) => {
   try {
-    const { chatId } = req.params;
+    const { chatId, courtId } = req.params;
     const offset = parseInt(req.query.offset) || 0;
     const limit = parseInt(req.query.limit) || 50;
+
+    const court = await Court.findById(courtId);
+    if (!court) return res.status(404).json({ message: "C not found" });
 
     const messages = await Message.find({ chatId })
       .sort({ createdAt: -1 })
@@ -244,7 +247,7 @@ export const getChatMessages = async (req, res) => {
 
     if (!messages) return res.status(404).json({ message: "Chat not found" });
 
-    res.status(200).json(messages);
+    res.status(200).json({ messages, courtSport: court.sport });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

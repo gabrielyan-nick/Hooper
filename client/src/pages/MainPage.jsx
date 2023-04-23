@@ -8,6 +8,7 @@ import {
   LoadingScreen,
   AddCourtWidget,
   SettingsWidget,
+  ErrorBoundary,
 } from "../components";
 import { Wrapper } from "../components/microComponets";
 
@@ -44,14 +45,15 @@ const MainPage = () => {
             />
           </>
         )}
-
-        <MainMap
-          closeLoadingScreen={closeLoadingScreen}
-          setAddCourtMarker={setAddCourtMarker}
-          addCourtMarker={addCourtMarker}
-          setOpenedCourt={setOpenedCourt}
-          openedCourt={openedCourt}
-        />
+        <ErrorBoundary>
+          <MainMap
+            closeLoadingScreen={closeLoadingScreen}
+            setAddCourtMarker={setAddCourtMarker}
+            addCourtMarker={addCourtMarker}
+            setOpenedCourt={setOpenedCourt}
+            openedCourt={openedCourt}
+          />
+        </ErrorBoundary>
       </Wrapper>
     </MapProvider>
   );

@@ -144,6 +144,22 @@ p, ul, li {
   transition: opacity 300ms;
 }
 
+.checkinBtn-enter {
+  transform: translateY(160%);
+}
+.checkinBtn-enter-active {
+  transform: translateY(0%);
+  transition: all 300ms;
+}
+.checkinBtn-exit {
+  transform: translateY(0%);
+}
+.checkinBtn-exit-active {
+  transform: translateY(160%);
+  transition: all 300ms;
+}
+
+
 .roll-hide-enter {
   opacity: 0;
   transform: translateX(100%) rotate(100deg);

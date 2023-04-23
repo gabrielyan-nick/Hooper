@@ -192,24 +192,27 @@ const CourtPlayers = ({ court, courtId }) => {
         <CSSTransition
           nodeRef={nodeRef}
           key={isOnCourt}
-          classNames="court"
+          classNames="checkinBtn"
           timeout={300}
+          unmountOnExit
+          mountOnEnter
         >
           {!isOnCourt ? (
-            <CheckInBtn
-              ref={nodeRef}
-              onClick={checkInOnCourt}
-              style={{
-                width: checkInWidth[court.sport],
-              }}
-              disabled={result.isLoading || isFetching}
-            >
-              {result.isLoading ? (
-                <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
-              ) : (
-                `Я на ${court.sport === "basketball" ? "майданчику" : "полі"}`
-              )}
-            </CheckInBtn>
+            <div ref={nodeRef}>
+              <CheckInBtn
+                onClick={checkInOnCourt}
+                style={{
+                  width: checkInWidth[court.sport],
+                }}
+                disabled={result.isLoading || isFetching}
+              >
+                {result.isLoading ? (
+                  <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
+                ) : (
+                  `Я на ${court.sport === "basketball" ? "майданчику" : "полі"}`
+                )}
+              </CheckInBtn>
+            </div>
           ) : (
             <CheckOutWrapper ref={nodeRef}>
               <CheckInBtn
@@ -218,7 +221,7 @@ const CourtPlayers = ({ court, courtId }) => {
                 style={{ width: "101px" }}
                 disabled={res.isLoading || isFetching}
               >
-                {res.isLoading  ? (
+                {res.isLoading ? (
                   <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
                 ) : (
                   "Пішов"
@@ -237,10 +240,10 @@ const CourtPlayers = ({ court, courtId }) => {
                     borderRadius: "7px",
                     maxWidth: "98vw",
                     padding: "5px 7px",
-                    backgroundColor: "#2b2a2adc",
+                    backgroundColor: "#1a1818dc",
                   }}
                 >
-                  Відмітка автоматично зникає через 3 години
+                  <Text color='#fff'>Відмітка автоматично зникає через 3 години</Text>
                 </Tooltip>
               </QuestionIconWrapper>
             </CheckOutWrapper>

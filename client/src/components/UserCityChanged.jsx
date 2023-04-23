@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useMap } from "react-map-gl";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
 import { setLogin } from "../store/storageSlice";
@@ -19,38 +20,13 @@ import { useUpdateUserInfoMutation } from "../api/userApi";
 import { ChangeIcon, CloseIcon, SaveIcon } from "./svgIcons";
 import { cities } from "../data";
 
-const Wrapper = styled.div`
-  position: relative;
-`;
-
-const ChangeBtn = styled(IconBtnBg)`
-  position: absolute;
-  border-radius: 7px;
-  right: 5px;
-  top: 7px;
-  padding: 2px;
-`;
-
-const CancelBtn = styled(IconBtnBg)`
-  position: absolute;
-  top: -17px;
-  right: -17px;
-  padding: 2px;
-  border-radius: 7px;
-`;
-
-const SaveBtn = styled(IconBtnBg)`
-  position: absolute;
-  bottom: -17px;
-  right: -17px;
-  padding: 2px;
-  border-radius: 7px;
-`;
-
-const UserCityChanged = ({ city }) => {
+const UserCityChanged = ({ city, setIsModalOverflow }) => {
   const [selectValue, setSelectValue] = useState(null);
   const token = useSelector((state) => state.storage?.user?.token);
   const _id = useSelector((state) => state.storage?.user?._id);
+  const coordinates = useSelector(
+    (state) => state.storage?.user?.city?.coordinates
+  );
   const [isChanged, setIsChanged] = useState(false);
   const theme = useTheme();
   const changeRef = useRef(null);
@@ -58,6 +34,7 @@ const UserCityChanged = ({ city }) => {
   const nodeRef = isChanged ? saveCloseRef : changeRef;
   const [updateCity, result] = useUpdateUserInfoMutation();
   const dispatch = useDispatch();
+  const { map } = useMap();
 
   const selectStyles = {
     control: (baseStyles, state) => ({
@@ -130,7 +107,16 @@ const UserCityChanged = ({ city }) => {
       formData.append("city", JSON.stringify(selectValue));
       updateCity({ _id, token, formData })
         .then((result) => {
-          result.data && dispatch(setLogin(result.data));
+          if (result.data) {
+            dispatch(setLogin(result.data));
+            map.flyTo({
+              center: [
+                result.data.city.coordinates[1],
+                result.data.city.coordinates[0],
+              ],
+              zoom: 11,
+            });
+          }
           setIsChanged(false);
         })
         .catch((e) => console.log(e));
@@ -156,6 +142,8 @@ const UserCityChanged = ({ city }) => {
                 styles={selectStyles}
                 placeholder="Виберіть місто"
                 onChange={handleSelectValue}
+                onMenuOpen={() => setIsModalOverflow(false)}
+                onMenuClose={() => setIsModalOverflow(true)}
               />
               <CancelBtn
                 color="orange"
@@ -177,7 +165,7 @@ const UserCityChanged = ({ city }) => {
           ) : (
             <>
               <TextLineWrapper p="9px 33px 9px 15px" ref={changeRef}>
-                <Text fS="20px">
+                <Text fS="20px" style={{ whiteSpace: "nowrap" }}>
                   <span style={{ paddingRight: "35px" }}>
                     {city?.label || null}
                   </span>
@@ -195,3 +183,31 @@ const UserCityChanged = ({ city }) => {
 };
 
 export default UserCityChanged;
+
+const Wrapper = styled.div`
+  position: relative;
+`;
+
+const ChangeBtn = styled(IconBtnBg)`
+  position: absolute;
+  border-radius: 7px;
+  right: 5px;
+  top: 7px;
+  padding: 2px;
+`;
+
+const CancelBtn = styled(IconBtnBg)`
+  position: absolute;
+  top: -17px;
+  right: -17px;
+  padding: 2px;
+  border-radius: 7px;
+`;
+
+const SaveBtn = styled(IconBtnBg)`
+  position: absolute;
+  bottom: -17px;
+  right: -17px;
+  padding: 2px;
+  border-radius: 7px;
+`;

@@ -31,3 +31,4 @@ export { default as BallsAnimation } from "./BallsAnimation";
 export { default as SettingsWidget } from "./SettingsWidget";
 export { default as SettingsForm } from "./forms/SettingsForm";
 export { default as BallSpinner } from "./BallSpinner";
+export { default as ErrorBoundary } from "./ErrorBoundary";

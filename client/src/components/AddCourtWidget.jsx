@@ -65,7 +65,7 @@ const AddCourtWidget = ({ addCourtMarker, setAddCourtMarker }) => {
               borderRadius: "7px",
               maxWidth: "90vw",
               padding: "5px 7px",
-              background: "#363535d3",
+              backgroundColor: "#1a1818dc",
             }}
           >
             <Text fontSize="14px" color="#f5ebeb">

@@ -53,13 +53,11 @@ export const updateUserInfo = async (req, res) => {
       { new: true }
     );
 
-    // await Message.updateMany({ user: id }, { avatar: picturePath });
     res.status(200).json({
       _id: updatedUser._id,
       picturePath: updatedUser.picturePath,
       username: updatedUser.username,
       city: updatedUser.city,
-      location: updatedUser.location,
       token: token,
       favouriteCourts: updatedUser.favouriteCourts,
     });

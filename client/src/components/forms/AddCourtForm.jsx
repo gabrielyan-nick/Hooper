@@ -43,7 +43,7 @@ const addCourtSchema = yup.object({
   hoopsCount: yup.number(),
 });
 
-const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
+const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker, setIsModalOverflow }) => {
   const [typeValue, setTypeValue] = useState("");
   const [coverValue, setCoverValue] = useState(null);
   const [hoopsCount, setHoopsCount] = useState(null);
@@ -204,7 +204,8 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
     }),
     placeholder: (baseStyles, state) => ({
       ...baseStyles,
-      color: theme.placeholderText,
+      color: state.isDisabled ? '#3d343188' : theme.placeholderText,
+
     }),
     singleValue: (baseStyles, state) => ({
       ...baseStyles,
@@ -272,6 +273,8 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
                       isDisabled={!typeValue}
                       onChange={handleCoverChange}
                       value={coverValue}
+                      onMenuOpen={() => setIsModalOverflow(false)}
+                      onMenuClose={() => setIsModalOverflow(true)}
                     />
                   )}
                 />
@@ -301,6 +304,8 @@ const AddCourtForm = ({ courtLocation, closeModal, setAddCourtMarker }) => {
                       placeholder="Виберіть..."
                       onChange={handleCountChange}
                       value={hoopsCount}
+                      onMenuOpen={() => setIsModalOverflow(false)}
+                      onMenuClose={() => setIsModalOverflow(true)}
                     />
                   )}
                 />

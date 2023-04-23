@@ -23,20 +23,16 @@ const ConfirmModal = ({
   opened,
   closeModal,
   action,
-  actionResult,
+  actionResult = false,
   question,
-  openedCourt,
+  courtSport = "basketball",
 }) => {
   const [animationIn, setAnimationIn] = useState(false);
   const contentRef = useRef(null);
   const overlayRef = useRef(null);
   const { mounted } = useMount({ opened });
   const spinner =
-    openedCourt === "Баскетбольний майданчик" ? (
-      <BasketballMarker />
-    ) : (
-      <FootballMarker />
-    );
+    courtSport === "basketball" ? <BasketballMarker /> : <FootballMarker />;
 
   useEffect(() => {
     setAnimationIn(opened);
@@ -115,7 +111,7 @@ const ConfirmModal = ({
               {question}
             </Text>
             <FlexBetweenBox>
-              <Button onClick={action} width="70px" height="40px">
+              <Button onClick={action} width="70px" height="40px" m="5px">
                 {actionResult.isLoading ? (
                   <BtnSpinnerWrapper>{spinner}</BtnSpinnerWrapper>
                 ) : (
@@ -128,6 +124,7 @@ const ConfirmModal = ({
                 bgColors={lightTheme.btnSecondary}
                 onClick={closeModal}
                 disabled={actionResult.isLoading}
+                m="5px"
               >
                 Ні
               </Button>
@@ -147,4 +144,5 @@ export const ModalContent = styled.div`
   border-radius: 10px;
   padding: 5px;
   max-width: 350px;
+  min-width: 230px;
 `;

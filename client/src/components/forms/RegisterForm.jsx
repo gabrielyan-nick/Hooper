@@ -54,7 +54,7 @@ const registerErrors = {
 };
 
 const RegisterForm = forwardRef((props, ref) => {
-  const { closeModal } = props;
+  const { closeModal, setIsModalOverflow } = props;
   const [isPassVisible, setIsPassVisible] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const {
@@ -215,6 +215,8 @@ const RegisterForm = forwardRef((props, ref) => {
                   options={cities}
                   styles={selectStyles}
                   placeholder="Виберіть ваше місто"
+                  onMenuOpen={() => setIsModalOverflow(false)}
+                  onMenuClose={() => setIsModalOverflow(true)}
                 />
               )}
             />

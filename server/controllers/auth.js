@@ -65,7 +65,6 @@ export const login = async (req, res) => {
       picturePath: user.picturePath,
       username: user.username,
       city: user.city,
-      location: user.location,
       token: token,
       favouriteCourts: user.favouriteCourts,
     });
@@ -97,11 +96,11 @@ export const forgotPass = async (req, res) => {
     const mailOptions = {
       from: process.env.MAIL_LOGIN,
       to: user.email,
-      subject: "Reset password",
+      subject: "Hooper, відновлення паролю",
       html: `
-        <p>To reset your password, follow the link:</p>
-        <a href="http://localhost:3000/reset-password/${resetToken}">reset password</a>
-        <p>Link is valid for one hour.</p>
+        <p>Щоб відновити ваш пароль, перейдіть за посиланням:</p>
+        <a href="https://hooper-13.web.app/reset-password/${resetToken}">Відновити пароль</a>
+        <p>Посилання дійсне протягом однієї години.</p>
       `,
     };
 

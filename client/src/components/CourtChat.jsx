@@ -64,12 +64,7 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
   const { courtId, chatId } = useParams();
   const [offset, setOffset] = useState(0);
   const limit = 50;
-  const {
-    data: messages = [],
-    isLoading,
-    isFetching,
-    isSuccess,
-  } = useGetChatMessagesQuery({
+  const { data, isLoading, isFetching, isSuccess } = useGetChatMessagesQuery({
     courtId,
     chatId,
     offset,
@@ -79,29 +74,30 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
   const [messagesRecieved, setMessagesReceived] = useState([]);
   const [isEndOfMessages, setIsEndOfMessages] = useState(false);
   const loadingRef = useRef(null);
+  const prevMessagesRef = useRef([]);
+  const messagesWrapperRef = useRef(null);
+  const navigate = useNavigate();
 
   const incrementOffset = useCallback(() => {
     if (!isFetching && !isEndOfMessages) {
       setOffset((offset) => offset + limit);
     }
   }, [isFetching, isEndOfMessages]);
+
   const topOfChatRef = useOnIntersection(incrementOffset);
-  const prevMessagesRef = useRef([]);
-  const messagesWrapperRef = useRef(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (prevMessagesRef.current !== messages) {
-      setMessagesReceived((state) => [...state, ...messages]);
-      prevMessagesRef.current = messages;
+    if (data?.messages && prevMessagesRef.current !== data?.messages) {
+      setMessagesReceived((state) => [...state, ...data?.messages]);
+      prevMessagesRef.current = data?.messages;
     }
   }, [isSuccess, isFetching]);
 
   useEffect(() => {
-    messages.length < limit
+    data?.messages?.length < limit
       ? setIsEndOfMessages(true)
       : setIsEndOfMessages(false);
-  }, [messages]);
+  }, [data?.messages]);
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
@@ -171,7 +167,7 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
   };
 
   const spinner =
-    openedCourt === "Баскетбольний майданчик" ? (
+    data?.courtSport === "basketball" ? (
       <BasketballMarker size={25} />
     ) : (
       <FootballMarker size={25} />
@@ -179,17 +175,6 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
 
   return (
     <div>
-      <CSSTransition
-        nodeRef={loadingRef}
-        in={isLoading}
-        timeout={1700}
-        classNames="loading-hide"
-        unmountOnExit
-      >
-        <LoadingScreenWrapper ref={loadingRef}>
-          <BallSpinner />
-        </LoadingScreenWrapper>
-      </CSSTransition>
       <ModalHeader>
         <BackBtn onClick={onGoBack}>
           <BackIcon />
@@ -200,7 +185,20 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
         </CloseBtn>
       </ModalHeader>
 
-      <MessagesWrapper ref={messagesWrapperRef}>
+      <MessagesWrapper ref={messagesWrapperRef} isLoading={isLoading}>
+        <CSSTransition
+          nodeRef={loadingRef}
+          in={isLoading}
+          timeout={1700}
+          classNames="loading-hide"
+          unmountOnExit
+          mountOnEnter
+        >
+          <LoadingWrapper ref={loadingRef}>
+            <BallSpinner />
+          </LoadingWrapper>
+        </CSSTransition>
+
         {!messagesRecieved.length ? (
           <FlexCenterBox style={{ height: "100%" }}>
             <Text centred>Залишайте повідомлення, домовляйтесь про ігри</Text>
@@ -210,7 +208,7 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
             <ChatMessage
               key={i}
               message={message}
-              openedCourt={openedCourt}
+              courtSport={data?.courtSport}
               courtId={courtId}
               chatId={chatId}
               token={token}
@@ -239,10 +237,15 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
             value={message}
             fW={600}
             onChange={(e) => setMessage(e.target.value)}
+            disabled={isLoading}
           />
         </label>
-        <SendMessageBtn color="green" type="submit">
-          <EnterIcon size={27} />
+        <SendMessageBtn color="green" type="submit" disabled={isLoading}>
+          {postResult.isLoading ? (
+            <BtnSpinnerWrapper size="26px">{spinner}</BtnSpinnerWrapper>
+          ) : (
+            <EnterIcon size={27} />
+          )}
         </SendMessageBtn>
       </Form>
     </div>
@@ -252,7 +255,7 @@ const CourtChat = ({ closeModal, goBack, openedCourt, socket }) => {
 export default CourtChat;
 
 const ChatMessage = memo(
-  ({ message, openedCourt, courtId, chatId, token, socket }) => {
+  ({ message, courtSport, courtId, chatId, token, socket }) => {
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [isEdited, setIsEdited] = useState(false);
     const [editedText, setEditedText] = useState(message.text);
@@ -321,7 +324,7 @@ const ChatMessage = memo(
     const closeDelModal = () => setIsConfirmModalOpen(false);
 
     const spinner =
-      openedCourt === "Баскетбольний майданчик" ? (
+      courtSport === "basketball" ? (
         <BasketballMarker size={13} />
       ) : (
         <FootballMarker size={13} />
@@ -329,7 +332,7 @@ const ChatMessage = memo(
 
     return (
       <>
-        <li>
+        <li style={{ margin: "5px" }}>
           <MainLine>
             <Avatar
               src={message.sender?.picturePath}
@@ -373,7 +376,7 @@ const ChatMessage = memo(
                         onClick={() => onUpdateMessage(message._id)}
                       >
                         {updateResult.isLoading ? (
-                          <BtnSpinnerWrapper size={16}>
+                          <BtnSpinnerWrapper size="15px">
                             {spinner}
                           </BtnSpinnerWrapper>
                         ) : (
@@ -400,12 +403,19 @@ const ChatMessage = memo(
           question="Видалити повідомлення?"
           action={() => onDeleteMessage(message._id)}
           actionResult={delResult}
-          openedCourt={openedCourt}
+          courtSport={courtSport}
         />
       </>
     );
   }
 );
+
+const LoadingWrapper = styled(LoadingScreenWrapper)`
+  width: 100%;
+  height: 450px;
+  border-radius: 7px;
+  position: absolute;
+`;
 
 const EditedInput = styled(Input)`
   background: transparent;
@@ -473,20 +483,19 @@ const Avatar = styled.img`
 `;
 
 const MessagesWrapper = styled.ul`
+  position: relative;
   height: 450px;
   display: flex;
   flex-direction: column-reverse;
-  gap: 10px;
   border-radius: 7px;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 5px;
   margin: 5px;
   scrollbar-width: auto;
   background: ${(props) => props.bg || props.theme.textWrapperBg};
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
   &::-webkit-scrollbar {
-    display: initial;
+    display: ${(props) => (props.isLoading ? "none" : "initial")};
     width: 3px;
   }
   &::-webkit-scrollbar-thumb {

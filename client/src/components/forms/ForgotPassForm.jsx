@@ -13,12 +13,13 @@ import {
   FlexBetweenBox,
   CloseBtn,
   ModalHeader,
+  BackBtn,
 } from "./../microComponets";
 import { useForgotPassMutation } from "../../api/authApi";
 import { ErrorText, FormWrapper } from "../forms/RegisterForm";
 import { BasketballMarker } from "../markers";
 import { lightTheme } from "../../styles/themes";
-import { CloseIcon } from "../svgIcons";
+import { CloseIcon, BackIcon } from "../svgIcons";
 
 const forgotPassSchema = yup.object({
   email: yup
@@ -54,8 +55,11 @@ const ForgotPassForm = forwardRef((props, ref) => {
   };
 
   return (
-    <>
-      <ModalHeader empty>
+    <div ref={ref}>
+      <ModalHeader>
+        <BackBtn onClick={goBack}>
+          <BackIcon />
+        </BackBtn>
         <CloseBtn onClick={closeModal}>
           <CloseIcon />
         </CloseBtn>
@@ -81,34 +85,25 @@ const ForgotPassForm = forwardRef((props, ref) => {
               Успішно. Перевірте вашу пошту
             </Text>
           )}
-          <ButtonsWrapper>
-            <Button type="submit" disabled={isLoading || isSuccess} width="40%">
-              {isLoading ? (
-                <BtnSpinnerWrapper>
-                  <BasketballMarker />
-                </BtnSpinnerWrapper>
-              ) : (
-                "Надіслати"
-              )}
-            </Button>
-            <Button
-              width="40%"
-              type="button"
-              bgColors={lightTheme.btnSecondary}
-              disabled={isLoading}
-              onClick={goBack}
-            >
-              Назад
-            </Button>
-          </ButtonsWrapper>
+
+          <Button
+            type="submit"
+            disabled={isLoading || isSuccess}
+            width="40%"
+            m="30px auto 10px auto"
+          >
+            {isLoading ? (
+              <BtnSpinnerWrapper>
+                <BasketballMarker />
+              </BtnSpinnerWrapper>
+            ) : (
+              "Надіслати"
+            )}
+          </Button>
         </form>
       </FormWrapper>
-    </>
+    </div>
   );
 });
 
 export default ForgotPassForm;
-
-const ButtonsWrapper = styled(FlexBetweenBox)`
-  margin: 30px 0 5px;
-`;

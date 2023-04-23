@@ -18,6 +18,7 @@ import {
   BasketballMarker,
   ModalWindow,
   BallsAnimation,
+  ErrorBoundary,
 } from "./index";
 import { MarkerIcon } from "./svgIcons";
 import { setViewState } from "../store/storageSlice";
@@ -121,8 +122,14 @@ const MainMap = ({
     zoom: viewState.zoom,
     options: {
       radius: 40,
+      maxZoom: 14,
     },
   });
+
+  const onZoomCluster = (id, longitude, latitude) => {
+    const zoom = supercluster.getClusterExpansionZoom(id);
+    map?.flyTo({ center: [longitude, latitude], zoom });
+  };
 
   return (
     <>
@@ -152,7 +159,7 @@ const MainMap = ({
                 key={`cluster-${point.id}`}
                 longitude={longitude}
                 latitude={latitude}
-                onClick={() => supercluster.getClusterExpansionZoom(point.id)}
+                onClick={() => onZoomCluster(point.id, longitude, latitude)}
               >
                 <ClusterMark>{pointCount}</ClusterMark>
               </Marker>
@@ -207,13 +214,13 @@ const ClusterMark = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  border: 2px solid ${lightTheme.green};
+  border: 3px solid #039751;
   background: ${lightTheme.orange};
   box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
     rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
     rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px;
-  width: 27px;
-  height: 27px;
+  width: 30px;
+  height: 30px;
   font-weight: 700;
   font-size: 16px;
   font-family: "Play", sans-serif;

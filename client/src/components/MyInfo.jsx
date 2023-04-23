@@ -14,13 +14,19 @@ import {
   ModalHeader,
 } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
-import { AvatarChanged, UserCityChanged, FavouriteCourts } from "./index";
+import {
+  AvatarChanged,
+  UserCityChanged,
+  FavouriteCourts,
+  ConfirmModal,
+} from "./index";
 import { ChangeIcon, CloseIcon } from "./svgIcons";
 
 import { setLogout } from "../store/storageSlice";
 
 const MyInfo = forwardRef((props, ref) => {
-  const { closeModal, setAddCourtMarker } = props;
+  const { closeModal, setAddCourtMarker, setIsModalOverflow } = props;
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const picturePath = useSelector((state) => state.storage?.user?.picturePath);
   const username = useSelector((state) => state.storage?.user?.username);
   const city = useSelector((state) => state.storage?.user?.city);
@@ -36,33 +42,48 @@ const MyInfo = forwardRef((props, ref) => {
     navigate("/");
   };
 
+  const onOpenLogoutModal = () => setIsLogoutModalOpen(true);
+  const onCloseLogoutModal = () => setIsLogoutModalOpen(false);
+
   return (
-    <div ref={ref}>
-      <ModalHeader empty>
-        <CloseBtn onClick={closeModal}>
-          <CloseIcon />
-        </CloseBtn>
-      </ModalHeader>
-      <Wrapper>
-        <FirstLineWrapper>
-          <TextWrapper>
-            <TextLineWrapper>
-              <Text fS="22px">{username || null}</Text>
-            </TextLineWrapper>
-            <UserCityChanged city={city} />
-          </TextWrapper>
-          <AvatarChanged photo={picturePath} />
-        </FirstLineWrapper>
-        <FavouriteCourts courts={favouriteCourts} />
-        <Button
-          onClick={onLogout}
-          bgColors={lightTheme.btnSecondary}
-          style={{ margin: "20px auto 0" }}
-        >
-          Вийти з акаунта
-        </Button>
-      </Wrapper>
-    </div>
+    <>
+      <div ref={ref}>
+        <ModalHeader empty>
+          <CloseBtn onClick={closeModal}>
+            <CloseIcon />
+          </CloseBtn>
+        </ModalHeader>
+        <Wrapper>
+          <FirstLineWrapper>
+            <TextWrapper>
+              <TextLineWrapper>
+                <Text fS="22px">{username || null}</Text>
+              </TextLineWrapper>
+              <UserCityChanged
+                city={city}
+                setIsModalOverflow={setIsModalOverflow}
+              />
+            </TextWrapper>
+            <AvatarChanged photo={picturePath} />
+          </FirstLineWrapper>
+          <FavouriteCourts courts={favouriteCourts} />
+          <Button
+            onClick={onOpenLogoutModal}
+            bgColors={lightTheme.btnSecondary}
+            style={{ margin: "20px auto 0" }}
+          >
+            Вийти
+          </Button>
+        </Wrapper>
+      </div>
+
+      <ConfirmModal
+        opened={isLogoutModalOpen}
+        closeModal={onCloseLogoutModal}
+        question="Вийти з акаунту?"
+        action={onLogout}
+      />
+    </>
   );
 });
 

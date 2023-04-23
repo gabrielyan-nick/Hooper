@@ -19,9 +19,9 @@ import {
   EditCourtForm,
   CourtChat,
   SettingsForm,
+  ErrorBoundary,
 } from "./index";
-import { Button, IconButton, CloseBtn, ModalWrapper } from "./microComponets";
-import { CloseIconFill, CloseIcon } from "./svgIcons";
+import { ModalWrapper } from "./microComponets";
 import { serverUrl } from "../config";
 
 const socket = io.connect(serverUrl);
@@ -35,6 +35,7 @@ const ModalWindow = ({
   openedCourt = null,
   setOpenedCourt = null,
 }) => {
+  const [isModalOverflow, setIsModalOverflow] = useState(true);
   const [editedCourt, setEditedCourt] = useState({});
   const [history, setHistory] = useState([]);
   const [animationIn, setAnimationIn] = useState(false);
@@ -125,118 +126,124 @@ const ModalWindow = ({
           unmountOnExit
           classNames="modal-content"
         >
-          <ModalContent ref={contentRef} location={location}>
-            <SwitchTransition>
-              <CSSTransition
-                timeout={200}
-                key={location.key}
-                classNames="switch"
-              >
-                <Routes>
-                  <Route
-                    path="/courts/:courtId"
-                    element={
-                      <CourtPopup
-                        closeModal={onCloseModal}
-                        history={history}
-                        goBack={onGoBack}
-                        setEditedCourt={setEditedCourt}
-                        setOpenedCourt={setOpenedCourt}
-                        socket={socket}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/courts/:courtId/chat/:chatId"
-                    element={
-                      <CourtChat
-                        closeModal={onCloseModal}
-                        goBack={onGoBack}
-                        openedCourt={openedCourt}
-                        socket={socket}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/settings"
-                    element={
-                      <SettingsForm
-                        closeModal={onCloseModal}
-                        goBack={onGoBack}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/users/:userId"
-                    element={
-                      <UserInfo closeModal={onCloseModal} goBack={onGoBack} />
-                    }
-                  />
-                  <Route
-                    path="/my-info"
-                    element={
-                      <MyInfo
-                        closeModal={onCloseModal}
-                        goBack={onGoBack}
-                        setAddCourtMarker={setAddCourtMarker}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/login"
-                    element={
-                      <LoginFormWrapper
-                        closeModal={onCloseModal}
-                        goBack={onGoBack}
-                        history={history}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/register"
-                    element={
-                      <RegisterForm
-                        closeModal={onCloseModal}
-                        goBack={onGoBack}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/log-reg"
-                    element={<LoginAfterReg closeModal={onCloseModal} />}
-                  />
-                  <Route
-                    path="/forgot-pass"
-                    element={
-                      <ForgotPassForm
-                        closeModal={onCloseModal}
-                        goBack={onGoBack}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/add-court"
-                    element={
-                      <AddCourtForm
-                        closeModal={onCloseModal}
-                        setAddCourtMarker={setAddCourtMarker}
-                        courtLocation={addCourtMarker}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/courts/:courtId/edit"
-                    element={
-                      <EditCourtForm
-                        closeModal={onCloseModal}
-                        courtInfo={editedCourt}
-                        goBack={onGoBack}
-                      />
-                    }
-                  />
-                </Routes>
-              </CSSTransition>
-            </SwitchTransition>
+          <ModalContent ref={contentRef} isModalOverflow={isModalOverflow}>
+            <ErrorBoundary inModal closeModal={onCloseModal}>
+              <SwitchTransition>
+                <CSSTransition
+                  timeout={200}
+                  key={location.key}
+                  classNames="switch"
+                >
+                  <Routes>
+                    <Route
+                      path="/courts/:courtId"
+                      element={
+                        <CourtPopup
+                          closeModal={onCloseModal}
+                          history={history}
+                          goBack={onGoBack}
+                          setEditedCourt={setEditedCourt}
+                          setOpenedCourt={setOpenedCourt}
+                          socket={socket}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/courts/:courtId/chat/:chatId"
+                      element={
+                        <CourtChat
+                          closeModal={onCloseModal}
+                          goBack={onGoBack}
+                          openedCourt={openedCourt}
+                          socket={socket}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/settings"
+                      element={
+                        <SettingsForm
+                          closeModal={onCloseModal}
+                          goBack={onGoBack}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/users/:userId"
+                      element={
+                        <UserInfo closeModal={onCloseModal} goBack={onGoBack} />
+                      }
+                    />
+                    <Route
+                      path="/my-info"
+                      element={
+                        <MyInfo
+                          closeModal={onCloseModal}
+                          goBack={onGoBack}
+                          setAddCourtMarker={setAddCourtMarker}
+                          setIsModalOverflow={setIsModalOverflow}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/login"
+                      element={
+                        <LoginFormWrapper
+                          closeModal={onCloseModal}
+                          goBack={onGoBack}
+                          history={history}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/register"
+                      element={
+                        <RegisterForm
+                          closeModal={onCloseModal}
+                          goBack={onGoBack}
+                          setIsModalOverflow={setIsModalOverflow}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/log-reg"
+                      element={<LoginAfterReg closeModal={onCloseModal} />}
+                    />
+                    <Route
+                      path="/forgot-pass"
+                      element={
+                        <ForgotPassForm
+                          closeModal={onCloseModal}
+                          goBack={onGoBack}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/add-court"
+                      element={
+                        <AddCourtForm
+                          closeModal={onCloseModal}
+                          setAddCourtMarker={setAddCourtMarker}
+                          courtLocation={addCourtMarker}
+                          setIsModalOverflow={setIsModalOverflow}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/courts/:courtId/edit"
+                      element={
+                        <EditCourtForm
+                          closeModal={onCloseModal}
+                          courtInfo={editedCourt}
+                          goBack={onGoBack}
+                          setIsModalOverflow={setIsModalOverflow}
+                        />
+                      }
+                    />
+                  </Routes>
+                </CSSTransition>
+              </SwitchTransition>
+            </ErrorBoundary>
           </ModalContent>
         </CSSTransition>
       </ModalWrap>
@@ -257,11 +264,7 @@ export const ModalWrap = styled(ModalWrapper)`
 `;
 
 export const ModalContent = styled.div`
-  overflow: ${(props) =>
-    props.location.pathname.endsWith("edit") ||
-    props.location.pathname.endsWith("add-court")
-      ? "visible"
-      : "hidden"};
+  overflow: ${(props) => (props.isModalOverflow ? "hidden" : "visible")};
   background: ${(props) => props.bg || props.theme.popupBg};
   border-radius: 10px;
   min-height: 100px;

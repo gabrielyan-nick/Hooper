@@ -64,7 +64,7 @@ const convertBool = (str) => {
   else if (str === "false") return false;
 };
 
-const EditCourtForm = ({ courtInfo, closeModal, goBack }) => {
+const EditCourtForm = ({ courtInfo, closeModal, goBack, setIsModalOverflow }) => {
   const token = useSelector((s) => s.storage?.user?.token);
   const actualCoverObj =
     courtInfo.sport === "basketball" ? basketballCovers : footballCovers;
@@ -274,6 +274,8 @@ const EditCourtForm = ({ courtInfo, closeModal, goBack }) => {
                       isDisabled={!typeValue}
                       onChange={handleCoverChange}
                       value={coverValue}
+                      onMenuOpen={() => setIsModalOverflow(false)}
+                      onMenuClose={() => setIsModalOverflow(true)}
                     />
                   )}
                 />
@@ -303,6 +305,8 @@ const EditCourtForm = ({ courtInfo, closeModal, goBack }) => {
                       placeholder="Виберіть..."
                       onChange={handleCountChange}
                       value={hoopsCount}
+                      onMenuOpen={() => setIsModalOverflow(false)}
+                      onMenuClose={() => setIsModalOverflow(true)}
                     />
                   )}
                 />
