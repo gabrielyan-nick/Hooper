@@ -10,7 +10,7 @@ import React, {
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {
   Button,
   FlexBetweenBox,
@@ -19,7 +19,7 @@ import {
   TextLineWrapper,
   FlexCenterBox,
   IconBtnBg,
-  ListTitle
+  ListTitle,
 } from "./microComponets";
 import { EnterIcon, ShowHideIcon } from "./svgIcons";
 import { BasketballMarker, FootballMarker } from "./markers";
@@ -37,9 +37,10 @@ const FavouriteCourts = ({ courts }) => {
     showAll
       ? (listRef.current.style.height = `${34 * courts?.length + 13}px`)
       : (listRef.current.style.height = `${
-          34 * displayedCourts?.length + 13
+          34 * displayedCourts?.length + 10
         }px`);
-    if (courts?.length === 0) listRef.current.style.height = "35px";
+    if (courts?.length === 0 || courts?.length === 1)
+      listRef.current.style.height = "43px";
   }, [showAll, courts]);
 
   const showHideList = () => {
@@ -58,7 +59,7 @@ const FavouriteCourts = ({ courts }) => {
   return (
     <>
       <ListTitle>Улюблені майданчики</ListTitle>
-      <ListWrapper ref={listRef}>
+      <ListWrapper ref={listRef} listLength={courts?.length}>
         <TransitionGroup component={null}>
           {displayedCourts?.map((court) => (
             <CSSTransition
@@ -117,8 +118,6 @@ const FavCourt = memo(
   })
 );
 
-
-
 const ListWrapper = styled(TextLineWrapper)`
   padding: 8px;
   position: relative;
@@ -128,6 +127,12 @@ const ListWrapper = styled(TextLineWrapper)`
   & div + div {
     margin-top: 7px;
   }
+  ${(props) =>
+    props.listLength === 0 &&
+    css`
+      display: flex;
+      align-items: center;
+    `}
 `;
 
 const EmptyText = styled(Text)`

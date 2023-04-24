@@ -37,6 +37,7 @@ export const lightTheme = {
   textWrapperBg: "#ebe6e39e",
   inputBorder: "2px solid #00914C",
   radioBg: "#fff",
+  socialLinkIcon: "grey",
   hoopIcon: {
     main: "#faf3f3",
     secondary: "#d5e0de",
@@ -89,6 +90,7 @@ export const darkTheme = {
     net: "#cfd8d7",
     bottom: "#b35c0b",
   },
+  socialLinkIcon: "grey",
   loadingScreen: "radial-gradient(circle at 10% 20%, #262526 0%, #171515  90%)",
   logo: { main: "#ececec", net: "#828787a3" },
   courtTitleColor: "#dbdada",

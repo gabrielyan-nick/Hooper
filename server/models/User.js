@@ -47,24 +47,24 @@ const userSchema = new mongoose.Schema(
       ],
       default: [],
     },
-    addedCourts: {
-      type: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Court",
-        },
-      ],
-      default: [],
-    },
-    checkins: {
-      type: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Checkin",
-        },
-      ],
-      default: [],
-    },
+    // addedCourts: {
+    //   type: [
+    //     {
+    //       type: Schema.Types.ObjectId,
+    //       ref: "Court",
+    //     },
+    //   ],
+    //   default: [],
+    // },
+    // checkins: {
+    //   type: [
+    //     {
+    //       type: Schema.Types.ObjectId,
+    //       ref: "Checkin",
+    //     },
+    //   ],
+    //   default: [],
+    // },
     socialLinks: {
       type: Array,
       of: userSocialLinkSchema,

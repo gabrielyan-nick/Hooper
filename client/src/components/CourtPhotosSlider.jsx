@@ -252,20 +252,24 @@ const IconBtn = styled(IconBtnBg)`
   border-radius: 7px;
   height: 31px;
   cursor: pointer;
+`;
+
+const AddPhotoBtn = styled(IconBtn)`
+  bottom: 5px;
+  left: 41px;
   background: ${(props) => props.theme.iconBtn};
   &:hover {
     background: ${(props) => props.theme.iconBtnHover};
   }
 `;
 
-const AddPhotoBtn = styled(IconBtn)`
-  bottom: 5px;
-  left: 41px;
-`;
-
 const EditCourtBtn = styled(IconBtn)`
   bottom: 5px;
   left: 5px;
+  background: ${(props) => props.theme.iconBtn};
+  &:hover {
+    background: ${(props) => props.theme.iconBtnHover};
+  }
 `;
 
 const CancelBtn = styled(IconBtn)`

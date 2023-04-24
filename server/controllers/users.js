@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import Message from "../models/Message.js";
 import fetch from "node-fetch";
+import UserSocialLink from "../models/UserSocialLink.js";
 
 export const getUserInfo = async (req, res) => {
   try {
@@ -60,6 +61,37 @@ export const updateUserInfo = async (req, res) => {
       city: updatedUser.city,
       token: token,
       favouriteCourts: updatedUser.favouriteCourts,
+      socialLinks: updatedUser.socialLinks,
+    });
+  } catch (e) {
+    res.status(409).json({ message: e.message });
+  }
+};
+
+export const addSocialLink = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const token = req.headers.authorization.split(" ")[1];
+    const newLink = new UserSocialLink({
+      userId,
+      ...req.body,
+    });
+    await newLink.save();
+
+    const user = await User.findById(userId);
+    if (!user) res.status(404).json("User not found");
+
+    user.socialLinks.push(newLink);
+    await user.save();
+
+    res.status(200).json({
+      _id: user._id,
+      picturePath: user.picturePath,
+      username: user.username,
+      city: user.city,
+      token: token,
+      favouriteCourts: user.favouriteCourts,
+      socialLinks: user.socialLinks,
     });
   } catch (e) {
     res.status(409).json({ message: e.message });

@@ -72,7 +72,7 @@ const MyInfo = forwardRef((props, ref) => {
           <Button
             onClick={onOpenLogoutModal}
             bgColors={lightTheme.btnSecondary}
-            style={{ margin: "20px auto 0" }}
+            style={{ margin: "25px auto 0" }}
           >
             Вийти
           </Button>

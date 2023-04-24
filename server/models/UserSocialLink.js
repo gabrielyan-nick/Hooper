@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 export const userSocialLinkSchema = new mongoose.Schema(
   {
-    // _id: Schema.Types.ObjectId,
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -17,7 +16,6 @@ export const userSocialLinkSchema = new mongoose.Schema(
       required: true,
     },
   },
-
   { timestamps: true }
 );
 

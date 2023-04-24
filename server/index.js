@@ -49,9 +49,9 @@ mongoose
   .then(async () => {
     server.listen(PORT, () => console.log(`Server run on port ${PORT}`));
 
-    const markers = await Chat.find().sort({ createdAt: -1 }).limit(11);
-    const ids = markers.map((m) => m._id);
-    await Chat.deleteMany({ _id: { $in: ids } });
+    // const markers = await Marker.find().sort({ createdAt: -1 }).limit(11);
+    // const ids = markers.map((m) => m._id);
+    // await Marker.deleteMany({ _id: { $in: ids } });
 
   })
   .catch((error) => console.log(error));

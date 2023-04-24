@@ -36,7 +36,25 @@ export const userApi = createApi({
         };
       },
     }),
+    addSocialLink: builder.mutation({
+      query(data) {
+        const { userId, token, formData } = data;
+        return {
+          url: `/users/${userId}/links`,
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
-export const { useAddRemoveFavMutation, useUpdateUserInfoMutation, useGetUserInfoQuery } = userApi;
+export const {
+  useAddRemoveFavMutation,
+  useUpdateUserInfoMutation,
+  useGetUserInfoQuery,
+  useAddSocialLinkMutation,
+} = userApi;

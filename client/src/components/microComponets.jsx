@@ -72,6 +72,8 @@ export const IconBtnBg = styled.button`
       : props.color || "transparent"};
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
@@ -91,7 +93,7 @@ export const IconBtnBg = styled.button`
 
   &:disabled {
     cursor: default;
-    opacity: 0.6;
+    opacity: 0.7;
   }
 `;
 
@@ -358,8 +360,8 @@ export const BtnSpinnerWrapper = styled.span`
 
 export const IconSpinnerWrapper = styled.span`
   display: block;
-  width: 23px;
-  height: 23px;
+  width: ${(props) => props.size || "23px"};
+  height: ${(props) => props.size || "23px"};
   border-radius: 50%;
   position: relative;
   animation: ${rotateAnim} 1s linear infinite;
