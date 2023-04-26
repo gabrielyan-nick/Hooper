@@ -19,6 +19,7 @@ import { on } from "events";
 import Court from "./models/Court.js";
 import Marker from "./models/Marker.js";
 import Chat from "./models/Chat.js";
+import Agenda from "agenda";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,7 +53,6 @@ mongoose
     // const markers = await Marker.find().sort({ createdAt: -1 }).limit(11);
     // const ids = markers.map((m) => m._id);
     // await Marker.deleteMany({ _id: { $in: ids } });
-
   })
   .catch((error) => console.log(error));
 
@@ -91,3 +91,8 @@ io.on("connection", (socket) => {
     console.log(`User disconnected ${socket.id}`);
   });
 });
+
+export const agenda = new Agenda({
+  db: { address: process.env.MONGO_URL, collection: "checkOuts" },
+});
+await agenda.start();

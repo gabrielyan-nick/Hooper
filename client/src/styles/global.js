@@ -133,15 +133,14 @@ p, ul, li {
 }
 .court-enter-done {
   opacity: 1;
-  transition: opacity 300ms;
+  transition: opacity 200ms;
 }
 .court-exit {
   opacity: 1;
-  transition: opacity 300ms;
 }
 .court-exit-active {
   opacity: 0;
-  transition: opacity 300ms;
+  transition: opacity 200ms;
 }
 
 .checkinBtn-enter {

@@ -59,6 +59,7 @@ export const updateUserInfo = async (req, res) => {
       picturePath: updatedUser.picturePath,
       username: updatedUser.username,
       city: updatedUser.city,
+      onCourt: updatedUser.onCourt,
       token: token,
       favouriteCourts: updatedUser.favouriteCourts,
       socialLinks: updatedUser.socialLinks,
@@ -91,7 +92,40 @@ export const addSocialLink = async (req, res) => {
       city: user.city,
       token: token,
       favouriteCourts: user.favouriteCourts,
+      onCourt: user.onCourt,
       socialLinks: user.socialLinks,
+    });
+  } catch (e) {
+    res.status(409).json({ message: e.message });
+  }
+};
+
+export const delSocialLink = async (req, res) => {
+  try {
+    const { linkId, userId } = req.params;
+    const token = req.headers.authorization.split(" ")[1];
+    const user = await User.findById(userId);
+    if (!user) res.status(404).json("User not found");
+
+    await UserSocialLink.findByIdAndDelete(linkId);
+
+    const socialLinks = user.socialLinks.filter((link) => link._id != linkId);
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      { socialLinks },
+      { new: true }
+    );
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      picturePath: updatedUser.picturePath,
+      username: updatedUser.username,
+      city: updatedUser.city,
+      token: token,
+      onCourt: updatedUser.onCourt,
+      favouriteCourts: updatedUser.favouriteCourts,
+      socialLinks: updatedUser.socialLinks,
     });
   } catch (e) {
     res.status(409).json({ message: e.message });

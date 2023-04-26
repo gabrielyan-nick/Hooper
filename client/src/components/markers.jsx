@@ -1,12 +1,19 @@
 import React from "react";
+import { lightTheme } from "../styles/themes";
 
-export const BasketballMarker = ({ size = 30 }) => {
+export const BasketballMarker = ({ size = 30, playersCount = 0 }) => {
   return (
     <svg
       width={`${size}px`}
       height={`${size}px`}
       viewBox="0 0 512 512"
       xmlns="http://www.w3.org/2000/svg"
+      style={{
+        borderRadius: "50%",
+        outline: `${
+          playersCount > 0 ? `4px solid ${lightTheme.lightGreen}` : "none"
+        } `,
+      }}
     >
       <g fill="none" fillRule="evenodd" stroke="none" strokeWidth={1}>
         <path
@@ -39,7 +46,7 @@ export const BasketballMarker = ({ size = 30 }) => {
   );
 };
 
-export const FootballMarker = ({ size = 30 }) => {
+export const FootballMarker = ({ size = 30, playersCount = 0 }) => {
   return (
     <svg
       width={`${size}px`}
@@ -47,6 +54,12 @@ export const FootballMarker = ({ size = 30 }) => {
       viewBox="0 0 512 512"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
+      style={{
+        borderRadius: "50%",
+        outline: `${
+          playersCount > 0 ? `4px solid ${lightTheme.lightGreen}` : "none"
+        } `,
+      }}
     >
       <defs>
         <path

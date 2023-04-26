@@ -48,6 +48,9 @@ const storageSlice = createSlice({
     setCourtsType: (state, action) => {
       state.courtsType = action.payload;
     },
+    setOnCourt: (state, action) => {
+      state.user.onCourt = action.payload;
+    },
   },
 });
 
@@ -62,5 +65,6 @@ export const {
   setMapDark,
   setMapLight,
   setCourtsType,
+  setOnCourt,
 } = storageSlice.actions;
 export default storageSlice.reducer;

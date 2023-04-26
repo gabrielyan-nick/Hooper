@@ -171,13 +171,19 @@ const MainMap = ({
                 latitude={latitude}
                 longitude={longitude}
                 onClick={() => {
-                  onOpenCourtPopup(point.properties.courtId);
+                  onOpenCourtPopup(point.properties.courtId._id);
                 }}
               >
                 {point.properties.sport === "basketball" ? (
-                  <BasketballMarker size={25} />
+                  <BasketballMarker
+                    size={25}
+                    playersCount={point.properties.courtId.players.length}
+                  />
                 ) : (
-                  <FootballMarker size={25} />
+                  <FootballMarker
+                    size={25}
+                    playersCount={point.properties.courtId.players.length}
+                  />
                 )}
               </Marker>
             );

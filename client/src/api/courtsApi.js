@@ -45,6 +45,7 @@ export const courtsApi = createApi({
     getCourtPlayers: builder.query({
       query: (id) => `/courts/${id}/players`,
       providesTags: (result, error, id) => [{ type: "Players", id }],
+      keepUnusedDataFor: 30,
     }),
     checkIn: builder.mutation({
       query(data) {
@@ -60,6 +61,7 @@ export const courtsApi = createApi({
       },
       invalidatesTags: (result, error, { courtId }) => [
         { type: "Players", courtId },
+        { type: "Markers" },
       ],
     }),
     checkOut: builder.mutation({
@@ -76,6 +78,7 @@ export const courtsApi = createApi({
       },
       invalidatesTags: (result, error, { courtId }) => [
         { type: "Players", courtId },
+        { type: "Markers" },
       ],
     }),
     getChatMessages: builder.query({

@@ -39,21 +39,42 @@ const SocialLinksEdited = () => {
   const onAddLink = () => setIsLinkAdded(true);
   const onCancelAddLink = () => setIsLinkAdded(false);
 
+  const linkRef = useMemo(
+    () =>
+      links?.reduce((acc, { _id }) => {
+        acc[_id] = createRef();
+        return acc;
+      }, {}),
+    [links]
+  );
+
   return (
     <>
       <ListTitle style={{ marginTop: "15px" }}>Соц. мережі</ListTitle>
       <TextLineWrap p="8px">
-        {links.length > 0 &&
-          links.map((link) => (
-            <SocialLink
-              key={link._id}
-              name={link.name}
-              link={link.link}
-              id={link._id}
-              userId={link.userId}
-              isLinkAdded={isLinkAdded}
-            />
-          ))}
+        <TransitionGroup component={null}>
+          {links?.length > 0 &&
+            links.map((link) => (
+              <CSSTransition
+                timeout={200}
+                key={link._id}
+                classNames="court"
+                nodeRef={linkRef[link._id]}
+                mountOnEnter
+                unmountOnExit
+              >
+                <SocialLink
+                  key={link._id}
+                  name={link.name}
+                  link={link.link}
+                  linkId={link._id}
+                  userId={link.userId}
+                  isLinkAdded={isLinkAdded}
+                  ref={linkRef[link._id]}
+                />
+              </CSSTransition>
+            ))}
+        </TransitionGroup>
         <SwitchTransition mode="out-in">
           <CSSTransition
             timeout={100}
@@ -68,14 +89,14 @@ const SocialLinksEdited = () => {
                 color="green"
                 style={{
                   borderRadius: "7px",
-                  marginTop: !!links.length ? "5px" : 0,
+                  marginTop: !!links?.length ? "7px" : 0,
                 }}
                 onClick={onAddLink}
               >
                 <AddIcon />
               </IconBtnBg>
             ) : (
-              <div style={{ marginTop: !!links.length ? "5px" : 0 }}>
+              <div style={{ marginTop: !!links?.length ? "5px" : 0 }}>
                 <AddSocialLinkForm
                   ref={inputRef}
                   onCancelAddLink={onCancelAddLink}
@@ -92,7 +113,7 @@ const SocialLinksEdited = () => {
 
 export default SocialLinksEdited;
 
-const TextLineWrap = styled(TextLineWrapper)`
+export const TextLineWrap = styled(TextLineWrapper)`
   overflow: visible;
   & div + div {
     margin-top: 7px;

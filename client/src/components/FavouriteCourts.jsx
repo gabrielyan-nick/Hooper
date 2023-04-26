@@ -20,6 +20,7 @@ import {
   FlexCenterBox,
   IconBtnBg,
   ListTitle,
+  Dash,
 } from "./microComponets";
 import { EnterIcon, ShowHideIcon } from "./svgIcons";
 import { BasketballMarker, FootballMarker } from "./markers";
@@ -74,7 +75,7 @@ const FavouriteCourts = ({ courts }) => {
             </CSSTransition>
           ))}
         </TransitionGroup>
-        {!courts?.length && <EmptyText>Немає</EmptyText>}
+        {!courts?.length && <Dash />}
         {courts?.length > displayedListLength && (
           <span style={{ height: "1px" }}>
             <ShowHideBtn
@@ -118,7 +119,7 @@ const FavCourt = memo(
   })
 );
 
-const ListWrapper = styled(TextLineWrapper)`
+export const ListWrapper = styled(TextLineWrapper)`
   padding: 8px;
   position: relative;
   margin-bottom: 10px;
@@ -133,10 +134,6 @@ const ListWrapper = styled(TextLineWrapper)`
       display: flex;
       align-items: center;
     `}
-`;
-
-const EmptyText = styled(Text)`
-  color: #7e7a7a;
 `;
 
 const ShowHideBtn = styled(IconBtnBg)`

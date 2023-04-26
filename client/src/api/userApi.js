@@ -49,6 +49,18 @@ export const userApi = createApi({
         };
       },
     }),
+    delSocialLink: builder.mutation({
+      query(data) {
+        const { userId, linkId, token } = data;
+        return {
+          url: `/users/${userId}/links/${linkId}`,
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -57,4 +69,5 @@ export const {
   useUpdateUserInfoMutation,
   useGetUserInfoQuery,
   useAddSocialLinkMutation,
+  useDelSocialLinkMutation,
 } = userApi;

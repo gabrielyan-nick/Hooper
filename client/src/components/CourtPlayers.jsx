@@ -35,6 +35,7 @@ import { EnterIcon, ShowHideIcon, QuestionIcon } from "./svgIcons";
 import { ShowHideBtnWrapper } from "./FavouriteCourts";
 import { lightTheme } from "../styles/themes";
 import { BasketballMarker, FootballMarker } from "./markers";
+import { setOnCourt } from "../store/storageSlice";
 
 const CourtPlayers = ({ court, courtId }) => {
   const { user } = useSelector((state) => state.storage);
@@ -60,6 +61,7 @@ const CourtPlayers = ({ court, courtId }) => {
   const checkOutRef = useRef(null);
   const nodeRef = isOnCourt ? checkInRef : checkOutRef;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     listRef.current.style.height = `${
@@ -107,7 +109,7 @@ const CourtPlayers = ({ court, courtId }) => {
       formData.append("username", user.username);
       checkIn({ courtId, formData, token: user.token })
         .then((result) => {
-          // refetch();
+          dispatch(setOnCourt(result.data));
         })
         .catch((e) => console.log(e));
     } else navigate("/login");
@@ -119,7 +121,7 @@ const CourtPlayers = ({ court, courtId }) => {
       formData.append("_id", user._id);
       checkOut({ courtId, formData, token: user.token })
         .then((result) => {
-          // refetch();
+          dispatch(setOnCourt(result.data));
         })
         .catch((e) => console.log(e));
     } else navigate("/login");
@@ -207,7 +209,9 @@ const CourtPlayers = ({ court, courtId }) => {
                 disabled={result.isLoading || isFetching}
               >
                 {result.isLoading ? (
-                  <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
+                  <BtnSpinnerWrapper size="27px">
+                    {markers[court.sport]}
+                  </BtnSpinnerWrapper>
                 ) : (
                   `Я на ${court.sport === "basketball" ? "майданчику" : "полі"}`
                 )}
@@ -222,7 +226,9 @@ const CourtPlayers = ({ court, courtId }) => {
                 disabled={res.isLoading || isFetching}
               >
                 {res.isLoading ? (
-                  <BtnSpinnerWrapper>{markers[court.sport]}</BtnSpinnerWrapper>
+                  <BtnSpinnerWrapper size="27px">
+                    {markers[court.sport]}
+                  </BtnSpinnerWrapper>
                 ) : (
                   "Пішов"
                 )}
@@ -243,7 +249,9 @@ const CourtPlayers = ({ court, courtId }) => {
                     backgroundColor: "#1a1818dc",
                   }}
                 >
-                  <Text color='#fff'>Відмітка автоматично зникає через 3 години</Text>
+                  <Text color="#fff">
+                    Відмітка автоматично зникає через 3 години
+                  </Text>
                 </Tooltip>
               </QuestionIconWrapper>
             </CheckOutWrapper>
@@ -379,6 +387,6 @@ CourtPlayers.propTypes = {
   courtId: PropTypes.string.isRequired,
 };
 
-Player.propTypes = {
-  user: PropTypes.object.isRequired,
-};
+// Player.propTypes = {
+//   user: PropTypes.object.isRequired,
+// };

@@ -27,6 +27,17 @@ const userSchema = new mongoose.Schema(
       require: true,
       default: "/assets/avatar.png",
     },
+    onCourt: {
+      isOnCourt: {
+        type: Boolean,
+        default: false,
+      },
+      courtId: {
+        type: Schema.Types.ObjectId,
+        ref: "Court",
+        default: null,
+      },
+    },
     // friends: {
     //   type: [
     //     {

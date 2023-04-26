@@ -97,6 +97,14 @@ export const IconBtnBg = styled.button`
   }
 `;
 
+export const Dash = styled.div`
+  width: 13px;
+  height: 3px;
+  border: 1px solid #7e7a7a;
+  background-color: #7e7a7a;
+  margin-left: 7px;
+`;
+
 export const CloseBtn = styled(IconButton)`
   border-radius: 7px;
   padding: 3px;

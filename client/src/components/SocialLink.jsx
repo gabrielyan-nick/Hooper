@@ -13,7 +13,7 @@ import {
   SwitchTransition,
 } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import styled, { useTheme } from "styled-components";
 import {
   Button,
@@ -25,37 +25,81 @@ import {
   IconBtnBg,
   ListTitle,
 } from "./microComponets";
-import { SocialLinksLogos } from "./index";
+import { ConfirmModal, SocialLinksLogos } from "./index";
 import { EnterIcon, ShowHideIcon, AddIcon, DeleteIcon } from "./svgIcons";
 import { BasketballMarker, FootballMarker } from "./markers";
 import useMediaQuery from "../hooks/useMediaQuery";
+import { useDelSocialLinkMutation } from "../api/userApi";
+import { lightTheme } from "../styles/themes";
+import { setLogin } from "../store/storageSlice";
 
-const SocialLink = ({ name, link, id, userId, isLinkAdded = false }) => {
-  const myId = useSelector((s) => s.storage.user?._id);
-  const isSmallScreen = useMediaQuery("(max-width: 380px)");
-  const isMyLink = userId === myId;
-  const theme = useTheme();
+const SocialLink = forwardRef(
+  ({ name, link, linkId, userId, isLinkAdded = false }, ref) => {
+    const myId = useSelector((s) => s.storage.user?._id);
+    const isSmallScreen = useMediaQuery("(max-width: 380px)");
+    const theme = useTheme();
+    const [delLink, result] = useDelSocialLinkMutation();
+    const [isDelModalOpen, setIsDelModalOpen] = useState(false);
+    const token = useSelector((s) => s.storage.user?.token);
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const isMyLink = userId === myId && location.pathname.endsWith("my-info");
 
-  return (
-    <LineWrapper>
-      <SocialLinksLogos name={name} />
-      <Link to={link} target="_blank" style={{ textDecoration: "none" }}>
-        <Text fS={`${isSmallScreen ? "17px" : "18px"}`}>{name}</Text>
-      </Link>
-      {isMyLink ? (
-        <Btn color="orange" isVisible={!isLinkAdded}>
-          <DeleteIcon size={16} color={theme.username} />
-        </Btn>
-      ) : (
-        <Link to={link} target="_blank" style={{ textDecoration: "none" }}>
-          <Btn color="green" isVisible={!isLinkAdded}>
-            <EnterIcon />
-          </Btn>
-        </Link>
-      )}
-    </LineWrapper>
-  );
-};
+    const onDelLink = () => {
+      delLink({ userId, linkId, token })
+        .then((result) => {
+          if (result.data) {
+            dispatch(setLogin(result.data));
+            onCloseDelModal();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const onOpenDelModal = () => setIsDelModalOpen(true);
+    const onCloseDelModal = () => setIsDelModalOpen(false);
+
+    return (
+      <div ref={ref}>
+        <LineWrapper>
+          <SocialLinksLogos name={name} />
+          <Link to={link} target="_blank" style={{ textDecoration: "none" }}>
+            <Text fS={`${isSmallScreen ? "17px" : "18px"}`}>{name}</Text>
+          </Link>
+          {isMyLink ? (
+            <Btn
+              color="orange"
+              isVisible={!isLinkAdded}
+              onClick={onOpenDelModal}
+            >
+              <DeleteIcon size={15} color={lightTheme.username} />
+            </Btn>
+          ) : (
+            <Link
+              to={link}
+              target="_blank"
+              style={{ textDecoration: "none", marginLeft: "auto" }}
+            >
+              <Btn color="green" isVisible={!isLinkAdded}>
+                <EnterIcon />
+              </Btn>
+            </Link>
+          )}
+        </LineWrapper>
+
+        <ConfirmModal
+          opened={isDelModalOpen}
+          closeModal={onCloseDelModal}
+          action={onDelLink}
+          actionResult={result}
+          question="Видалити посилання?"
+        />
+      </div>
+    );
+  }
+);
 
 export default SocialLink;
 

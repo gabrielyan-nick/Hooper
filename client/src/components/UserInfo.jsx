@@ -23,6 +23,7 @@ import {
   PhotoWindow,
   LoadingScreen,
   BallSpinner,
+  UserSocialLinks,
 } from "./index";
 import { CloseIcon, BackIcon } from "./svgIcons";
 import { useGetUserInfoQuery } from "../api/userApi";
@@ -84,6 +85,7 @@ const UserInfo = forwardRef((props, ref) => {
             </FlexCenterBox>
           </FirstLineWrapper>
           <FavouriteCourts courts={data?.favouriteCourts} />
+          <UserSocialLinks links={data.socialLinks} />
         </Wrapper>
       </div>
 

@@ -3,6 +3,7 @@ import Marker from "../models/Marker.js";
 import User from "../models/User.js";
 import Chat from "../models/Chat.js";
 import Message from "../models/Message.js";
+import { agenda } from "../index.js";
 
 export const addCourt = async (req, res) => {
   try {
@@ -102,33 +103,70 @@ export const checkInOnCourt = async (req, res) => {
   try {
     const { courtId } = req.params;
     const { _id, username } = req.body;
+
+    const user = await User.findById(_id);
+    if (!user) res.status(404).json({ message: "User not found" });
     const court = await Court.findById(courtId);
     if (!court) res.status(404).json({ message: "Court not found" });
+
+    if (user.onCourt.isOnCourt) {
+      const prevCourt = await Court.findById(user.onCourt.courtId);
+      prevCourt.players = prevCourt.players.filter(
+        (player) => player._id != _id
+      );
+      await prevCourt.save();
+    }
 
     court.checkinPlayers.unshift({
       _id,
       username,
     });
 
-    const isOnCourt = court.players.some((player) => player._id == _id);
-    if (!isOnCourt) {
-      court.players.unshift({
-        _id,
-        username,
-      });
-    }
+    court.players.unshift({
+      _id,
+      username,
+    });
 
-    setTimeout(async () => {
-      const index = court.players.findIndex((player) => player._id == _id);
-      if (index !== -1) {
-        court.players.splice(index, 1);
-        await court.save();
-      }
-    }, 3 * 60 * 60 * 1000);
+    user.onCourt.isOnCourt = true;
+    user.onCourt.courtId = courtId;
 
+    await user.save();
     await court.save();
 
-    res.status(200).json({ message: "Successful" });
+    const jobName = `checkOut-user-${_id}`;
+    const jobs = await agenda.jobs({ name: jobName });
+
+    if (jobs.length > 0) {
+      await agenda.cancel({ name: jobName });
+      await agenda.purge({ name: jobName });
+    }
+
+    agenda.define(jobName, async (job) => {
+      try {
+        const user = await User.findById(_id);
+        if (user.onCourt.courtId == courtId) {
+          const court = await Court.findById(courtId);
+          const index = court.players.findIndex((player) => player._id == _id);
+          if (index !== -1) {
+            court.players.splice(index, 1);
+            user.onCourt.isOnCourt = false;
+            user.onCourt.courtId = null;
+
+            await user.save();
+            await court.save();
+          }
+        }
+        job.remove(() => console.log("REMOVE"));
+      } catch (e) {
+        console.log(e);
+      }
+    });
+
+    const now = new Date();
+    const scheduleTime = new Date(now.getTime() + 3 * 60 * 60 * 1000);
+    agenda.schedule(scheduleTime, jobName);
+
+    res.status(200).json(user.onCourt);
   } catch (e) {
     res.status(500).json({ message: "Unknown error" });
   }
@@ -138,6 +176,9 @@ export const checkOutOnCourt = async (req, res) => {
   try {
     const { courtId } = req.params;
     const { _id } = req.body;
+
+    const user = await User.findById(_id);
+    if (!user) res.status(404).json({ message: "User not found" });
     const court = await Court.findById(courtId);
     if (!court) res.status(404).json({ message: "Court not found" });
 
@@ -146,9 +187,21 @@ export const checkOutOnCourt = async (req, res) => {
       court.players = court.players.filter((player) => player._id != _id);
     }
 
+    user.onCourt.isOnCourt = false;
+    user.onCourt.courtId = null;
+
+    await user.save();
     await court.save();
 
-    res.status(200).json({ message: "Successful" });
+    const jobName = `checkOut-user-${_id}`;
+    const jobs = await agenda.jobs({ name: jobName });
+
+    if (jobs.length > 0) {
+      await agenda.cancel({ name: jobName });
+      await agenda.purge({ name: jobName });
+    }
+
+    res.status(200).json(user.onCourt);
   } catch (e) {
     res.status(500).json({ message: "Unknown error" });
   }

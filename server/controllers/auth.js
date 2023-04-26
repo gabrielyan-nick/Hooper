@@ -66,6 +66,7 @@ export const login = async (req, res) => {
       username: user.username,
       city: user.city,
       token: token,
+      onCourt: user.onCourt,
       favouriteCourts: user.favouriteCourts,
     });
   } catch (e) {
