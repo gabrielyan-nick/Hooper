@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import io from "socket.io-client";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import useMount from "../hooks/useMount";
@@ -20,6 +20,7 @@ import {
   CourtChat,
   SettingsForm,
   ErrorBoundary,
+  Tutorial,
 } from "./index";
 import { ModalWrapper } from "./microComponets";
 import { serverUrl } from "../config";
@@ -116,7 +117,7 @@ const ModalWindow = ({
       unmountOnExit
       classNames="modal-overlay"
     >
-      <ModalWrap ref={overlayRef}>
+      <ModalWrapper ref={overlayRef}>
         <CSSTransition
           in={animationIn}
           nodeRef={contentRef}
@@ -240,28 +241,21 @@ const ModalWindow = ({
                         />
                       }
                     />
+                    <Route
+                      path="/tutorial"
+                      element={<Tutorial closeModal={onCloseModal} />}
+                    />
                   </Routes>
                 </CSSTransition>
               </SwitchTransition>
             </ErrorBoundary>
           </ModalContent>
         </CSSTransition>
-      </ModalWrap>
+      </ModalWrapper>
     </CSSTransition>,
     document.body
   );
 };
-
-export const ModalWrap = styled(ModalWrapper)`
-  @media (max-height: 650px) {
-    align-items: flex-start;
-    padding: 50px 0;
-  }
-  @media ${(props) => props.theme.media.mobile} {
-    align-items: flex-start;
-    padding: 50px 0;
-  }
-`;
 
 export const ModalContent = styled.div`
   overflow: ${(props) => (props.isModalOverflow ? "hidden" : "visible")};
@@ -269,6 +263,9 @@ export const ModalContent = styled.div`
   border-radius: 10px;
   min-height: 100px;
   max-width: 420px;
+  height: max-content;
+  box-shadow: ${(props) => props.theme.modalShadows};
+
   @media ${(props) => props.theme.media.wideScreen} {
     width: 27%;
   }

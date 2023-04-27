@@ -1,6 +1,6 @@
 export const cities = [
   { value: "kharkiv", label: "Харків" },
-  { value: "kyiv", label: "Київ" },
+  { value: "Kyiv, Ukraine", label: "Київ" },
   { value: "alushta", label: "Алушта" },
   { value: "vinnytsia", label: "Вінниця" },
   { value: "dzhankoj", label: "Джанкой" },

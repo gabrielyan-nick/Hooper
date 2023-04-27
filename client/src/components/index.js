@@ -37,3 +37,5 @@ export { default as SocialLink } from "./SocialLink";
 export { default as AddSocialLinkForm } from "./forms/AddSocialLinkForm";
 export { default as SocialLinksLogos } from "./SocialLinksLogos";
 export { default as UserSocialLinks } from "./UserSocialLinks";
+export { default as TutorialWidget } from "./TutorialWidget";
+export { default as Tutorial } from "./Tutorial";

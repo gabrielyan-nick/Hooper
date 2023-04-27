@@ -94,5 +94,7 @@ io.on("connection", (socket) => {
 
 export const agenda = new Agenda({
   db: { address: process.env.MONGO_URL, collection: "checkOuts" },
+  processEvery: "1 minute",
 });
+
 await agenda.start();

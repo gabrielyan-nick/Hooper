@@ -1,7 +1,11 @@
 import React from "react";
 import { lightTheme } from "../styles/themes";
 
-export const BasketballMarker = ({ size = 30, playersCount = 0 }) => {
+export const BasketballMarker = ({
+  size = 30,
+  playersCount = 0,
+  margin = 0,
+}) => {
   return (
     <svg
       width={`${size}px`}
@@ -10,6 +14,7 @@ export const BasketballMarker = ({ size = 30, playersCount = 0 }) => {
       xmlns="http://www.w3.org/2000/svg"
       style={{
         borderRadius: "50%",
+        margin: margin,
         outline: `${
           playersCount > 0 ? `4px solid ${lightTheme.lightGreen}` : "none"
         } `,

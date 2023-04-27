@@ -154,6 +154,7 @@ const MainMap = ({
           const { cluster: isCluster, point_count: pointCount } =
             point.properties;
           if (isCluster) {
+   
             return (
               <Marker
                 key={`cluster-${point.id}`}
@@ -177,12 +178,12 @@ const MainMap = ({
                 {point.properties.sport === "basketball" ? (
                   <BasketballMarker
                     size={25}
-                    playersCount={point.properties.courtId.players.length}
+                    playersCount={point.properties.courtId?.players?.length}
                   />
                 ) : (
                   <FootballMarker
                     size={25}
-                    playersCount={point.properties.courtId.players.length}
+                    playersCount={point.properties.courtId?.players?.length}
                   />
                 )}
               </Marker>

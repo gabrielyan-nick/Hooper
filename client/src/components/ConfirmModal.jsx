@@ -91,7 +91,10 @@ const ConfirmModal = ({
       unmountOnExit
       classNames="modal-overlay"
     >
-      <ModalWrapper ref={overlayRef}>
+      <ModalWrapper
+        style={{ alignItems: "center", padding: 0 }}
+        ref={overlayRef}
+      >
         <CSSTransition
           in={animationIn}
           nodeRef={contentRef}

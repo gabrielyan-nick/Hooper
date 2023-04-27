@@ -37,7 +37,7 @@ import { useAddCourtMutation } from "../../api/courtsApi";
 import { BasketballMarker } from "../markers";
 
 const addCourtSchema = yup.object({
-  name: yup.string().max(23, "Максимум 23 символи"),
+  name: yup.string().max(23, "Максимум 23 символи").required("Введіть назву"),
   sport: yup.string().required("Виберіть тип майданчика"),
   cover: yup.string().required("Виберіть покриття"),
   hoopsCount: yup.number(),
@@ -224,7 +224,7 @@ const AddCourtForm = ({
         </CloseBtn>
       </ModalHeader>
       <FormWrapper style={{ padding: "0 5px 10px 5px" }}>
-        <Text fS="20px" fW={700} m="15px 10px 15px" centred>
+        <Text fS="20px" fW={700} m="20px 10px 25px" centred>
           Вкажіть інформацію про майданчик
         </Text>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>

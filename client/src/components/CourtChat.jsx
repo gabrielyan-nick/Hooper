@@ -11,7 +11,7 @@ import io from "socket.io-client";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import {
   useGetChatMessagesQuery,
   usePostChatMessageMutation,
@@ -269,6 +269,7 @@ const ChatMessage = memo(
     const [updateMessage, updateResult] = useUpdateChatMessageMutation();
     const [deleteMessage, delResult] = useDeleteChatMessageMutation();
     const navigate = useNavigate();
+    const theme = useTheme();
 
     useEffect(() => {
       if (inputRef.current) {
@@ -391,7 +392,7 @@ const ChatMessage = memo(
                 </CSSTransition>
               </SwitchTransition>
             )}
-            <DateText color="secondary" fS="14px">
+            <DateText color={theme.chatDate} fS="14px">
               {date}
             </DateText>
           </BottomLine>
@@ -484,7 +485,7 @@ const Avatar = styled.img`
 
 const MessagesWrapper = styled.ul`
   position: relative;
-  height: 450px;
+  height: 435px;
   display: flex;
   flex-direction: column-reverse;
   border-radius: 7px;

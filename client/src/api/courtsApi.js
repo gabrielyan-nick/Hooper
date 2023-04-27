@@ -85,6 +85,7 @@ export const courtsApi = createApi({
       query: ({ courtId, chatId, offset, limit }) =>
         `/courts/${courtId}/chat/${chatId}?offset=${offset}&limit=${limit}`,
       keepUnusedDataFor: 1,
+      refetchOnFocus: false,
     }),
     postChatMessage: builder.mutation({
       query(data) {

@@ -9,6 +9,7 @@ const RadioText = styled(Text)`
   padding-left: 10px;
   cursor: pointer;
   user-select: none;
+  font-size: 17px;
 `;
 
 const RadioBox = styled.div`

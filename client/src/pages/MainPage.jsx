@@ -9,6 +9,7 @@ import {
   AddCourtWidget,
   SettingsWidget,
   ErrorBoundary,
+  TutorialWidget,
 } from "../components";
 import { Wrapper } from "../components/microComponets";
 
@@ -43,6 +44,7 @@ const MainPage = () => {
               addCourtMarker={addCourtMarker}
               setAddCourtMarker={setAddCourtMarker}
             />
+            <TutorialWidget />
           </>
         )}
         <ErrorBoundary>

@@ -19,7 +19,7 @@ export const FlexBetweenBox = styled.div`
 export const SectionTitle = styled.h6`
   font-family: "Play", sans-serif;
   font-weight: 600;
-  font-size: 16px;
+  font-size: ${(props) => props.fS || "16px"};
   margin: 0 0 5px 5px;
   color: ${(props) => props.theme.textSecondary};
   @media ${(props) => props.theme.media.smallMobile} {
@@ -103,11 +103,12 @@ export const Dash = styled.div`
   border: 1px solid #7e7a7a;
   background-color: #7e7a7a;
   margin-left: 7px;
+  border-radius: 1px;
 `;
 
 export const CloseBtn = styled(IconButton)`
   border-radius: 7px;
-  padding: 3px;
+  padding: ${(props) => props.p || "3px"};
   user-select: none;
   background-color: #e02504;
   transition: all 0.3s;
@@ -162,9 +163,27 @@ export const Text = styled.p`
   word-break: break-word;
 `;
 
-export const Title = styled.h3`
-  font-size: 18px;
-  font-weight: 700;
+export const LogoText = styled.p`
+  font-family: "Berlin";
+  font-size: ${(props) => props.fS || "25px"};
+  font-weight: ${(props) => props.fW || 700};
+  text-align: ${(props) => (props.centred ? "center" : "inherit")};
+  margin: ${(props) => props.m || 0};
+  padding: ${(props) => props.p || 0};
+  background: linear-gradient(
+    90deg,
+    rgba(0, 145, 76, 1) 0%,
+    rgba(20, 124, 63, 1) 50%,
+    rgba(255, 82, 53, 1) 75%,
+    rgba(208, 69, 22, 1) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`;
+
+export const Title = styled.h2`
+  font-size: ${(props) => props.fS || "18px"};
+  font-weight: ${(props) => props.fW || 700};
   color: ${(props) => props.theme.courtTitleColor};
   margin: 0;
 `;
@@ -387,9 +406,15 @@ export const ModalWrapper = styled.div`
   background-color: #09000cb9;
   display: flex;
   justify-content: center;
-  align-items: center;
+  padding: 100px 0;
   &::-webkit-scrollbar {
     width: 0;
+  }
+  @media (max-width: 800px) {
+    padding: 50px 0;
+  }
+  @media (max-width: 600px) {
+    padding: 30px 0;
   }
 `;
 

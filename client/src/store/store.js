@@ -1,4 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/dist/query/index.js";
 import {
   persistStore,
   persistReducer,
@@ -40,5 +41,7 @@ export const store = configureStore({
     }).concat(courtsApi.middleware, authApi.middleware, userApi.middleware),
   devTools: process.env.NODE_ENV !== "production",
 });
+
+setupListeners(store.dispatch);
 
 export const persistedStore = persistStore(store);

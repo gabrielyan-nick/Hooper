@@ -64,26 +64,26 @@ const CourtInfo = ({ data }) => {
   return (
     <div style={{ padding: "5px" }}>
       <CourtInfoWrapper>
-        <CourtInfoDataWrapper>
+        <FlexCenterBox style={{ gap: "5px" }}>
           <IconWithTooltip icon={coverIcon} tooltip="Покриття" id="cover" />
           <Text fS="14px" fW={700}>
             {coverData}
           </Text>
-        </CourtInfoDataWrapper>
-        <CourtInfoDataWrapper>
+        </FlexCenterBox>
+        <FlexCenterBox style={{ gap: "5px" }}>
           <IconWithTooltip icon={countIcon} tooltip={countTooltip} id="count" />
           <Text fS="18px" fW={700}>
             {data.hoopsCount}
           </Text>
-        </CourtInfoDataWrapper>
-        <CourtInfoDataWrapper>
+        </FlexCenterBox>
+        <FlexCenterBox>
           <IconWithTooltip
             icon={<LightingIcon main={theme.lighting.main} />}
             tooltip="Освітлення"
             id="light"
           />
           {isLighting}
-        </CourtInfoDataWrapper>
+        </FlexCenterBox>
       </CourtInfoWrapper>
     </div>
   );
@@ -112,15 +112,12 @@ export const IconWithTooltip = ({ icon, tooltip, id, place = "top" }) => {
   );
 };
 
-const CourtInfoWrapper = styled(TextLineWrapper)`
-  padding: 5px;
+export const CourtInfoWrapper = styled(TextLineWrapper)`
+  padding: 3px 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   overflow: visible;
-`;
-const CourtInfoDataWrapper = styled(FlexCenterBox)`
-  gap: 5px;
 `;
 
 const basketballCover = {

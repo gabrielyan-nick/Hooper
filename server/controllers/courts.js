@@ -138,7 +138,6 @@ export const checkInOnCourt = async (req, res) => {
 
     if (jobs.length > 0) {
       await agenda.cancel({ name: jobName });
-      await agenda.purge({ name: jobName });
     }
 
     agenda.define(jobName, async (job) => {
@@ -156,7 +155,7 @@ export const checkInOnCourt = async (req, res) => {
             await court.save();
           }
         }
-        job.remove(() => console.log("REMOVE"));
+        job.remove(() => console.log("          REMOVE        "));
       } catch (e) {
         console.log(e);
       }
@@ -198,12 +197,11 @@ export const checkOutOnCourt = async (req, res) => {
 
     if (jobs.length > 0) {
       await agenda.cancel({ name: jobName });
-      await agenda.purge({ name: jobName });
     }
 
     res.status(200).json(user.onCourt);
   } catch (e) {
-    res.status(500).json({ message: "Unknown error" });
+    res.status(500).json({ message: e.message });
   }
 };
 

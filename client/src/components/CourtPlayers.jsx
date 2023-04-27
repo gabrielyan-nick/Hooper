@@ -184,9 +184,9 @@ const CourtPlayers = ({ court, courtId }) => {
             color={`${showAll ? "orange" : "green"}`}
             onClick={showHideList}
           >
-            <ShowHideBtnWrap showAll={showAll}>
+            <ShowHideBtnWrapper style={{ height: "25px" }} showAll={showAll}>
               <ShowHideIcon size={25} />
-            </ShowHideBtnWrap>
+            </ShowHideBtnWrapper>
           </ShowHideBtn>
         </div>
       )}
@@ -316,10 +316,6 @@ const checkInWidth = {
   football: "101px",
 };
 
-const ShowHideBtnWrap = styled(ShowHideBtnWrapper)`
-  height: 25px;
-`;
-
 const ShowHideBtn = styled(IconBtnBg)`
   position: absolute;
   bottom: -16px;
@@ -327,7 +323,7 @@ const ShowHideBtn = styled(IconBtnBg)`
   border-radius: 7px;
 `;
 
-const LineWrapper = styled.div`
+export const LineWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
@@ -335,7 +331,7 @@ const LineWrapper = styled.div`
   height: 25px;
   align-items: center;
   & + div {
-    margin-top: 3px;
+    margin-top: ${(props) => props.mt || "3px"};
   }
 `;
 
@@ -356,7 +352,7 @@ const GoToBtn = styled(IconBtnBg)`
   border-radius: 7px;
 `;
 
-const PlayersList = styled(TextLineWrapper)`
+export const PlayersList = styled(TextLineWrapper)`
   position: relative;
   min-height: 30px;
   display: flex;
@@ -364,18 +360,18 @@ const PlayersList = styled(TextLineWrapper)`
   transition: height 0.2s;
 `;
 
-const Divider = styled.div`
+export const Divider = styled.div`
   width: 3px;
   border-radius: 80px;
   background-color: ${(props) => props.theme.textSecondary};
 `;
 
-const TitlesWrapper = styled.div`
+export const TitlesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 `;
 
-const ColumnWrapper = styled.div`
+export const ColumnWrapper = styled.div`
   width: 50%;
   padding: 0 3px 0 7px;
 `;
@@ -387,6 +383,6 @@ CourtPlayers.propTypes = {
   courtId: PropTypes.string.isRequired,
 };
 
-// Player.propTypes = {
-//   user: PropTypes.object.isRequired,
-// };
+Player.propTypes = {
+  user: PropTypes.object.isRequired,
+};
