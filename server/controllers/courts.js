@@ -146,11 +146,12 @@ export const checkInOnCourt = async (req, res) => {
         if (user.onCourt.courtId == courtId) {
           const court = await Court.findById(courtId);
           const index = court.players.findIndex((player) => player._id == _id);
+          console.log("          START        ");
           if (index !== -1) {
             court.players.splice(index, 1);
             user.onCourt.isOnCourt = false;
             user.onCourt.courtId = null;
-
+            console.log("          DONE        ");
             await user.save();
             await court.save();
           }
@@ -162,12 +163,12 @@ export const checkInOnCourt = async (req, res) => {
     });
 
     const now = new Date();
-    const scheduleTime = new Date(now.getTime() + 3 * 60 * 60 * 1000);
+    const scheduleTime = new Date(now.getTime() + 3 * 60 * 1000);
     agenda.schedule(scheduleTime, jobName);
 
     res.status(200).json(user.onCourt);
   } catch (e) {
-    res.status(500).json({ message: "Unknown error" });
+    res.status(500).json({ message: e.message });
   }
 };
 
