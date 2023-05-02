@@ -7,7 +7,7 @@ import { Button, FlexBetweenBox, Text, UserWidgetBtn } from "./microComponets";
 import { darkTheme, lightTheme } from "../styles/themes";
 import { ModalWindow } from "./index";
 
-const UserWidget = ({ setAddCourtMarker, setOpenedCourt }) => {
+const UserWidget = ({ setAddCourtMarker, setOpenedCourt, openedCourt }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { picturePath, username } = useSelector((state) => state.storage.user);
   const name = username.slice(0, 15);
@@ -40,6 +40,7 @@ const UserWidget = ({ setAddCourtMarker, setOpenedCourt }) => {
         closeModal={onCloseModal}
         setAddCourtMarker={setAddCourtMarker}
         setOpenedCourt={setOpenedCourt}
+        openedCourt={openedCourt}
       />
     </>
   );

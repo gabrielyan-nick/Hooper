@@ -1,9 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { CSSTransition } from "react-transition-group";
+import React, { useState, useEffect, useRef } from "react";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled, { useTheme } from "styled-components";
-import { Tooltip } from "react-tooltip";
+import {
+  FacebookShareButton,
+  LinkedinShareButton,
+  PinterestShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  ViberShareButton,
+  WhatsappShareButton,
+  FacebookIcon,
+  LinkedinIcon,
+  PinterestIcon,
+  TelegramIcon,
+  TwitterIcon,
+  ViberIcon,
+  WhatsappIcon,
+} from "react-share";
 import {
   Button,
   UserWidgetBtn,
@@ -17,6 +32,7 @@ import {
   FlexBetweenBox,
   SectionTitle,
   BackBtn,
+  Wrapper,
 } from "./microComponets";
 import {
   ModalWindow,
@@ -37,6 +53,7 @@ import {
   OkIcon,
   EnterIcon,
   ShowHideIcon,
+  LinksIcon,
 } from "./svgIcons";
 import { lightTheme } from "../styles/themes";
 import { CourtInfoWrapper } from "./CourtInfo";
@@ -53,28 +70,62 @@ import ukrflag from "../assets/ukrflag.svg";
 import ny from "../assets/ny.jfif";
 import milan from "../assets/milan.jpg";
 import moon from "../assets/moon.webp";
+import { AddCourtBtn } from "./AddCourtWidget";
 
-const Tutorial = ({ closeModal }) => {
-  const theme = useTheme();
+const shareUrl = "https://hooper-13.web.app/";
+const shareTitle =
+  "Привіт! Я Hooper, сайт який допоможе тобі знайти місце для гри в улюблений вид спорту.";
+
+const TutorialWrapper = ({
+  closeModal,
+  goBack,
+  isBackBtn = true,
+  isEmptyHeader = false,
+  children,
+}) => {
   return (
-    <div>
-      <ModalHeader empty>
+    <>
+      <ModalHeader empty={isEmptyHeader}>
+        {isBackBtn && (
+          <BackBtn onClick={goBack}>
+            <BackIcon />
+          </BackBtn>
+        )}
         <CloseBtn onClick={closeModal}>
           <CloseIcon />
         </CloseBtn>
       </ModalHeader>
-      <div style={{ padding: "20px" }}>
+      <Inner>{children}</Inner>
+    </>
+  );
+};
+
+export const Tutorial = ({ closeModal }) => {
+  const theme = useTheme();
+  const navigate = useNavigate();
+
+  const onGoForward = () => {
+    navigate("/tutorial/2");
+  };
+
+  return (
+    <div>
+      <TutorialWrapper
+        closeModal={closeModal}
+        isEmptyHeader={true}
+        isBackBtn={false}
+      >
         <FlexCenterBox>
           <Title fS="23px" fW="600">
             Привіт! Я
           </Title>
           <LogoText m="0 0 0 5px">Hooper</LogoText>
         </FlexCenterBox>
-
-        <Text m="15px 0 0" fS="17px">
-          &nbsp;Сайт який допоможе знайти місце для гри в улюблений вид спорту.
+        <Text m="20px 0 10px" fS="17px">
+          &nbsp;Сайт який допоможе тобі знайти місце для гри в улюблений вид
+          спорту.
         </Text>
-        <Text m="5px 0 10px " fS="17px">
+        <Text m="0 0 10px " fS="17px">
           &nbsp;На карті ти бачиш спортивні майданчики, відмічені відповідно до
           виду спорту.
         </Text>
@@ -83,13 +134,31 @@ const Tutorial = ({ closeModal }) => {
           <Text fS="17px">або</Text>
           <FootballMarker size={25} />
         </FlexBetweenBox>
-
         <Text fS="17px" m="20px 0 0">
           &nbsp;Якщо побачиш такий
           <BasketballMarker size={25} playersCount={1} margin="0 10px" />
           це означає, що там зараз хтось грає.
         </Text>
-        <Text fS="17px" m="20px 0 15px">
+      </TutorialWrapper>
+      <Button m="0 auto 10px auto" onClick={onGoForward}>
+        Далі
+      </Button>
+    </div>
+  );
+};
+
+export const Tutorial2 = ({ closeModal, goBack }) => {
+  const theme = useTheme();
+  const navigate = useNavigate();
+
+  const onGoForward = () => {
+    navigate("/tutorial/3");
+  };
+
+  return (
+    <div>
+      <TutorialWrapper closeModal={closeModal} goBack={goBack}>
+        <Text fS="17px" m="0 0 10px">
           &nbsp;Натисни на м'яч і побачиш інформацію про майданчик.
         </Text>
         <CourtInfoWrapper style={{ userSelect: "none" }}>
@@ -114,7 +183,7 @@ const Tutorial = ({ closeModal }) => {
             <OkIcon />
           </FlexCenterBox>
         </CourtInfoWrapper>
-        <Text fS="17px" m="20px 0 15px">
+        <Text fS="17px" m="20px 0 10px">
           &nbsp;Список гравців.
         </Text>
         <div style={{ userSelect: "none", pointerEvents: "none" }}>
@@ -144,7 +213,26 @@ const Tutorial = ({ closeModal }) => {
             </HideBtn>
           </PlayersList>
         </div>
-        <Text fS="17px" m="30px 0 15px">
+      </TutorialWrapper>
+      <Button m="0 auto 10px auto" onClick={onGoForward}>
+        Далі
+      </Button>
+    </div>
+  );
+};
+
+export const Tutorial3 = ({ closeModal, goBack }) => {
+  const theme = useTheme();
+  const navigate = useNavigate();
+
+  const onGoForward = () => {
+    navigate("/tutorial/4");
+  };
+
+  return (
+    <div>
+      <TutorialWrapper closeModal={closeModal} goBack={goBack}>
+        <Text fS="17px" m="0 0 10px">
           &nbsp;Чат майданчика, де ти можеш домовитися про гру.
         </Text>
         <div
@@ -231,16 +319,113 @@ const Tutorial = ({ closeModal }) => {
             </div>
           </div>
         </div>
+      </TutorialWrapper>
+      <Button m="0 auto 10px auto" onClick={onGoForward}>
+        Далі
+      </Button>
+    </div>
+  );
+};
 
-        <FlexBetweenBox>
-          <Text fS="17px" m="20px 7px 15px ">
-            &nbsp;І не забудь натиснути на
-          </Text>
-          <Button fS="15px" p="5px 13px" height="auto">
+export const Tutorial4 = ({ closeModal, goBack }) => {
+  const [isShare, setIsShare] = useState(false);
+  const btnRef = useRef(null);
+  const linksRef = useRef(null);
+  const nodeRef = isShare ? linksRef : btnRef;
+
+  return (
+    <div>
+      <TutorialWrapper closeModal={closeModal} goBack={goBack}>
+        <Text fS="17px" m="0 0 5px">
+          І не забудь натиснути на
+        </Text>
+        <FlexCenterBox direction="column">
+          <Button
+            p="5px 10px"
+            height="auto"
+            fS="14px"
+            style={{ userSelect: "none", pointerEvents: "none" }}
+          >
             Я на полі
           </Button>
-        </FlexBetweenBox>
-      </div>
+        </FlexCenterBox>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Text fS="17px" m="3px 0 5px">
+            коли прийдеш грати.
+          </Text>
+        </div>
+
+        <Text fS="17px">
+          &nbsp;Тоді люди побачать активний майданчик і теж приєднаються до гри.
+        </Text>
+        <Text fS="17px" m="10px 0 5px">
+          &nbsp;Якщо ти знаєш майданчики, поля або зали де збираються люди,
+          додавай їх на карту натиснувши
+        </Text>
+        <FlexCenterBox>
+          <AddCourtBtn
+            p="4px 12px 4px 7px"
+            style={{ userSelect: "none", pointerEvents: "none" }}
+            color="orange"
+          >
+            <AddCourtIcon width={35} height={30} />
+          </AddCourtBtn>
+        </FlexCenterBox>
+        <Text fS="17px" m="20px 0 0">
+          &nbsp;Розповідай друзям і завжди будь у грі.
+        </Text>
+      </TutorialWrapper>
+      <SwitchTransition mode="out-in">
+        <CSSTransition
+          nodeRef={nodeRef}
+          key={isShare}
+          classNames="checkinBtn"
+          timeout={300}
+          unmountOnExit
+          mountOnEnter
+        >
+          {!isShare ? (
+            <div ref={btnRef}>
+              <Button
+                height="auto"
+                m="-10px auto 10px auto"
+                bgColors="linear-gradient(92.83deg,
+    #00914C
+     0,
+     #D04516 100%)"
+                onClick={() => setIsShare(true)}
+              >
+                Поділитися
+                <LinksIcon />
+              </Button>
+            </div>
+          ) : (
+            <FlexCenterBox
+              style={{ gap: "10px", margin: "-10px 0 10px" }}
+              ref={linksRef}
+            >
+              <FacebookShareButton url={shareUrl} quote={shareTitle}>
+                <FacebookIcon size={36} round={true} />
+              </FacebookShareButton>
+              <TwitterShareButton url={shareUrl} title={shareTitle}>
+                <TwitterIcon size={36} round={true} />
+              </TwitterShareButton>
+              <WhatsappShareButton url={shareUrl} title={shareTitle}>
+                <WhatsappIcon size={36} round={true} />
+              </WhatsappShareButton>
+              <TelegramShareButton url={shareUrl} title={shareTitle}>
+                <TelegramIcon size={36} round={true} />
+              </TelegramShareButton>
+              <ViberShareButton url={shareUrl} title={shareTitle}>
+                <ViberIcon size={36} round={true} />
+              </ViberShareButton>
+              <LinkedinShareButton url={shareUrl} title={shareTitle}>
+                <LinkedinIcon size={36} round={true} />
+              </LinkedinShareButton>
+            </FlexCenterBox>
+          )}
+        </CSSTransition>
+      </SwitchTransition>
     </div>
   );
 };
@@ -310,4 +495,8 @@ const HideBtn = styled(IconBtnBg)`
   bottom: -16px;
   left: 15%;
   border-radius: 7px;
+`;
+
+const Inner = styled.div`
+  padding: 25px 20px 20px 20px;
 `;

@@ -39,6 +39,7 @@ const MainPage = () => {
             <UserLoginWidget
               setAddCourtMarker={setAddCourtMarker}
               setOpenedCourt={setOpenedCourt}
+              openedCourt={openedCourt}
             />
             <AddCourtWidget
               addCourtMarker={addCourtMarker}

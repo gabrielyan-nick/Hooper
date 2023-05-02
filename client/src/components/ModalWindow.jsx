@@ -21,6 +21,9 @@ import {
   SettingsForm,
   ErrorBoundary,
   Tutorial,
+  Tutorial2,
+  Tutorial3,
+  Tutorial4,
 } from "./index";
 import { ModalWrapper } from "./microComponets";
 import { serverUrl } from "../config";
@@ -33,7 +36,7 @@ const ModalWindow = ({
   closeClickOutside = false,
   setAddCourtMarker,
   addCourtMarker = null,
-  openedCourt = null,
+  openedCourt,
   setOpenedCourt = null,
 }) => {
   const [isModalOverflow, setIsModalOverflow] = useState(true);
@@ -244,6 +247,33 @@ const ModalWindow = ({
                     <Route
                       path="/tutorial"
                       element={<Tutorial closeModal={onCloseModal} />}
+                    />
+                    <Route
+                      path="/tutorial/2"
+                      element={
+                        <Tutorial2
+                          closeModal={onCloseModal}
+                          goBack={onGoBack}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/tutorial/3"
+                      element={
+                        <Tutorial3
+                          closeModal={onCloseModal}
+                          goBack={onGoBack}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/tutorial/4"
+                      element={
+                        <Tutorial4
+                          closeModal={onCloseModal}
+                          goBack={onGoBack}
+                        />
+                      }
                     />
                   </Routes>
                 </CSSTransition>

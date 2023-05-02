@@ -5,7 +5,11 @@ import styled from "styled-components";
 import { Button, UserWidgetBtn } from "./microComponets";
 import { ModalWindow, UserWidget } from "./index";
 
-const UserLoginWidget = ({ setAddCourtMarker, setOpenedCourt }) => {
+const UserLoginWidget = ({
+  setAddCourtMarker,
+  setOpenedCourt,
+  openedCourt,
+}) => {
   const isAuth = useSelector((state) => !!state.storage.user?.token);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -29,6 +33,7 @@ const UserLoginWidget = ({ setAddCourtMarker, setOpenedCourt }) => {
           <UserWidget
             setAddCourtMarker={setAddCourtMarker}
             setOpenedCourt={setOpenedCourt}
+            openedCourt={openedCourt}
           />
         ) : (
           <UserWidgetBtn p="13px 30px" onClick={onOpenLoginModal}>

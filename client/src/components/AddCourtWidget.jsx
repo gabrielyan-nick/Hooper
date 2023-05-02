@@ -103,8 +103,8 @@ const Wrapper = styled(FlexCenterBox)`
   z-index: 10;
 `;
 
-const AddCourtBtn = styled(UserWidgetBtn)`
-  padding: 5px 15px 5px 10px;
+export const AddCourtBtn = styled(UserWidgetBtn)`
+  padding: ${(props) => props.p || "5px 15px 5px 10px"};
   background-color: ${lightTheme.orange};
   &:hover:not(:disabled) {
     background-color: #ff4800d1;

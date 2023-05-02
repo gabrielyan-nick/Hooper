@@ -6,7 +6,7 @@ import React, {
   memo,
   useRef,
 } from "react";
-import Map, { Marker, useMap } from "react-map-gl";
+import Map, { Marker, useMap, NavigationControl } from "react-map-gl";
 import useSupercluster from "use-supercluster";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -31,7 +31,6 @@ const MainMap = ({
   openedCourt,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const theme = useSelector((s) => s.storage.theme);
   const token = useSelector((s) => s.storage.user?.token);
   const user = useSelector((s) => s.storage?.user);
   const favCourts = useSelector(
@@ -154,7 +153,6 @@ const MainMap = ({
           const { cluster: isCluster, point_count: pointCount } =
             point.properties;
           if (isCluster) {
-   
             return (
               <Marker
                 key={`cluster-${point.id}`}

@@ -32,7 +32,6 @@ p, ul, li {
 .photo-modal-overlay-appear,
 .modal-overlay-appear {
   opacity: 0;
-  /* transition: opacity 200ms; */
 }
 .photo-modal-overlay-appear-done,
 .modal-overlay-appear-done {
@@ -166,17 +165,16 @@ p, ul, li {
 .roll-hide-enter-done {
   opacity: 1; 
   transform: translateX(0%) rotate(0deg);
-  transition: all 500ms;
+  transition: transform 500ms, opacity 500ms;
 }
 .roll-hide-exit {
   opacity: 1;
   transform: translateX(0%) rotate(0deg);
-  transition: all 500ms;
 }
 .roll-hide-exit-active {
   opacity: 0;
   transform: translateX(100%) rotate(100deg);
-  transition: all 500ms;
+  transition: transform 500ms, opacity 1000ms;
 }
 
 

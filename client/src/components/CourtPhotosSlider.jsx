@@ -32,7 +32,7 @@ const CourtPhotosSlider = ({ courtId, photos, sport }) => {
   const nodeRef = addedPhoto ? saveCloseRef : addRef;
   const navigate = useNavigate();
   const theme = useTheme();
-
+ 
   const handlers = useSwipeable({
     onSwipedLeft: () => handleNext(),
     onSwipedRight: () => handlePrev(),

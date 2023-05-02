@@ -45,7 +45,7 @@ const UserCityChanged = ({ city, setIsModalOverflow }) => {
       fontFamily: "Golos Text, sans-serif",
       fontWeight: 600,
       fontSize: "20px",
-      height: "42px",
+      height: "41px",
       paddingLeft: "5px",
       boxShadow: state.isFocused
         ? "0 0 2px 0 black inset"

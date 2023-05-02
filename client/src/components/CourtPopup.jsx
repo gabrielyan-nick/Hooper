@@ -2,41 +2,24 @@ import React, { forwardRef, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { useMap } from "react-map-gl";
 import { CSSTransition } from "react-transition-group";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import styled, { keyframes } from "styled-components";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
 import { useGetCourtQuery } from "../api/courtsApi";
 import {
   FlexBetweenBox,
-  FlexCenterBox,
-  IconButton,
   Title,
-  CourtImg,
   CloseBtn,
-  IconBtnBg,
   BackBtn,
-  Button,
-  BtnSpinnerWrapper,
   LoadingScreenWrapper,
 } from "./microComponets";
-import {
-  FavouriteIcon,
-  CloseIcon,
-  BasketballCourtIcon,
-  ShowHideIcon,
-  BackIcon,
-} from "./svgIcons";
+import { CloseIcon, BackIcon } from "./svgIcons";
 import {
   CourtInfo,
   CourtPlayers,
-  CourtChat,
   CourtPhotosSlider,
   CourtChatPreview,
-  BallsAnimation,
-  LoadingScreen,
   BallSpinner,
 } from "./index";
-import { setViewState } from "../store/storageSlice";
 
 const CourtPopup = forwardRef((props, ref) => {
   const {
@@ -56,13 +39,12 @@ const CourtPopup = forwardRef((props, ref) => {
     isSuccess,
   } = useGetCourtQuery(courtId);
   const { map } = useMap();
-  const dispatch = useDispatch();
   const loadingRef = useRef(null);
 
   useEffect(() => {
     if (isSuccess) {
       setEditedCourt(court);
-      setOpenedCourt(court?.name);
+      setOpenedCourt(court.name);
       map?.flyTo({
         center: [
           court?.geometry?.coordinates[1],
