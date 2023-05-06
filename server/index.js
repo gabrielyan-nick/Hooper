@@ -98,4 +98,3 @@ export const agenda = new Agenda({
 });
 
 await agenda.start();
-agenda.processEvery("1 minute");

@@ -40,6 +40,7 @@ const addCourtSchema = yup.object({
   name: yup.string().max(23, "Максимум 23 символи").required("Введіть назву"),
   sport: yup.string().required("Виберіть тип майданчика"),
   cover: yup.string().required("Виберіть покриття"),
+  addInfo: yup.string().max(200, "Максимум 200 символів"),
   hoopsCount: yup.number(),
 });
 
@@ -252,6 +253,17 @@ const AddCourtForm = ({
               Назва
               <Input {...register("name")} m="5px 0 0" />
               <ErrorText>{errors.name?.message}</ErrorText>
+            </Label>
+          </LabelWrapper>
+          <LabelWrapper>
+            <Label pl="10px">
+              Додаткова інформація
+              <Input
+                {...register("addInfo")}
+                m="5px 0 0"
+                style={{ minHeight: "36.4px" }}
+              />
+              <ErrorText>{errors.addInfo?.message}</ErrorText>
             </Label>
           </LabelWrapper>
           <GridWrapper>
@@ -469,4 +481,8 @@ export const hoopsCountOptions = [
   { value: 4, label: "4" },
   { value: 5, label: "5" },
   { value: 6, label: "6" },
+  { value: 7, label: "7" },
+  { value: 8, label: "8" },
+  { value: 9, label: "9" },
+  { value: 10, label: "10" },
 ];

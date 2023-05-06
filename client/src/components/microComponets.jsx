@@ -216,7 +216,7 @@ export const Input = styled.input`
 export const TextLineWrapper = styled.div`
   position: relative;
   background: ${(props) => props.bg || props.theme.textWrapperBg};
-  width: 100%;
+  width: ${(props) => props.width || "100%"};
   padding: ${(props) => props.p || "9px 15px"};
   border-radius: 7px;
   margin: ${(props) => props.m || 0};

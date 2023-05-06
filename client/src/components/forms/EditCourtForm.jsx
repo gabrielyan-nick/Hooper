@@ -22,6 +22,7 @@ import {
   FlexBetweenBox,
   ModalHeader,
   BackBtn,
+  Textarea,
 } from "./../microComponets";
 import { CloseIcon, BackIcon } from "./../svgIcons";
 import { useUpdateCourtInfoMutation } from "../../api/courtsApi";
@@ -52,6 +53,7 @@ const editCourtSchema = yup.object({
   name: yup.string().max(23, "Максимум 23 символи").required("Введіть назву"),
   sport: yup.string().required("Виберіть тип майданчика"),
   cover: yup.string().required("Виберіть покриття"),
+  addInfo: yup.string().max(200, "Максимум 200 символів"),
   hoopsCount: yup.number(),
 });
 
@@ -64,11 +66,17 @@ const convertBool = (str) => {
   else if (str === "false") return false;
 };
 
-const EditCourtForm = ({ courtInfo, closeModal, goBack, setIsModalOverflow }) => {
+const EditCourtForm = ({
+  courtInfo,
+  closeModal,
+  goBack,
+  setIsModalOverflow,
+}) => {
   const token = useSelector((s) => s.storage?.user?.token);
   const actualCoverObj =
     courtInfo.sport === "basketball" ? basketballCovers : footballCovers;
   const [typeValue, setTypeValue] = useState(courtInfo.sport);
+  const [addInfo, setAddInfo] = useState(courtInfo.addInfo);
   const [coverValue, setCoverValue] = useState(
     getSelectObj(courtInfo.cover, actualCoverObj)
   );
@@ -104,7 +112,8 @@ const EditCourtForm = ({ courtInfo, closeModal, goBack, setIsModalOverflow }) =>
       getSelectObj(courtInfo?.cover, actualCoverObj)?.value ||
     hoopsCount !== getSelectObj(courtInfo?.hoopsCount, hoopsCountOptions) ||
     convertBool(lighting) !== courtInfo?.lighting ||
-    nameWatch !== courtInfo.name;
+    nameWatch !== courtInfo.name ||
+    addInfo !== courtInfo.addInfo;
 
   const handleTypeChange = (e) => {
     setTypeValue(e.target.value);
@@ -140,6 +149,9 @@ const EditCourtForm = ({ courtInfo, closeModal, goBack, setIsModalOverflow }) =>
 
   const onSubmit = (formData) => {
     formData.lighting === null && delete formData.lighting;
+    if (/^\s*$/.test(formData.addInfo)) {
+      formData.addInfo = "";
+    }
     submit({ courtId, formData, token })
       .then((res) => {
         if (res.data) {
@@ -245,11 +257,21 @@ const EditCourtForm = ({ courtInfo, closeModal, goBack, setIsModalOverflow }) =>
           <LabelWrapper>
             <Label pl="10px">
               Назва
-              <Input
-                {...register("name")}
-                m="5px 0 0"
-              />
+              <Input {...register("name")} m="5px 0 0" />
               <ErrorText>{errors.name?.message}</ErrorText>
+            </Label>
+          </LabelWrapper>
+          <LabelWrapper>
+            <Label pl="10px">
+              Додаткова інформація
+              <Input
+                {...register("addInfo")}
+                m="5px 0 0"
+                value={addInfo}
+                onChange={(e) => setAddInfo(e.target.value)}
+                style={{ minHeight: "36.4px" }}
+              />
+              <ErrorText>{errors.addInfo?.message}</ErrorText>
             </Label>
           </LabelWrapper>
           <GridWrap>

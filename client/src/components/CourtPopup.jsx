@@ -19,6 +19,7 @@ import {
   CourtPhotosSlider,
   CourtChatPreview,
   BallSpinner,
+  CourtAddInfo,
 } from "./index";
 
 const CourtPopup = forwardRef((props, ref) => {
@@ -40,7 +41,7 @@ const CourtPopup = forwardRef((props, ref) => {
   } = useGetCourtQuery(courtId);
   const { map } = useMap();
   const loadingRef = useRef(null);
-
+  console.log(court);
   useEffect(() => {
     if (isSuccess) {
       setEditedCourt(court);
@@ -88,6 +89,7 @@ const CourtPopup = forwardRef((props, ref) => {
           photos={court?.photos}
         />
         <CourtInfo data={court} />
+        {!!court.addInfo?.length && <CourtAddInfo data={court.addInfo} />}
         <CourtChatPreview
           messages={court?.messages}
           courtId={court?._id}

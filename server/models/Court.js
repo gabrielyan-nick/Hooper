@@ -33,6 +33,11 @@ const courtSchema = new mongoose.Schema(
         else return "Футбольне поле";
       },
     },
+    addInfo: {
+      type: String,
+      max: 200,
+      default: "",
+    },
     photos: {
       type: [String],
       required: true,

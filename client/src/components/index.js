@@ -39,3 +39,5 @@ export { default as SocialLinksLogos } from "./SocialLinksLogos";
 export { default as UserSocialLinks } from "./UserSocialLinks";
 export { default as TutorialWidget } from "./TutorialWidget";
 export { Tutorial, Tutorial2, Tutorial3, Tutorial4 } from "./Tutorial";
+export { default as CourtAddInfo } from "./CourtAddInfo";
+

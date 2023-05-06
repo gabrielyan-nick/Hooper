@@ -53,6 +53,7 @@ export const getCourt = async (req, res) => {
       hoopsCount: court.hoopsCount,
       lighting: court.lighting,
       geometry: court.geometry,
+      addInfo: court.addInfo,
       messages: court.chatId.messages,
       chatId: court.chatId._id,
       name: court.name,

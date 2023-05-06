@@ -6,7 +6,7 @@ import React, {
   memo,
   useRef,
 } from "react";
-import Map, { Marker, useMap, NavigationControl } from "react-map-gl";
+import Map, { Marker, useMap } from "react-map-gl";
 import useSupercluster from "use-supercluster";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
