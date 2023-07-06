@@ -162,7 +162,7 @@ export const checkInOnCourt = async (req, res) => {
     });
 
     const now = new Date();
-    const scheduleTime = new Date(now.getTime() + 30 * 60 * 1000);
+    const scheduleTime = new Date(now.getTime() + 3 * 60 * 60 * 1000);
     agenda.schedule(scheduleTime, jobName);
 
     res.status(200).json(user.onCourt);

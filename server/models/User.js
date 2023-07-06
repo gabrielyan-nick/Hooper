@@ -24,7 +24,6 @@ const userSchema = new mongoose.Schema(
     },
     picturePath: {
       type: String,
-      require: true,
       default: "/assets/avatar.png",
     },
     onCourt: {
