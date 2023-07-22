@@ -161,8 +161,14 @@ const data = {
   ],
 };
 
-router.get("/", async function getData() {
-  return data;
-});
+router.get("/", getData);
+
+export const getData = async (req, res) => {
+  try {
+    res.status(200).json(data);
+  } catch (e) {
+    res.status(500).json(e.message);
+  }
+};
 
 export default router;
