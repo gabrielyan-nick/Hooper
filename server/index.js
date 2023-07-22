@@ -15,10 +15,6 @@ import {
   markersRoutes,
   usersRoutes,
 } from "./routes/index.js";
-import { on } from "events";
-import Court from "./models/Court.js";
-import Marker from "./models/Marker.js";
-import Chat from "./models/Chat.js";
 import Agenda from "agenda";
 
 const __filename = fileURLToPath(import.meta.url);
