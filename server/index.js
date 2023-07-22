@@ -14,6 +14,7 @@ import {
   authRoutes,
   markersRoutes,
   usersRoutes,
+  materioRoutes,
 } from "./routes/index.js";
 import Agenda from "agenda";
 
@@ -34,6 +35,8 @@ app.use("/auth", authRoutes);
 app.use("/courts", courtsRoutes);
 app.use("/markers", markersRoutes);
 app.use("/users", usersRoutes);
+// temp route for recieving data for another project
+app.use("/materio", materioRoutes);
 
 const PORT = process.env.PORT || 8800;
 const server = createServer(app);
@@ -45,7 +48,6 @@ mongoose
   })
   .then(async () => {
     server.listen(PORT, () => console.log(`Server run on port ${PORT}`));
-
   })
   .catch((error) => console.log(error));
 
