@@ -1,8 +1,8 @@
 import express from "express";
-// import multer from "multer";
+import multer from "multer";
 
 const router = express.Router();
-// const upload = multer();
+const upload = multer();
 
 const data = {
   about: [
@@ -169,6 +169,15 @@ const getData = async (req, res) => {
   }
 };
 
+const changeAccountData = async (req, res) => {
+  try {
+    res.status(200).json({message: 'Successful'});
+  } catch (e) {
+    res.status(500).json(e.message);
+  }
+};
+
 router.get("/", getData);
+router.post("/", changeAccountData);
 
 export default router;
